@@ -1,0 +1,48 @@
+jwt:
+  refresh:
+      secret: ${JWT_SECRET:VERY_SECRET_KEY_12345678901234567890123456}
+      expiration: ${JWT_REFRESH_EXPIRATON:604800000}
+  access:
+      secret: ${JWT_SECRET:VERY_SECRET_KEY_12345678901234567890123456}
+      expiration: ${JWT_ACCESS_EXPIRATON:900000}
+
+user-service:
+  url: ${USER_SERVICE_URL:http://user-service:8080}
+
+
+# Kafka configuration
+kafka:
+  topic:
+    user-created: ${KAFKA_TOPIC_USER_CREATED:user-created}
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/auth_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  application:
+    name: Auth-service
+
+logging:
+  level:
+    com.slavacom.auth_service: DEBUG
+    org.springframework.security: DEBUG
+
+server:
+  port: {{SERVER_PORT:8080}}
