@@ -1,0 +1,22 @@
+include:
+#  - docker-compose.db.yml
+#  - docker-compose.kafka.yml
+  - docker-compose.services.yml
+
+services:
+  {}
+
+
+networks:
+  micro-net:
+    name: micro-net
+    driver: bridge
+
+volumes:
+  auth-db-data:
+  user-db-data:
+  task-db-data:
+  event-db-data:
+  organization-db-data:
+  permission-db-data:
+  redis-data:
