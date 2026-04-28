@@ -1,0 +1,34 @@
+jwt:
+  refresh:
+    secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}
+    expiration: ${JWT_REFRESH_EXPIRATON:604800000}
+  access:
+    secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}
+    expiration: ${JWT_ACCESS_EXPIRATON:900000}
+
+user-service:
+  url: ${USER_SERVICE_URL:http://profile-service:8080}
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://auth-db:5432/auth_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  application:
+    name: Auth-service
+
+logging:
+  level:
+    com.slavacom.auth_service: INFO
+    org.springframework.security: INFO
+
