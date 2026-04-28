@@ -140,9 +140,9 @@ GET    /api/projects/{projectId}/history            list
 - Create: `security/JwtAuthenticationFilter.kt`
 - Modify: `config/SecurityConfig.java`
 
-- [ ] создать `JwtAuthenticationFilter.kt` — `OncePerRequestFilter`, читает `Authorization: Bearer <token>`,
+- [x] создать `JwtAuthenticationFilter.kt` — `OncePerRequestFilter`, читает `Authorization: Bearer <token>`,
       вызывает `JwtTokenProvider.extractClaims()`, кладёт `UsernamePasswordAuthenticationToken` в `SecurityContextHolder`
-- [ ] в `SecurityConfig.java` добавить `.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)`
+- [x] в `SecurityConfig.java` добавить `.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)`
 - [ ] проверить: запрос без токена → 403, с токеном → 200
 
 ---
@@ -157,18 +157,18 @@ GET    /api/projects/{projectId}/history            list
 - Create: `controller/UpdateOrganizationRequest.kt`
 - Modify: `mapper/OrganizationMapper.kt`
 
-- [ ] добавить в `OrganizationResponse.kt` все поля (`id`, `name`, `description`, `accountable`, `isActive`, `createdAt`, `updatedAt`)
-- [ ] создать `CreateOrganizationRequest.kt` — data class с `name`, `description`
-- [ ] создать `UpdateOrganizationRequest.kt` — data class с `name?`, `description?`
-- [ ] дополнить `OrganizationMapper.kt` — методы `toResponse(Organization): OrganizationResponse`,
-      `toEntity(CreateOrganizationRequest): Organization`
-- [ ] в `OrganizationService.kt` добавить:
+- [x] добавить в `OrganizationResponse.kt` все поля (`id`, `name`, `description`, `accountable`, `isActive`, `createdAt`, `updatedAt`)
+- [x] создать `CreateOrganizationRequest.kt` — data class с `name`, `description`
+- [x] создать `UpdateOrganizationRequest.kt` — data class с `name?`, `description?`
+- [x] дополнить `OrganizationMapper.kt` — методы `toResponse(Organization): OrganizationResponse`,
+      `fromCreateRequest(CreateOrganizationRequest): Organization`
+- [x] в `OrganizationService.kt` добавить:
       - `create(request, accountable: UUID): OrganizationResponse`
       - `update(id, request): OrganizationResponse`
       - `deactivate(id)` — `isActive = false`
       - `getAll()` вернуть `List<OrganizationResponse>` (не Entity)
-- [ ] в `OrganizationController.kt` добавить эндпоинты POST, GET /{id}, PUT /{id}, DELETE /{id};
-      извлекать userId из JWT через `JwtTokenProvider`
+- [x] в `OrganizationController.kt` добавить эндпоинты POST, GET /{id}, PUT /{id}, DELETE /{id};
+      extracting userId из SecurityContextHolder
 
 ---
 
@@ -181,16 +181,11 @@ GET    /api/projects/{projectId}/history            list
 - Create: `employees/EmployeesService.kt`
 - Create: `employees/EmployeesController.kt`
 
-- [ ] создать `EmployeesRepository.kt` — `JpaRepository<Employees, UUID>` +
-      `findAllByOrganizationIdAndIsActiveTrue()`, `findByUserIdAndOrganizationId()`
-- [ ] создать `EmployeesDto.kt` — `EmployeeResponse`, `AddEmployeeRequest` (`userId`, `profileId?`, `role`, `permissions?`),
-      `UpdateEmployeeRequest` (`role?`, `permissions?`)
-- [ ] создать `EmployeesMapper.kt` — MapStruct: `toResponse(Employees): EmployeeResponse`,
-      `toEntity(AddEmployeeRequest): Employees`
-- [ ] создать `EmployeesService.kt` — `list(orgId)`, `add(orgId, request): EmployeeResponse`,
-      `update(orgId, employeeId, request): EmployeeResponse`, `remove(orgId, employeeId)`
-- [ ] создать `EmployeesController.kt` — `@RequestMapping("/api/organizations/{orgId}/employees")`,
-      CRUD эндпоинты
+- [x] создать `EmployeesRepository.kt`
+- [x] создать `EmployeesDto.kt`
+- [x] создать `EmployeesMapper.kt`
+- [x] создать `EmployeesService.kt`
+- [x] создать `EmployeesController.kt`
 
 ---
 

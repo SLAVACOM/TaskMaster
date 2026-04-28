@@ -14,7 +14,7 @@ data class OrganizationFilter(
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null
 ) {
-    fun toSpecification(): Specification<Organization?>? = idSpec()
+    fun toSpecification(): Specification<Organization>? = idSpec()
         .and(nameSpec())
         .and(descriptionSpec())
         .and(accountableSpec())
