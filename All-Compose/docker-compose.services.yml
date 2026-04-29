@@ -1,39 +1,25 @@
 services:
-#  gateway-service:
-#    build: ../Gateway-service
-#    container_name: gateway-service
-#    depends_on:
-#      auth-service:
-#        condition: service_started
-#      user-service:
-#        condition: service_started
-#      organization-service:
-#        condition: service_healthy
-#      permission-service:
-#        condition: service_healthy
-#      task-service:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#      SPRING_REDIS_HOST: redis
-#      SPRING_REDIS_PORT: 6379
-#      SPRING_REDIS_PASSWORD: tracker_redis_pass
-#      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - micro-net
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8080/gateway/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 5
-#      start_period: 30s
+  gateway-service:
+    build: ../Gateway-service
+    container_name: TaskMaster-GatewayService
+    depends_on:
+      - auth-service
+      - user-service
+      - organization-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
+      AUTH_SERVICE_URL: http://auth-service:8080
+      USER_SERVICE_URL: http://user-service:8080
+      ORG_SERVICE_URL: http://organization-service:8080
+      TASK_SERVICE_URL: http://task-service:8080
+    ports:
+      - "8080:8080"
+    networks:
+      - micro-net
 
   auth-service:
-    build: ../Authservice
+    build: ../Auth-service
     image: task-master.auth-service:latest
 
     container_name: TaskMaster-AuthService
@@ -60,46 +46,46 @@ services:
       start_period: 30s
       retries: 5
 
-#  user-service:
-#    build: ../User-service
-#    container_name: user-service
-#    ports:
-#      - "8082:8080"
-#    depends_on:
-#      - user-db
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user_db
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: postgres
-#      SPRING_PROFILES_ACTIVE: docker
-#      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-#      PROFILE_SERVICE_URL: http://user-service:8080
-#      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
-#    volumes:
-#      - user-service-logs:/app/logs
-#    networks:
-#      - micro-net
-#
-#  organization-service:
-#    build: ../Organization-service
-#    container_name: organization-service
-#    ports:
-#      - "8083:8080"
-#    depends_on:
-#      - organization-db
-#      - user-service
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://organization-db:5432/organization_db
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: postgres
-#      SPRING_PROFILES_ACTIVE: docker
-#      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-#      PROFILE_SERVICE_URL: http://user-service:8080
-#      USER_SERVICE_URL: http://user-service:8080
-#      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
-#
-#    networks:
-#      - micro-net
+  user-service:
+    build: ../UserService
+    container_name: TaskMaster-UserService
+    ports:
+      - "8082:8080"
+    depends_on:
+      - user-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: docker
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      PROFILE_SERVICE_URL: http://user-service:8080
+    volumes:
+      - user-service-logs:/app/logs
+    networks:
+      - micro-net
+
+  organization-service:
+    build: ../OrganizationService
+    container_name: TaskMaster-OrganizationService
+    ports:
+      - "8083:8080"
+    depends_on:
+      - organization-db
+      - user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://organization-db:5432/organization_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: docker
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      PROFILE_SERVICE_URL: http://user-service:8080
+      USER_SERVICE_URL: http://user-service:8080
+
+    networks:
+      - micro-net
+
+
 
 volumes:
   user-service-logs:

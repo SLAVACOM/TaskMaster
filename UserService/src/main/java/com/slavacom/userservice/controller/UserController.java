@@ -1,17 +1,11 @@
-package com.slavacom.user_service.controller;
+package com.slavacom.userservice.controller;
 
-import com.slavacom.user_service.dto.CanRegisterRequest;
-import com.slavacom.user_service.dto.CanRegisterResponse;
-import com.slavacom.user_service.dto.CreateUserDto;
-import com.slavacom.user_service.dto.ExtendedUserInfoDto;
-import com.slavacom.user_service.dto.RegisterUserDto;
-import com.slavacom.user_service.dto.UserInfoDto;
-import com.slavacom.user_service.entity.User;
-import com.slavacom.user_service.mapper.UserMapper;
-import com.slavacom.user_service.repository.UserRepository;
-import com.slavacom.user_service.security.JwtTokenProvider;
-import com.slavacom.user_service.service.ProfileService;
-import com.slavacom.user_service.service.UserServiceImpl;
+import com.slavacom.userservice.dto.*;
+import com.slavacom.userservice.entity.User;
+import com.slavacom.userservice.mapper.UserMapper;
+import com.slavacom.userservice.repository.UserRepository;
+import com.slavacom.userservice.service.ProfileService;
+import com.slavacom.userservice.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +25,6 @@ public class UserController {
     private final UserServiceImpl userService;
     private final UserMapper userMapper;
     private final ProfileService profileService;
-    private final JwtTokenProvider jwtTokenProvider;
 
 
     @PostMapping("/can-register")
@@ -201,23 +194,20 @@ public class UserController {
 	}
 
 	/**
-	 * Получение расширенной информации о текущем пользователе из JWT токена
-	 * Используется Auth Service для обновления токена
+	 * Получение расширенной информации о текущем пользователе.
+	 * X-User-Id проставляется Gateway после валидации JWT.
 	 */
 	@GetMapping("/me/extended")
 	public ResponseEntity<ExtendedUserInfoDto> getCurrentUserExtendedInfo(
-			@RequestHeader("Authorization") String authorizationHeader) {
+			@RequestHeader("X-User-Id") UUID userId) {
 
 		try {
-			// Извлекаем userId из JWT токена
-			UUID userId = jwtTokenProvider.extractUserId(authorizationHeader);
 			log.info("REST: Getting extended user info for current user: {}", userId);
-
 			ExtendedUserInfoDto extendedInfo = userService.getExtendedUserInfo(userId);
 			log.info("Extended user info found for current user: {}", userId);
 			return ResponseEntity.ok(extendedInfo);
 		} catch (Exception e) {
-			log.warn("Error getting extended user info from JWT token", e);
+			log.warn("Error getting extended user info for userId: {}", userId, e);
 			return ResponseEntity.badRequest().build();
 		}
 	}

@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://auth-service:8080}
+          predicates:
+            - Path=/api/auth/**
+
+        - id: user-service
+          uri: ${USER_SERVICE_URL:http://user-service:8080}
+          predicates:
+            - Path=/api/users/**
+
+        - id: organization-service
+          uri: ${ORG_SERVICE_URL:http://organization-service:8080}
+          predicates:
+            - Path=/api/organizations/**
+
+        - id: task-service
+          uri: ${TASK_SERVICE_URL:http://task-service:8080}
+          predicates:
+            - Path=/api/tasks/**

@@ -16,6 +16,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 
-# JWT configuration - должен совпадать с Auth Service
-jwt:
-  secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}
+server:
+  port: ${SERVER_PORT:8080}

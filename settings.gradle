@@ -1,0 +1,9 @@
+rootProject.name = 'TaskMaster'
+
+include ':Auth-service'
+include ':Gateway-service'
+include ':NotificationService'
+include ':OrganizationService'
+include ':S3CloudeStorage'
+include ':TaskService'
+include ':UserService'

@@ -83,14 +83,14 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 - Create: `Gateway-service/.env`
 - Create: `Gateway-service/Dockerfile`
 
-- [ ] Создать `Gateway-service/build.gradle` с зависимостями:
+- [x] Создать `Gateway-service/build.gradle` с зависимостями:
   `spring-cloud-starter-gateway`, `jjwt-api`, `jjwt-impl`, `jjwt-jackson`
-- [ ] Создать `GatewayApplication.java` — стандартный `@SpringBootApplication`
-- [ ] Создать `application.yml`: порт 8080, маршруты для auth/user/org/task сервисов,
+- [x] Создать `GatewayApplication.java` — стандартный `@SpringBootApplication`
+- [x] Создать `application.yml`: порт 8080, маршруты для auth/user/org/task сервисов,
   переменные `jwt.secret`, `*_service.url`
-- [ ] Создать `application-docker.yml`: docker-uri для каждого сервиса
-- [ ] Создать `.env` для локального запуска (PORT, JWT_SECRET, service URLs)
-- [ ] Создать `Dockerfile` (multi-stage: gradle build + JRE runtime)
+- [x] Создать `application-docker.yml`: docker-uri для каждого сервиса
+- [x] Создать `.env` для локального запуска (PORT, JWT_SECRET, service URLs)
+- [x] Создать `Dockerfile` (multi-stage: gradle build + JRE runtime)
 
 ---
 
@@ -100,14 +100,13 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 - Create: `Gateway-service/src/main/java/com/slavacom/gateway/filter/JwtAuthFilter.java`
 - Create: `Gateway-service/src/main/java/com/slavacom/gateway/config/SecurityConfig.java`
 
-- [ ] Создать `JwtAuthFilter implements GlobalFilter, Ordered`:
+- [x] Создать `JwtAuthFilter implements GlobalFilter, Ordered`:
   - Пропускать запросы, чей путь начинается с `/api/auth/` (без проверки)
   - Извлекать `Authorization: Bearer <token>` из заголовка
   - Вернуть 401 если заголовка нет или токен невалиден
   - Парсить claims через JJWT (`userId`, `role`, `profileId`, `organizationId`)
   - Добавить в запрос: `X-User-Id`, `X-User-Role`, `X-Profile-Id`, `X-Organization-Id`
-  - Убрать `Authorization` из downstream-запроса (опционально — для безопасности)
-- [ ] Создать `SecurityConfig` (WebFlux): отключить CSRF, все маршруты `permitAll`
+- [x] Создать `SecurityConfig` (WebFlux): отключить CSRF, все маршруты `permitAll`
   (Gateway сам контролирует доступ через фильтр)
 
 ---
@@ -120,11 +119,11 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 - Delete: `OrganizationService/src/main/java/com/slavacom/organizationservice/security/JwtTokenProvider.java`
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/config/SecurityConfig.java`
 
-- [ ] В `OrganizationController.kt`: удалить `currentUserId()` через `SecurityContextHolder`,
+- [x] В `OrganizationController.kt`: удалить `currentUserId()` через `SecurityContextHolder`,
   добавить `@RequestHeader("X-User-Id") userId: UUID` параметр в метод `create()`
-- [ ] Удалить файлы `JwtAuthenticationFilter.kt` и `JwtTokenProvider.java`
-- [ ] В `SecurityConfig.java`: убрать `jwtAuthenticationFilter` и его регистрацию через `addFilterBefore`
-- [ ] Убрать `JWT_SECRET` из `OrganizationService/.env`
+- [x] Удалить файлы `JwtAuthenticationFilter.kt` и `JwtTokenProvider.java`
+- [x] В `SecurityConfig.java`: убрать `jwtAuthenticationFilter` и его регистрацию через `addFilterBefore`
+- [x] Убрать `JWT_SECRET` из `OrganizationService/.env` (его там не было)
 
 ---
 
@@ -134,11 +133,11 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
 - Delete: `TaskService/src/main/kotlin/com/slavacom/taskservice/security/JwtTokenProvider.kt`
 
-- [ ] В `TaskController.kt`: заменить `@RequestHeader("Authorization") token: String` +
+- [x] В `TaskController.kt`: заменить `@RequestHeader("Authorization") token: String` +
   `jwtTokenProvider.extractUserId(token)` → `@RequestHeader("X-User-Id") changedBy: UUID`
   в методах `create`, `update`, `delete`
-- [ ] Удалить `JwtTokenProvider.kt`
-- [ ] Убрать `jwt.secret` из `application.yml` / `.env`
+- [x] Удалить `JwtTokenProvider.kt`
+- [x] Убрать `jwt.secret` из `application.yml` и jjwt из `build.gradle`
 
 ---
 
@@ -148,12 +147,12 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 - Modify: `UserService/src/main/java/com/slavacom/userservice/controller/UserController.java`
 - Delete: `UserService/src/main/java/com/slavacom/userservice/security/JwtTokenProvider.java`
 
-- [ ] В `UserController.java`, метод `getCurrentUserExtendedInfo` (`GET /me/extended`):
+- [x] В `UserController.java`, метод `getCurrentUserExtendedInfo` (`GET /me/extended`):
   заменить `@RequestHeader("Authorization") String authorizationHeader` + `jwtTokenProvider.extractUserId()`
   → `@RequestHeader("X-User-Id") UUID userId`
-- [ ] Удалить `JwtTokenProvider` из инжектирования в `UserController`
-- [ ] Удалить файл `JwtTokenProvider.java`
-- [ ] Убрать `JWT_SECRET` из `UserService/.env`
+- [x] Удалить `JwtTokenProvider` из инжектирования в `UserController`
+- [x] Удалить файл `JwtTokenProvider.java`
+- [x] Убрать jjwt из `UserService/build.gradle`
 
 ---
 
@@ -162,10 +161,10 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 **Files:**
 - Modify: `All-Compose/docker-compose.services.yml`
 
-- [ ] Раскомментировать и актуализировать блок `gateway-service`
+- [x] Раскомментировать и актуализировать блок `gateway-service`
   (порт `8080:8080`, `JWT_SECRET`, `*_SERVICE_URL` для каждого сервиса)
-- [ ] Убрать `JWT_SECRET` из env-блоков `user-service`, `organization-service`, `task-service`
-- [ ] Добавить `gateway-service` в `depends_on` там, где это нужно (если frontend уже настроен на `:8080`)
+- [x] Убрать `JWT_SECRET` из env-блоков `user-service`, `organization-service`
+- [x] Добавить `Gateway-service` в `settings.gradle`
 
 ---
 
