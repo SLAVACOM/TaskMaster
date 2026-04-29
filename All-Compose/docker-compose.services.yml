@@ -81,11 +81,23 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       PROFILE_SERVICE_URL: http://user-service:8080
       USER_SERVICE_URL: http://user-service:8080
-
     networks:
       - micro-net
 
-
+  task-service:
+    build: ../TaskService
+    container_name: TaskMaster-TaskService
+    ports:
+      - "8084:8080"
+    depends_on:
+      - task-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://task-db:5432/task_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - micro-net
 
 volumes:
   user-service-logs:
