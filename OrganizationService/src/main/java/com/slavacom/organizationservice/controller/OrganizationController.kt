@@ -2,6 +2,7 @@ package com.slavacom.organizationservice.controller
 
 import com.slavacom.organizationservice.service.OrganizationService
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -34,6 +35,12 @@ class OrganizationController(
     fun deactivate(@PathVariable id: UUID) =
         service.deactivate(id)
 
+    @GetMapping("/user/{userId}/info")
+    fun getUserOrganizationInfo(@PathVariable userId: UUID): ResponseEntity<UserOrganizationInfoResponse> {
+        val info = service.getUserOrganizationInfo(userId)
+        return if (info != null) ResponseEntity.ok(info) else ResponseEntity.noContent().build()
+    }
+
     private fun currentUserId(): UUID =
-        UUID.fromString(SecurityContextHolder.getContext().authentication.principal as String)
+        UUID.fromString(SecurityContextHolder.getContext().authentication?.principal as String)
 }

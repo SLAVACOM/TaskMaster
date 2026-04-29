@@ -38,7 +38,7 @@ OrganizationController has no such route → 404. The fix adds the missing endpo
 **Files:**
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/employees/EmployeesRepository.kt`
 
-- [ ] Add `findByUserIdAndIsActiveTrue(userId: UUID): Optional<Employees>` to `EmployeesRepository`
+- [x] Add `findByUserIdAndIsActiveTrue(userId: UUID): Optional<Employees>` to `EmployeesRepository`
 
 ---
 
@@ -47,7 +47,7 @@ OrganizationController has no such route → 404. The fix adds the missing endpo
 **Files:**
 - Create: `OrganizationService/src/main/java/com/slavacom/organizationservice/controller/UserOrganizationInfoResponse.kt`
 
-- [ ] Create `data class UserOrganizationInfoResponse` with fields matching the UserService `OrganizationInfoDto`:
+- [x] Create `data class UserOrganizationInfoResponse` with fields matching the UserService `OrganizationInfoDto`:
   `id: String, name: String, description: String?, userId: String, currentUserId: String, role: String`
 
 ---
@@ -57,8 +57,8 @@ OrganizationController has no such route → 404. The fix adds the missing endpo
 **Files:**
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/service/OrganizationService.kt`
 
-- [ ] Inject `EmployeesRepository` into `OrganizationService`
-- [ ] Add `getUserOrganizationInfo(userId: UUID): UserOrganizationInfoResponse?`:
+- [x] Inject `EmployeesRepository` into `OrganizationService`
+- [x] Add `getUserOrganizationInfo(userId: UUID): UserOrganizationInfoResponse?`:
   - Find active `Employees` record by userId (return `null` if not found)
   - Find `Organization` by `organizationId` (throw `OrganizationNotFoundException` if missing)
   - Map to `UserOrganizationInfoResponse`
@@ -70,8 +70,8 @@ OrganizationController has no such route → 404. The fix adds the missing endpo
 **Files:**
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/controller/OrganizationController.kt`
 
-- [ ] Add `GET /user/{userId}/info` mapping to `OrganizationController`
-- [ ] Return `ResponseEntity<UserOrganizationInfoResponse>` — 200 with body if found, 204/404 if user has no active org membership
+- [x] Add `GET /user/{userId}/info` mapping to `OrganizationController`
+- [x] Return `ResponseEntity<UserOrganizationInfoResponse>` — 200 with body if found, 204/404 if user has no active org membership
 
 ---
 
