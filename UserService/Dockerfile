@@ -30,13 +30,6 @@ COPY --from=layers /application/extracted/application/ ./
 # Generate CDS archive
 RUN java -XX:ArchiveClassesAtExit=app.jsa -Dspring.context.exit=onRefresh -jar app.jar || true
 
-# JVM memory options
-ENV JAVA_RESERVED_CODE_CACHE_SIZE="240M"
-ENV JAVA_MAX_DIRECT_MEMORY_SIZE="10M"
-ENV JAVA_MAX_METASPACE_SIZE="179M"
-ENV JAVA_XSS="1M"
-ENV JAVA_XMX="345M"
-
 # JVM options
 ENV JAVA_CDS_OPTS="-XX:SharedArchiveFile=app.jsa -Xlog:class+load:file=/tmp/classload.log"
 ENV JAVA_ERROR_FILE_OPTS="-XX:ErrorFile=/tmp/java_error.log"
@@ -52,11 +45,6 @@ ENV JAVA_JMX_REMOTE_OPTS="-Djava.rmi.server.hostname=127.0.0.1 \
     -Dcom.sun.management.jmxremote.rmi.port=5005"
 
 ENTRYPOINT exec java \
-    -XX:ReservedCodeCacheSize=$JAVA_RESERVED_CODE_CACHE_SIZE \
-    -XX:MaxDirectMemorySize=$JAVA_MAX_DIRECT_MEMORY_SIZE \
-    -XX:MaxMetaspaceSize=$JAVA_MAX_METASPACE_SIZE \
-    -Xss$JAVA_XSS \
-    -Xmx$JAVA_XMX \
     $JAVA_HEAP_DUMP_OPTS \
     $JAVA_ON_OUT_OF_MEMORY_OPTS \
     $JAVA_ERROR_FILE_OPTS \
