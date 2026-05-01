@@ -1,4 +1,4 @@
-package com.slavacom.s3storageservice.service
+package com.slavacom.s3cloudestorage.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.StringRedisTemplate

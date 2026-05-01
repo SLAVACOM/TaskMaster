@@ -1,4 +1,4 @@
-package com.slavacom.user_service.dto;
+package com.slavacom.userservice.dto;
 
 import java.time.Instant;
 import java.util.UUID;

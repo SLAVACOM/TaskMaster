@@ -1,4 +1,4 @@
-package com.slavacom.user_service.entity;
+package com.slavacom.userservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,7 @@
 package com.slavacom.organizationservice.mapper
 
-import com.slavacom.organizationservice.controller.CreateOrganizationRequest
-import com.slavacom.organizationservice.controller.OrganizationResponse
+import com.slavacom.organizationservice.dto.CreateOrganizationRequest
+import com.slavacom.organizationservice.dto.OrganizationResponse
 import com.slavacom.organizationservice.entity.Organization
 import org.mapstruct.Mapper
 import org.mapstruct.MappingConstants

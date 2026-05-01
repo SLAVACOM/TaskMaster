@@ -1,6 +1,6 @@
-package com.slavacom.user_service.client;
+package com.slavacom.userservice.client;
 
-import com.slavacom.user_service.dto.OrganizationInfoDto;
+import com.slavacom.userservice.dto.OrganizationInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +10,7 @@ import org.springframework.web.client.RestClientException;
 
 import java.util.UUID;
 
-/**
- * Клиент для взаимодействия с Organization Service
- */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

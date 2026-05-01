@@ -51,6 +51,7 @@ class TaskService(
             end = request.end,
             deadline = request.deadline,
             sprintId = request.sprintId,
+            projectId = request.projectId,
             storyPoint = request.storyPoint,
         )
         val saved = taskRepository.save(task)
@@ -71,8 +72,13 @@ class TaskService(
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $id")
 
     @Transactional(readOnly = true)
-    fun getAll(): List<TaskResponse> =
-        taskRepository.findByIsActiveTrueOrderByCreatedAtDesc().map(taskMapper::toResponse)
+    fun getAll(projectId: UUID? = null): List<TaskResponse> {
+        val tasks = if (projectId != null)
+            taskRepository.findByProjectIdAndIsActiveTrueOrderByCreatedAtDesc(projectId)
+        else
+            taskRepository.findByIsActiveTrueOrderByCreatedAtDesc()
+        return tasks.map(taskMapper::toResponse)
+    }
 
     @Transactional(readOnly = true)
     fun search(filter: TaskSearchRequest): TaskPageResponse {
@@ -167,6 +173,10 @@ class TaskService(
         request.sprintId?.let {
             if (it != task.sprintId) changes += FieldChange("sprintId", task.sprintId?.toString(), it.toString())
             task.sprintId = it
+        }
+        request.projectId?.let {
+            if (it != task.projectId) changes += FieldChange("projectId", task.projectId?.toString(), it.toString())
+            task.projectId = it
         }
         request.storyPoint?.let {
             if (it != task.storyPoint) changes += FieldChange("storyPoint", task.storyPoint?.toString(), it.toString())

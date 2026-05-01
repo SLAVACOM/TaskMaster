@@ -85,6 +85,9 @@ class Task(
 	@Column(name = "sprint_id")
 	var sprintId: UUID? = null,
 
+	@Column(name = "project_id")
+	var projectId: UUID? = null,
+
 	@Column(name = "story_point")
 	var storyPoint: Int? = null,
 )

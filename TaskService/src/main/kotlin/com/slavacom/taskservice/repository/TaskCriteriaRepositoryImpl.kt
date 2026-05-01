@@ -66,6 +66,7 @@ class TaskCriteriaRepositoryImpl(
         filter.responsible?.let { predicates += cb.equal(root.get<Any>("responsible"), it) }
         filter.executor?.let { predicates += cb.equal(root.get<Any>("executor"), it) }
         filter.sprintId?.let { predicates += cb.equal(root.get<Any>("sprintId"), it) }
+        filter.projectId?.let { predicates += cb.equal(root.get<Any>("projectId"), it) }
 
         // tags/observers хранятся JSON-текстом в БД через AttributeConverter
         filter.tag?.takeIf { it.isNotBlank() }?.let {

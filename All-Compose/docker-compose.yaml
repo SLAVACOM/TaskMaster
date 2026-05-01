@@ -1,6 +1,6 @@
 include:
-#  - docker-compose.db.yml
-#  - docker-compose.kafka.yml
+  - docker-compose.db.yml
+  - docker-compose.kafka.yml
   - docker-compose.services.yml
 
 services:

@@ -1,6 +1,6 @@
-package com.slavacom.user_service.dto;
+package com.slavacom.userservice.dto;
 
-import com.slavacom.user_service.entity.User;
+import com.slavacom.userservice.entity.User;
 
 import java.time.Instant;
 import java.util.UUID;

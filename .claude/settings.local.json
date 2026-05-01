@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__amplicode__get_project_summary",
+      "mcp__amplicode__list_all_domain_entities",
+      "mcp__amplicode__list_project_endpoints",
+      "mcp__amplicode__list_kafka_producers",
+      "mcp__amplicode__list_kafka_consumers",
+      "mcp__amplicode__list_security_configurations",
+      "mcp__ide__getDiagnostics",
+      "Bash(./gradlew :TaskService:build -x test)",
+      "PowerShell(.\\\\gradlew.bat :TaskService:build -x test 2>&1 | Select-Object -Last 25)",
+      "Bash(./gradlew build *)",
+      "Bash(mkdir -p extracted_classes)",
+      "Bash(jar xf *)",
+      "Bash(javap -c -p com/example/a.class)",
+      "Bash(javap -c -p com/example/d.class)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "mcp__amplicode__rebuild_project"
+    ]
+  }
+}

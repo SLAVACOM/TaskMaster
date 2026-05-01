@@ -6,6 +6,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -24,30 +25,52 @@ public class RequestHeaderFilter implements GlobalFilter, Ordered {
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		log.debug("RequestHeaderFilter: Processing request for path: {}", exchange.getRequest().getURI().getPath());
+		log.debug("RequestHeaderFilter: Exchange attributes available: {}", exchange.getAttributes().keySet());
+
 		// Получаем данные, сохраненные JwtAuthFilter в attributes
-		String userId = (String) exchange.getAttributes().getOrDefault("X-User-Id", "");
-		String role = (String) exchange.getAttributes().getOrDefault("X-User-Role", "");
-		String profileId = (String) exchange.getAttributes().getOrDefault("X-Profile-Id", "");
-		String organizationId = (String) exchange.getAttributes().getOrDefault("X-Organization-Id", "");
+		String userId = (String) exchange.getAttributes().get("X-User-Id");
+		String role = (String) exchange.getAttributes().get("X-User-Role");
+		String profileId = (String) exchange.getAttributes().get("X-Profile-Id");
+		String organizationId = (String) exchange.getAttributes().get("X-Organization-Id");
 
-		// Добавляем заголовки в request если есть данные
-		if (!userId.isEmpty() || !role.isEmpty() || !profileId.isEmpty() || !organizationId.isEmpty()) {
-			try {
-				ServerHttpRequest newRequest = exchange.getRequest().mutate()
-						.header("X-User-Id", userId)
-						.header("X-User-Role", role)
-						.header("X-Profile-Id", profileId)
-						.header("X-Organization-Id", organizationId)
-						.build();
+		log.debug("RequestHeaderFilter: Retrieved attributes - userId={}, role={}, profileId={}, organizationId={}",
+				userId, role, profileId, organizationId);
 
-				return chain.filter(exchange.mutate().request(newRequest).build());
-			} catch (UnsupportedOperationException e) {
-				log.debug("Cannot modify request headers (headers are immutable), continuing without headers");
-				return chain.filter(exchange);
-			}
+		if (!StringUtils.hasText(userId)
+				&& !StringUtils.hasText(role)
+				&& !StringUtils.hasText(profileId)
+				&& !StringUtils.hasText(organizationId)) {
+			log.debug("RequestHeaderFilter: No JWT attributes found, skipping header injection");
+			return chain.filter(exchange);
 		}
 
-		return chain.filter(exchange);
+		log.debug("RequestHeaderFilter: Original request headers: {}", exchange.getRequest().getHeaders().keySet());
+
+		ServerHttpRequest newRequest = exchange.getRequest().mutate()
+				.headers(headers -> {
+					if (StringUtils.hasText(userId)) {
+						headers.add("X-User-Id", userId);
+						log.debug("RequestHeaderFilter: Added header X-User-Id={}", userId);
+					}
+					if (StringUtils.hasText(role)) {
+						headers.add("X-User-Role", role);
+						log.debug("RequestHeaderFilter: Added header X-User-Role={}", role);
+					}
+					if (StringUtils.hasText(profileId)) {
+						headers.add("X-Profile-Id", profileId);
+						log.debug("RequestHeaderFilter: Added header X-Profile-Id={}", profileId);
+					}
+					if (StringUtils.hasText(organizationId)) {
+						headers.add("X-Organization-Id", organizationId);
+						log.debug("RequestHeaderFilter: Added header X-Organization-Id={}", organizationId);
+					}
+				})
+				.build();
+
+		log.debug("RequestHeaderFilter: Mutated request headers: {}", newRequest.getHeaders().keySet());
+		log.debug("RequestHeaderFilter: Forwarding request with mutated headers to chain");
+
+		return chain.filter(exchange.mutate().request(newRequest).build());
 	}
 }
-

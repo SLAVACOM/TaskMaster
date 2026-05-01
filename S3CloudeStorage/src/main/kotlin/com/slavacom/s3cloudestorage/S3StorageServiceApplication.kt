@@ -1,4 +1,4 @@
-package com.slavacom.s3storageservice
+package com.slavacom.s3cloudestorage
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

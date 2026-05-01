@@ -1,8 +1,8 @@
-package com.slavacom.user_service.repository;
+package com.slavacom.userservice.repository;
 
-import com.slavacom.user_service.dto.ExtendedUserInfoDto;
-import com.slavacom.user_service.dto.RegisterUserDto;
-import com.slavacom.user_service.entity.User;
+import com.slavacom.userservice.dto.ExtendedUserInfoDto;
+import com.slavacom.userservice.dto.RegisterUserDto;
+import com.slavacom.userservice.entity.User;
 
 import java.util.UUID;
 

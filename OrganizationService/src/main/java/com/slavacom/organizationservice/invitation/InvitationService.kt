@@ -36,7 +36,7 @@ class InvitationService(
         if (invitation.status != InvitationStatus.PENDING) {
             throw InvitationAlreadyProcessedException("Invitation $invitationId is already ${invitation.status}")
         }
-        if (invitation.expiresAt.isBefore(Instant.now())) {
+        if (invitation.expiresAt!!.isBefore(Instant.now())) {
             throw InvitationExpiredException("Invitation $invitationId has expired")
         }
 
@@ -45,10 +45,10 @@ class InvitationService(
         invitationRepository.save(invitation)
 
         employeesService.add(
-            invitation.organizationId,
+            invitation.organizationId!!,
             AddEmployeeRequest(
-                userId = invitation.invitedUserId,
-                role = invitation.role,
+                userId = invitation.invitedUserId!!,
+                role = invitation.role!!,
                 permissions = invitation.permissions
             )
         )

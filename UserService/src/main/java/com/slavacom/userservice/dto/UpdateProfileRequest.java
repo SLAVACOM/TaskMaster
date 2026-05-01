@@ -1,4 +1,4 @@
-package com.slavacom.user_service.dto;
+package com.slavacom.userservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

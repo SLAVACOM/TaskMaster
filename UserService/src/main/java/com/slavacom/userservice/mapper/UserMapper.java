@@ -1,8 +1,8 @@
-package com.slavacom.user_service.mapper;
+package com.slavacom.userservice.mapper;
 
-import com.slavacom.user_service.dto.UserDto;
-import com.slavacom.user_service.dto.UserInfoDto;
-import com.slavacom.user_service.entity.User;
+import com.slavacom.userservice.dto.UserDto;
+import com.slavacom.userservice.dto.UserInfoDto;
+import com.slavacom.userservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

@@ -2,9 +2,49 @@
 <project version="4">
   <component name="AmplicodePersistenceUnitSettings">
     <persistence-units>
-      <persistence-unit moduleName="TaskMaster.AuthService.main" name="Default">
+      <persistence-unit moduleName="NotificationService.main" name="Default">
         <packages>
-          <package value="com.slavacom.authservice" />
+          <package value="com.slavacom.notificationservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="UserService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.userservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.taskservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="OrganizationService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.organizationservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskMaster.NotificationService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.notificationservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskMaster.OrganizationService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.organizationservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskMaster.TaskService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.taskservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskMaster.UserService.main" name="Default">
+        <packages>
+          <package value="com.slavacom.userservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="TaskMaster.Auth-service.main" name="Default">
+        <packages>
+          <package value="com.slavacom.auth_service" />
         </packages>
       </persistence-unit>
     </persistence-units>

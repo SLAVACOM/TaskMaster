@@ -1,4 +1,4 @@
-package com.slavacom.user_service.config;
+package com.slavacom.userservice.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

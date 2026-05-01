@@ -1,4 +1,4 @@
-package com.slavacom.user_service.config;
+package com.slavacom.userservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

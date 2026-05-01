@@ -24,6 +24,7 @@ data class TaskResponse(
     val end: Instant?,
     val deadline: Instant?,
     val sprintId: UUID?,
+    val projectId: UUID?,
     val storyPoint: Int?,
 )
 

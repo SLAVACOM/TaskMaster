@@ -1,7 +1,6 @@
 package com.slavacom.organizationservice.invitation
 
 import org.springframework.http.HttpStatus
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
@@ -12,8 +11,9 @@ class InvitationController(private val service: InvitationService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun invite(
         @PathVariable orgId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID,
         @RequestBody request: CreateInvitationRequest
-    ): InvitationResponse = service.invite(orgId, request, currentUserId())
+    ): InvitationResponse = service.invite(orgId, request, userId)
 
     @GetMapping("/api/organizations/{orgId}/invitations")
     fun list(@PathVariable orgId: UUID): List<InvitationResponse> =
@@ -27,6 +27,4 @@ class InvitationController(private val service: InvitationService) {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun decline(@PathVariable id: UUID) = service.decline(id)
 
-    private fun currentUserId(): UUID =
-        UUID.fromString(SecurityContextHolder.getContext().authentication.principal as String)
 }

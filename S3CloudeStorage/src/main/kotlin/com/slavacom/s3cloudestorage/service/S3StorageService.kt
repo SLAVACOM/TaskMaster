@@ -1,10 +1,10 @@
-package com.slavacom.s3storageservice.service
+package com.slavacom.s3cloudestorage.service
 
-import com.slavacom.s3storageservice.config.S3Properties
-import com.slavacom.s3storageservice.domain.DownloadFileRequest
-import com.slavacom.s3storageservice.domain.DownloadFileResponse
-import com.slavacom.s3storageservice.domain.UploadFileRequest
-import com.slavacom.s3storageservice.domain.UploadFileResponse
+import com.slavacom.s3cloudestorage.config.S3Properties
+import com.slavacom.s3cloudestorage.domain.DownloadFileRequest
+import com.slavacom.s3cloudestorage.domain.DownloadFileResponse
+import com.slavacom.s3cloudestorage.domain.UploadFileRequest
+import com.slavacom.s3cloudestorage.domain.UploadFileResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import software.amazon.awssdk.services.s3.model.GetObjectRequest

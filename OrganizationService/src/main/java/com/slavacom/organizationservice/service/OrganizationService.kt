@@ -1,9 +1,9 @@
 package com.slavacom.organizationservice.service
 
-import com.slavacom.organizationservice.controller.CreateOrganizationRequest
-import com.slavacom.organizationservice.controller.OrganizationResponse
-import com.slavacom.organizationservice.controller.UpdateOrganizationRequest
-import com.slavacom.organizationservice.controller.UserOrganizationInfoResponse
+import com.slavacom.organizationservice.dto.CreateOrganizationRequest
+import com.slavacom.organizationservice.dto.OrganizationResponse
+import com.slavacom.organizationservice.dto.UpdateOrganizationRequest
+import com.slavacom.organizationservice.dto.UserOrganizationInfoResponse
 import com.slavacom.organizationservice.employees.EmployeesRepository
 import com.slavacom.organizationservice.exception.OrganizationNotFoundException
 import com.slavacom.organizationservice.mapper.OrganizationMapper

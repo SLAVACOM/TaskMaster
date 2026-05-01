@@ -7,5 +7,5 @@ import java.util.UUID
 
 interface OrganizationRepository : JpaRepository<Organization, UUID>, JpaSpecificationExecutor<Organization> {
     fun findAllByIsActiveTrue(): List<Organization>
-    override fun findAll(): List<Organization>
 }
+

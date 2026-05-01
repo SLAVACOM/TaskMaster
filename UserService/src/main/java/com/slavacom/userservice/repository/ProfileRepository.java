@@ -1,6 +1,6 @@
-package com.slavacom.user_service.repository;
+package com.slavacom.userservice.repository;
 
-import com.slavacom.user_service.entity.Profile;
+import com.slavacom.userservice.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

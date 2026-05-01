@@ -1,14 +1,14 @@
-package com.slavacom.user_service.service;
+package com.slavacom.userservice.service;
 
-import com.slavacom.user_service.client.OrganizationServiceClient;
-import com.slavacom.user_service.dto.ExtendedUserInfoDto;
-import com.slavacom.user_service.dto.OrganizationInfoDto;
-import com.slavacom.user_service.dto.RegisterUserDto;
-import com.slavacom.user_service.entity.User;
-import com.slavacom.user_service.exception.UserAlreadyExistBy;
-import com.slavacom.user_service.exception.UserNotFoundException;
-import com.slavacom.user_service.repository.UserRepository;
-import com.slavacom.user_service.repository.UserService;
+import com.slavacom.userservice.client.OrganizationServiceClient;
+import com.slavacom.userservice.dto.ExtendedUserInfoDto;
+import com.slavacom.userservice.dto.OrganizationInfoDto;
+import com.slavacom.userservice.dto.RegisterUserDto;
+import com.slavacom.userservice.entity.User;
+import com.slavacom.userservice.exception.UserAlreadyExistBy;
+import com.slavacom.userservice.exception.UserNotFoundException;
+import com.slavacom.userservice.repository.UserRepository;
+import com.slavacom.userservice.repository.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

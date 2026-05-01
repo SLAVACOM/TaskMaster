@@ -7,6 +7,7 @@ import java.util.UUID
 interface TaskRepository : JpaRepository<Task, UUID>, TaskCriteriaRepository {
     fun findByExecutorAndIsActiveTrueOrderByCreatedAtDesc(executor: UUID): List<Task>
     fun findBySprintIdAndIsActiveTrueOrderByCreatedAtDesc(sprintId: UUID): List<Task>
+    fun findByProjectIdAndIsActiveTrueOrderByCreatedAtDesc(projectId: UUID): List<Task>
 	fun findByIdAndIsActiveTrue(id: UUID): Task?
 	fun findByIsActiveTrueOrderByCreatedAtDesc(): List<Task>
 }

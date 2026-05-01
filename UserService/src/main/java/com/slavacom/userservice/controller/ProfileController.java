@@ -4,7 +4,7 @@ import com.slavacom.userservice.dto.CreateProfileRequest;
 import com.slavacom.userservice.dto.ProfileResponse;
 import com.slavacom.userservice.dto.UpdateProfileRequest;
 import com.slavacom.userservice.service.ProfileService;
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,8 +31,12 @@ public class ProfileController {
     }
 
     @GetMapping
-    public List<ProfileResponse> getAllProfiles(@RequestHeader("X-User-Id") UUID userId) {
-        log.info("REST: Getting all profiles for current user: {}", userId);
+    public List<ProfileResponse> getAllProfiles(HttpServletRequest request) {
+		UUID userId = UUID.randomUUID();
+		log.info("HTTP {} {}", request.getMethod(), request.getRequestURI());
+		log.info("Query: {}", request.getQueryString());
+		log.info("Headers: Authorization={}", request.getHeader("Authorization"));
+		log.info("REST: Getting all profiles for current user: {}", userId);
         return profileService.getAllProfiles(userId);
     }
 

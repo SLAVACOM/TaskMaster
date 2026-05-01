@@ -1,4 +1,4 @@
-package com.slavacom.s3storageservice.config
+package com.slavacom.s3cloudestorage.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

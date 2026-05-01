@@ -6,24 +6,94 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.6.3/52e345c907fbf173b376586c7f8b131d53fa5867/mapstruct-processor-1.6.3.jar" />
         </processorPath>
-        <module name="TaskMaster.AuthService.main" />
+        <module name="TaskMaster.OrganizationService.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="TaskMaster.Auth-service.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.34/ec547ef414ab1d2c040118fb9c1c265ada63af14/lombok-1.18.34.jar" />
+        </processorPath>
+        <module name="TaskMaster.Gateway-service.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
+        </processorPath>
+        <module name="TaskMaster.S3CloudeStorage.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.6.0/d48e787cbd31bfd8766cdcd255ca102e974309/mapstruct-processor-1.6.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok-mapstruct-binding/0.2.0/2f1cf9ced7b720ba4996c942b816669e63f0fa4f/lombok-mapstruct-binding-0.2.0.jar" />
+        </processorPath>
+        <module name="TaskMaster.UserService.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="AuthService" target="21" />
-      <module name="AuthService.main" target="21" />
-      <module name="AuthService.test" target="21" />
+      <module name="Auth-Service.main" target="17" />
+      <module name="Auth-Service.test" target="17" />
+      <module name="AuthService" target="17" />
+      <module name="TaskMaster.AuthService" target="21" />
+      <module name="TaskMaster.AuthService.main" target="21" />
+      <module name="TaskMaster.AuthService.test" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Auth-Service.main" options="-parameters" />
+      <module name="Auth-Service.test" options="-parameters" />
       <module name="AuthService" options="-parameters" />
-      <module name="AuthService.main" options="-parameters" />
-      <module name="AuthService.test" options="-parameters" />
+      <module name="NotificationService" options="-parameters" />
+      <module name="NotificationService.main" options="-parameters" />
+      <module name="NotificationService.test" options="-parameters" />
+      <module name="OrganizationService" options="-parameters -proc:none" />
+      <module name="OrganizationService.main" options="-parameters -proc:none" />
+      <module name="OrganizationService.test" options="-parameters -proc:none" />
+      <module name="S3CloudeStorage" options="-parameters" />
+      <module name="S3CloudeStorage.main" options="-parameters" />
+      <module name="S3CloudeStorage.test" options="-parameters" />
+      <module name="TaskMaster.Auth-service" options="-parameters" />
+      <module name="TaskMaster.Auth-service.main" options="-parameters" />
+      <module name="TaskMaster.Auth-service.test" options="-parameters" />
       <module name="TaskMaster.AuthService" options="-parameters" />
       <module name="TaskMaster.AuthService.main" options="-parameters" />
       <module name="TaskMaster.AuthService.test" options="-parameters" />
+      <module name="TaskMaster.Gateway-service" options="-parameters" />
+      <module name="TaskMaster.Gateway-service.main" options="-parameters" />
+      <module name="TaskMaster.Gateway-service.test" options="-parameters" />
+      <module name="TaskMaster.NotificationService" options="-parameters" />
+      <module name="TaskMaster.NotificationService.main" options="-parameters" />
+      <module name="TaskMaster.NotificationService.test" options="-parameters" />
+      <module name="TaskMaster.OrganizationService" options="-parameters -proc:none" />
+      <module name="TaskMaster.OrganizationService.main" options="-parameters -proc:none" />
+      <module name="TaskMaster.OrganizationService.test" options="-parameters -proc:none" />
+      <module name="TaskMaster.S3CloudeStorage" options="-parameters" />
+      <module name="TaskMaster.S3CloudeStorage.main" options="-parameters" />
+      <module name="TaskMaster.S3CloudeStorage.test" options="-parameters" />
+      <module name="TaskMaster.TaskService" options="-parameters -proc:none" />
+      <module name="TaskMaster.TaskService.main" options="-parameters -proc:none" />
+      <module name="TaskMaster.TaskService.test" options="-parameters -proc:none" />
+      <module name="TaskMaster.UserService" options="-parameters" />
+      <module name="TaskMaster.UserService.main" options="-parameters" />
+      <module name="TaskMaster.UserService.test" options="-parameters" />
+      <module name="TaskService" options="-parameters -proc:none" />
+      <module name="TaskService.main" options="-parameters -proc:none" />
+      <module name="TaskService.test" options="-parameters -proc:none" />
+      <module name="UserService" options="-parameters" />
+      <module name="UserService.main" options="-parameters" />
+      <module name="UserService.test" options="-parameters" />
     </option>
   </component>
 </project>

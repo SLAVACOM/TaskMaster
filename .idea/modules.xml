@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AuthService/TaskMaster.AuthService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AuthService/TaskMaster.AuthService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OrganizationService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/OrganizationService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Auth-service/TaskMaster.Auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Auth-service/TaskMaster.Auth-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Gateway-service/TaskMaster.Gateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Gateway-service/TaskMaster.Gateway-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OrganizationService/TaskMaster.OrganizationService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/OrganizationService/TaskMaster.OrganizationService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UserService/TaskMaster.UserService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UserService/TaskMaster.UserService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UserService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UserService.main.iml" />
     </modules>
   </component>
 </project>

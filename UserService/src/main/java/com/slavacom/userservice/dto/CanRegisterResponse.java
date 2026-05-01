@@ -1,4 +1,4 @@
-package com.slavacom.user_service.dto;
+package com.slavacom.userservice.dto;
 
 /**
  * DTO для ответа на проверку возможности регистрации пользователя

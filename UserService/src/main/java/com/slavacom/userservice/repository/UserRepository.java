@@ -1,6 +1,6 @@
-package com.slavacom.user_service.repository;
+package com.slavacom.userservice.repository;
 
-import com.slavacom.user_service.entity.User;
+import com.slavacom.userservice.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;

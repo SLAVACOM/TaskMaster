@@ -3,78 +3,141 @@ package com.slavacom.gateway.filter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.HexFormat;
 import java.util.List;
 
 @Slf4j
 @Component
 public class JwtAuthFilter implements GlobalFilter, Ordered {
 
-    private static final List<String> PUBLIC_PATHS = List.of("/api/auth/");
+	private static final List<String> PUBLIC_PATHS = List.of("/api/auth/");
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+	@Value("${jwt.access.secret}")
+	private String ACCESS_SECRET;
 
-    @Override
-    public int getOrder() {
-        return -1;
-    }
+	@PostConstruct
+	public void logKeyFingerprint() {
+		SecretKey key = Keys.hmacShaKeyFor(ACCESS_SECRET.getBytes(StandardCharsets.UTF_8));
+		log.info("Gateway JWT access key fingerprint (first 4 bytes): {}",
+				HexFormat.of().formatHex(key.getEncoded()).substring(0, 8));
+	}
 
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String path = exchange.getRequest().getURI().getPath();
+	@Override
+	public int getOrder() {
+		return -1;
+	}
 
-        if (PUBLIC_PATHS.stream().anyMatch(path::startsWith)) {
-            return chain.filter(exchange);
-        }
+	@Override
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		log.info("Incoming request: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getURI());
 
-        String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
+		String path = exchange.getRequest().getURI().getPath();
 
-        try {
-            Claims claims = parseClaims(authHeader.substring(7));
+		if (PUBLIC_PATHS.stream().anyMatch(path::startsWith)) {
+			log.info("Public path accessed: {}", path);
+			return chain.filter(exchange);
+		}
 
-            String userId = claims.get("userId", String.class);
-            String role = claims.get("role", String.class);
-            String profileId = claims.get("profileId", String.class);
-            String organizationId = claims.get("organizationId", String.class);
+		String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
+		if (authHeader == null) {
 
-            ServerHttpRequest mutated = exchange.getRequest().mutate()
-                    .header("X-User-Id", userId != null ? userId : "")
-                    .header("X-User-Role", role != null ? role : "")
-                    .header("X-Profile-Id", profileId != null ? profileId : "")
-                    .header("X-Organization-Id", organizationId != null ? organizationId : "")
-                    .build();
+			exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+			log.warn("Missing or invalid Authorization header for path {}: {}", path, authHeader);
+			return exchange.getResponse().setComplete();
+		}
 
-            return chain.filter(exchange.mutate().request(mutated).build());
+		if (authHeader.startsWith("Bearer ")) {
+			authHeader = authHeader.substring(7);
+		}
 
-        } catch (Exception e) {
-            log.warn("JWT validation failed for path {}: {}", path, e.getMessage());
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
-    }
+		final String token = authHeader;
+		return Mono.fromCallable(() -> parseClaims(token))
+				.flatMap(claims -> {
+					try {
+						String userId = firstNonBlank(claims.get("userId", String.class), claims.getSubject());
+						String role = claims.get("role", String.class);
+						String profileId = claims.get("profileId", String.class);
+						String organizationId = claims.get("organizationId", String.class);
 
-    private Claims parseClaims(String token) {
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
+						// Сохраняем только непустые данные JWT в exchange attributes
+						putAttributeIfHasText(exchange, "X-User-Id", userId);
+						putAttributeIfHasText(exchange, "X-User-Role", role);
+						putAttributeIfHasText(exchange, "X-Profile-Id", profileId);
+						putAttributeIfHasText(exchange, "X-Organization-Id", organizationId);
+
+						log.info("JWT validated: path={} userId={} role={}", path, userId, role);
+						log.debug("JWT attributes stored in exchange: X-User-Id={}, X-User-Role={}, X-Profile-Id={}, X-Organization-Id={}",
+								userId, role, profileId, organizationId);
+						log.debug("Exchange attributes after JWT filter: {}", exchange.getAttributes());
+						return chain.filter(exchange);
+					} catch (Exception e) {
+						log.error("Error processing JWT claims: path={} error={}", path, e.getMessage(), e);
+						throw e;
+					}
+				})
+				.onErrorResume(e -> {
+					log.error("JWT validation failed: path={} error={} type={} cause={}",
+							path, e.getMessage(), e.getClass().getSimpleName(),
+							(e.getCause() != null ? e.getCause().getClass().getSimpleName() : "none"),
+							e);
+					exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+					return exchange.getResponse().setComplete();
+				});
+	}
+
+	private void putAttributeIfHasText(ServerWebExchange exchange, String key, String value) {
+		if (StringUtils.hasText(value)) {
+			exchange.getAttributes().put(key, value);
+		} else {
+			exchange.getAttributes().remove(key);
+		}
+	}
+
+	private String firstNonBlank(String primary, String fallback) {
+		return StringUtils.hasText(primary) ? primary : fallback;
+	}
+
+	private Claims parseClaims(String token) {
+		if (token == null || token.isEmpty()) {
+			throw new IllegalArgumentException("Token is empty");
+		}
+
+		if (ACCESS_SECRET == null || ACCESS_SECRET.isEmpty()) {
+			log.error("JWT_SECRET is not configured!");
+			throw new IllegalStateException("JWT_SECRET not configured");
+		}
+
+		try {
+			SecretKey key = Keys.hmacShaKeyFor(ACCESS_SECRET.getBytes(StandardCharsets.UTF_8));
+			Claims claims = Jwts.parser()
+					.verifyWith(key)
+					.build()
+					.parseSignedClaims(token.trim())
+					.getPayload();
+
+			log.debug("JWT parsed successfully. Claims: {}", claims);
+			return claims;
+		} catch (Exception e) {
+			log.error("Failed to parse JWT token: {}; SECRET length: {}; Token preview: {}",
+					e.getMessage(),
+					ACCESS_SECRET != null ? ACCESS_SECRET.length() : 0,
+					token.length() > 20 ? token.substring(0, 20) + "..." : token,
+					e);
+			throw new IllegalArgumentException("Invalid JWT token", e);
+		}
+	}
 }

@@ -3,24 +3,25 @@ package com.slavacom.auth_service.service;
 import com.slavacom.auth_service.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtService {
 
-	private final Key jwtAccessSigningKey;
-	private final Key jwtRefreshSigningKey;
+	private final SecretKey jwtAccessSigningKey;
+	private final SecretKey jwtRefreshSigningKey;
 
 	@Value("${jwt.access.expiration}")
 	private long accessTokenExpiration;
@@ -79,16 +80,13 @@ public class JwtService {
 		return buildToken(new HashMap<>(), userId.toString(), refreshTokenExpiration, jwtRefreshSigningKey);
 	}
 
-	/**
-	 * Построение JWT токена
-	 */
-	private String buildToken(Map<String, Object> extraClaims, String subject, long expiration, Key signingKey) {
+	private String buildToken(Map<String, Object> extraClaims, String subject, long expiration, SecretKey signingKey) {
 		return Jwts.builder()
-				.setClaims(extraClaims)
-				.setSubject(subject)
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + expiration))
-				.signWith(signingKey, SignatureAlgorithm.HS256)
+				.claims(extraClaims)
+				.subject(subject)
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + expiration))
+				.signWith(signingKey)
 				.compact();
 	}
 
@@ -161,15 +159,12 @@ public class JwtService {
 		return extractClaim(token, Claims::getExpiration, isRefreshToken);
 	}
 
-	/**
-	 * Извлечение всех claims из токена
-	 */
-	private Claims extractAllClaims(String token, Key signingKey) {
+	private Claims extractAllClaims(String token, SecretKey signingKey) {
 		return Jwts.parser()
-				.setSigningKey(signingKey)
+				.verifyWith(signingKey)
 				.build()
-				.parseClaimsJws(token)
-				.getBody();
+				.parseSignedClaims(token)
+				.getPayload();
 	}
 }
 

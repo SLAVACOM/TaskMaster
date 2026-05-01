@@ -3,7 +3,7 @@ package com.slavacom.organizationservice.employees
 import com.slavacom.organizationservice.exception.EmployeeAlreadyExistsException
 import com.slavacom.organizationservice.exception.EmployeeNotFoundException
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class EmployeesService(
@@ -17,7 +17,7 @@ class EmployeesService(
 
     fun add(orgId: UUID, request: AddEmployeeRequest): EmployeeResponse {
         if (employeesRepository.existsByUserIdAndOrganizationIdAndIsActiveTrue(request.userId, orgId)) {
-            throw EmployeeAlreadyExistsException("Employee with userId ${request.userId} already exists in organization $orgId")
+            throw EmployeeAlreadyExistsException(request.userId, orgId)
         }
         val employee = employeesMapper.fromAddRequest(request)
         employee.organizationId = orgId

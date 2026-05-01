@@ -1,12 +1,12 @@
-package com.slavacom.user_service.service;
+package com.slavacom.userservice.service;
 
-import com.slavacom.user_service.dto.CreateProfileRequest;
-import com.slavacom.user_service.dto.ProfileResponse;
-import com.slavacom.user_service.dto.UpdateProfileRequest;
-import com.slavacom.user_service.entity.Profile;
-import com.slavacom.user_service.entity.User;
-import com.slavacom.user_service.repository.ProfileRepository;
-import com.slavacom.user_service.repository.UserRepository;
+import com.slavacom.userservice.dto.CreateProfileRequest;
+import com.slavacom.userservice.dto.ProfileResponse;
+import com.slavacom.userservice.dto.UpdateProfileRequest;
+import com.slavacom.userservice.entity.Profile;
+import com.slavacom.userservice.entity.User;
+import com.slavacom.userservice.repository.ProfileRepository;
+import com.slavacom.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

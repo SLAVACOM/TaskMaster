@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: OrganizationService
+
+    datasource:
+        url: ${DB_URL:jdbc:postgresql://localhost:5432/organization_db}
+        username: ${DB_USERNAME:postgres}
+        password: ${DB_PASSWORD:postgres}
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+server:
+  port: ${SERVER_PORT:8080}

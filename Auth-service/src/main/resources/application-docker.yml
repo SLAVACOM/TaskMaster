@@ -1,10 +1,10 @@
 jwt:
-  refresh:
-    secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}
-    expiration: ${JWT_REFRESH_EXPIRATON:604800000}
   access:
-    secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}
+    secret: ${JWT_ACCESS_SECRET:TaskMasterAccessSecret2026SuperLongKey}
     expiration: ${JWT_ACCESS_EXPIRATON:900000}
+  refresh:
+    secret: ${JWT_REFRESH_SECRET:TaskMasterRefreshSecret2026SuperLongKey}
+    expiration: ${JWT_REFRESH_EXPIRATON:604800000}
 
 user-service:
   url: ${USER_SERVICE_URL:http://profile-service:8080}

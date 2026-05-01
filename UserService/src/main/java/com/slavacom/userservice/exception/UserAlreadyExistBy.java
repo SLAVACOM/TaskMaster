@@ -1,4 +1,4 @@
-package com.slavacom.user_service.exception;
+package com.slavacom.userservice.exception;
 
 public class UserAlreadyExistBy extends RuntimeException {
 	public UserAlreadyExistBy(String by, String value) {

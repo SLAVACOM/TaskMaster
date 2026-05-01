@@ -1,4 +1,4 @@
-package com.slavacom.organizationservice.controller
+package com.slavacom.organizationservice.dto
 
 import java.time.Instant
 import java.util.*

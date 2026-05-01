@@ -1,0 +1,91 @@
+2026-04-02 15:44:14.424 [main] INFO  c.s.s.S3StorageServiceApplicationKt - Starting S3StorageServiceApplicationKt using Java 21.0.8 with PID 14064 (C:\Users\slava\IdeaProjects\TaskMaster\S3CloudeStorage\build\classes\kotlin\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-04-02 15:44:14.427 [main] INFO  c.s.s.S3StorageServiceApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2026-04-02 15:44:14.577 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-02 15:44:15.319 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-02 15:44:15.322 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-02 15:44:15.352 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-04-02 15:44:15.743 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8090 (http)
+2026-04-02 15:44:15.755 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8090"]
+2026-04-02 15:44:15.757 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 15:44:15.757 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-02 15:44:15.809 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1319 ms
+2026-04-02 15:44:16.291 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 's3Client' defined in class path resource [com/slavacom/s3cloudestorage/config/S3Config.class]: Failed to instantiate [software.amazon.awssdk.services.s3.S3Client]: Factory method 's3Client' threw exception with message: The URI scheme of endpointOverride must not be null.
+2026-04-02 15:44:16.301 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-04-02 15:44:16.308 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-04-02 15:44:16.318 [main] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 's3Client' defined in class path resource [com/slavacom/s3cloudestorage/config/S3Config.class]: Failed to instantiate [software.amazon.awssdk.services.s3.S3Client]: Factory method 's3Client' threw exception with message: The URI scheme of endpointOverride must not be null.
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1218)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1184)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:994)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at com.slavacom.s3cloudestorage.S3StorageServiceApplicationKt.main(S3StorageServiceApplication.kt:13)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [software.amazon.awssdk.services.s3.S3Client]: Factory method 's3Client' threw exception with message: The URI scheme of endpointOverride must not be null.
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:183)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:72)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:152)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 21 common frames omitted
+Caused by: java.lang.NullPointerException: The URI scheme of endpointOverride must not be null.
+	at software.amazon.awssdk.utils.Validate.paramNotNull(Validate.java:156)
+	at software.amazon.awssdk.core.client.builder.SdkDefaultClientBuilder.endpointOverride(SdkDefaultClientBuilder.java:540)
+	at com.slavacom.s3cloudestorage.config.S3Config.s3Client(S3Config.kt:20)
+	at com.slavacom.s3cloudestorage.config.S3Config$$SpringCGLIB$$0.CGLIB$s3Client$0(<generated>)
+	at com.slavacom.s3cloudestorage.config.S3Config$$SpringCGLIB$$FastClass$$1.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:398)
+	at com.slavacom.s3cloudestorage.config.S3Config$$SpringCGLIB$$0.s3Client(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:155)
+	... 24 common frames omitted
+2026-04-02 15:46:06.697 [main] INFO  c.s.s.S3StorageServiceApplicationKt - Starting S3StorageServiceApplicationKt using Java 21.0.8 with PID 27056 (C:\Users\slava\IdeaProjects\TaskMaster\S3CloudeStorage\build\classes\kotlin\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-04-02 15:46:06.703 [main] INFO  c.s.s.S3StorageServiceApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2026-04-02 15:46:06.845 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-02 15:46:07.574 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-02 15:46:07.577 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-02 15:46:07.611 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-04-02 15:46:08.011 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-02 15:46:08.020 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-02 15:46:08.022 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 15:46:08.022 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-02 15:46:08.075 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1317 ms
+2026-04-02 15:46:09.223 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-02 15:46:09.232 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-02 15:46:09.236 [main] INFO  c.s.s.S3StorageServiceApplicationKt - Started S3StorageServiceApplicationKt in 3.097 seconds (process running for 3.5)
+2026-04-02 15:46:27.098 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 15:46:27.104 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-02 17:06:52.034 [main] INFO  c.s.s.S3StorageServiceApplicationKt - Starting S3StorageServiceApplicationKt using Java 26 with PID 24040 (C:\Users\slava\IdeaProjects\TaskMaster\S3CloudeStorage\build\classes\kotlin\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-04-02 17:06:52.037 [main] INFO  c.s.s.S3StorageServiceApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2026-04-02 17:06:52.246 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-02 17:06:53.620 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-02 17:06:53.624 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-02 17:06:53.672 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 0 Redis repository interfaces.
+2026-04-02 17:06:54.964 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-02 17:06:54.985 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-02 17:06:54.987 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 17:06:54.989 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-04-02 17:06:55.097 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2941 ms
+2026-04-02 17:06:57.997 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-02 17:06:58.082 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-02 17:06:58.093 [main] INFO  c.s.s.S3StorageServiceApplicationKt - Started S3StorageServiceApplicationKt in 7.268 seconds (process running for 8.044)
+2026-04-02 17:37:17.504 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 17:37:17.508 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete

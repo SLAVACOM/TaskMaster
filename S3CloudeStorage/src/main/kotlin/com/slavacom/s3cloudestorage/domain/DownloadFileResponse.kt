@@ -1,4 +1,4 @@
-package com.slavacom.s3storageservice.domain
+package com.slavacom.s3cloudestorage.domain
 
 data class DownloadFileResponse(
     val file: String?,

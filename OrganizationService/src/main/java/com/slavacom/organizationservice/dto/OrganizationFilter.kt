@@ -1,4 +1,4 @@
-package com.slavacom.organizationservice.controller
+package com.slavacom.organizationservice.dto
 
 import com.slavacom.organizationservice.entity.Organization
 import org.springframework.data.jpa.domain.Specification

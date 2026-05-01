@@ -170,7 +170,7 @@ Downstream-сервисы: убирают JWT, читают `X-User-Id` чере
 
 ### Task 7: Verify acceptance criteria
 
-- [ ] Собрать `Gateway-service` локально: `./gradlew bootRun`
+- [x] Собрать `Gateway-service` локально: `./gradlew bootRun`
 - [ ] Запустить полный стек через docker-compose и выполнить:
   - `POST /api/auth/login` → получить JWT
   - `GET /api/users/{id}/extended` через Gateway — убедиться, что X-User-Id передаётся и ответ корректен

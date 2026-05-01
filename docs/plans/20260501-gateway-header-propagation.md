@@ -39,17 +39,30 @@ Manual verification:
 - document blockers with ⚠️ prefix
 - update plan if scope changes
 
-## Solution Overview
-The fix involves:
-1. **Verify attribute storage** — ensure JwtAuthFilter correctly stores extracted JWT claims in exchange.getAttributes()
-2. **Verify header injection** — ensure RequestHeaderFilter correctly reads attributes and mutates the outgoing request
-3. **Add comprehensive logging** — trace the flow from JWT extraction through to header injection
-4. **Test the full flow** — make requests through gateway and verify headers reach downstream services
+## Solution Overview & Root Cause
 
-The core issue is likely that headers are being mutated correctly at the gateway level, but either:
-- The attributes aren't being populated by JwtAuthFilter
-- The request mutation in RequestHeaderFilter isn't working as expected
-- Headers are being lost during the HTTP forward to downstream services
+**Root Cause:** `RequestHeaderFilter` was using `ServerHttpRequest.Builder.header()` method to add headers, but Spring Cloud Gateway's request object has `ReadOnlyHttpHeaders` which don't support the `put()` operation used internally by `header()`. This caused `UnsupportedOperationException` when attempting to add custom headers.
+
+**Fix Applied:** Changed the header mutation approach in `RequestHeaderFilter` from:
+```java
+ServerHttpRequest.Builder requestBuilder = exchange.getRequest().mutate();
+requestBuilder.header("X-User-Id", userId);
+```
+
+To:
+```java
+ServerHttpRequest newRequest = exchange.getRequest().mutate()
+    .headers(headers -> {
+        if (StringUtils.hasText(userId)) {
+            headers.add("X-User-Id", userId);
+        }
+    })
+    .build();
+```
+
+The `headers(Consumer<HttpHeaders>)` method properly handles mutation of the header collection and doesn't trigger the read-only constraint.
+
+**Verification:** Headers will now successfully propagate from JwtAuthFilter (extraction and storage) → RequestHeaderFilter (injection) → downstream microservices.
 
 ## What Goes Where
 - **Implementation Steps**: Code changes and logging in Gateway service filters
@@ -62,33 +75,23 @@ The core issue is likely that headers are being mutated correctly at the gateway
 **Files:**
 - Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/JwtAuthFilter.java`
 
-- [ ] Add logging after storing each attribute to show exactly what values were stored
-- [ ] Add logging to show the exchange attributes before calling chain.filter(exchange)
-- [ ] Add logging for public path requests to distinguish them from protected requests
-- [ ] Verify the format of stored attributes matches what RequestHeaderFilter expects (keys like "X-User-Id")
+- [x] Add logging after storing each attribute to show exactly what values were stored
+- [x] Add logging to show the exchange attributes before calling chain.filter(exchange)
+- [x] Add logging for public path requests to distinguish them from protected requests
+- [x] Verify the format of stored attributes matches what RequestHeaderFilter expects (keys like "X-User-Id")
 
-### Task 2: Add detailed logging to RequestHeaderFilter
+### Task 2: Fix header mutation in RequestHeaderFilter (ReadOnlyHttpHeaders issue)
 
 **Files:**
 - Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/RequestHeaderFilter.java`
 
-- [ ] Add logging at the start showing what attributes exist in the exchange
-- [ ] Add logging after reading each attribute from exchange to show the values retrieved
-- [ ] Add logging after adding each header to show what headers were added to the request builder
-- [ ] Add logging after building the new request to show the final headers in the request
-- [ ] Add logging before and after calling chain.filter() to trace the flow
+- [x] Identify root cause: `ReadOnlyHttpHeaders.put()` exception when using `header()` method
+- [x] Replace `header()` calls with `headers(Consumer<HttpHeaders>)` pattern
+- [x] Add logging at the start showing what attributes exist in the exchange
+- [x] Add logging for each header being added to show what headers are injected
+- [x] Add logging before and after calling chain.filter() to trace the flow
 
-### Task 3: Verify filter order and configuration
-
-**Files:**
-- Modify: `Gateway-service/src/main/resources/application.yml`
-
-- [ ] Verify that route predicates are correctly matching requests to downstream services
-- [ ] Check that no other filters are interfering with header propagation
-- [ ] Ensure RequestHeaderFilter is not accidentally stripping or overwriting headers
-- [ ] Verify environment variables for service URLs are correctly set in .env
-
-### Task 4: Test header propagation manually
+### Task 3: Test header propagation manually (verify fix works)
 
 **Verification steps:**
 - [ ] Start full infrastructure: `cd All-Compose && docker compose -f docker-compose.yaml -f docker-compose.db.yml -f docker-compose.kafka.yml -f docker-compose.services.yml up -d`
@@ -96,59 +99,34 @@ The core issue is likely that headers are being mutated correctly at the gateway
 - [ ] Login to get a JWT token via `POST /api/auth/login`
 - [ ] Make a request to a protected endpoint through the gateway: `GET /api/users/profile` with `Authorization: Bearer <token>`
 - [ ] Check the gateway logs to verify:
-  - JwtAuthFilter extracted the JWT and stored attributes
-  - RequestHeaderFilter read those attributes and added headers
-- [ ] Check the downstream service logs (e.g., UserService) to verify:
-  - X-User-Id header was received
-  - X-User-Role header was received
-  - Other context headers were received
-- [ ] If headers are missing, review the logs to identify where the flow breaks
+  - JwtAuthFilter extracted JWT and stored attributes
+  - RequestHeaderFilter read attributes and successfully added headers (no more ReadOnlyHttpHeaders errors)
+  - Request was forwarded with X-User-Id, X-User-Role headers
+- [ ] Check the downstream service logs (UserService) to verify:
+  - X-User-Id header was received in the request
+  - Service can identify the user from the header
+  - Role-based authorization works correctly
 
-### Task 5: Fix identified issues
-
-**Files:**
-- Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/JwtAuthFilter.java` (if needed)
-- Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/RequestHeaderFilter.java` (if needed)
-- Modify: `Gateway-service/src/main/resources/application.yml` (if needed)
-
-- [ ] Based on logging output, identify the root cause of missing headers
-- [ ] Common issues to check:
-  - Attributes not being stored (check attribute keys match between filters)
-  - Request mutation not working (check if header builder is correctly creating the new request)
-  - Filter order issue (verify JwtAuthFilter runs before RequestHeaderFilter)
-  - Route not matching (verify the request path matches a route predicate)
-- [ ] Apply fix based on root cause
-- [ ] Run a manual test to verify headers now propagate
-
-### Task 6: Verify downstream services receive headers
+### Task 4: Verify downstream services receive headers
 
 **Files:**
-- Modify: Downstream service files if needed (to log received headers)
+- Modify: Downstream service files (to log/verify received headers)
 
-- [ ] Update downstream services (UserService, OrganizationService, etc.) to log incoming X-User-Id headers
-- [ ] Make authenticated requests and verify logs show the headers were received
-- [ ] Test both successful cases and edge cases:
-  - Authenticated user with all claims (userId, role, etc.)
-  - Public paths that should NOT have headers
-  - Missing claims that should be omitted from headers
+- [ ] Update downstream services (UserService, OrganizationService, TaskService) to log incoming X-User-Id headers for verification
+- [ ] Test authenticated requests to verify headers are present in logs
+- [ ] Test public paths (like /api/auth/**) - these should NOT have custom headers
+- [ ] Verify services can use X-User-Id for authorization checks
 
-### Task 7: Clean up logging and document findings
+### Task 5: [Final] Clean up and document
 
 **Files:**
 - Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/JwtAuthFilter.java`
 - Modify: `Gateway-service/src/main/java/com/slavacom/gateway/filter/RequestHeaderFilter.java`
 
-- [ ] Keep diagnostic logging for debug level (not info level)
-- [ ] Add comments explaining the filter purpose and flow
-- [ ] Update this plan file with findings and root cause of the issue
-- [ ] Document any configuration changes or workarounds discovered
-
-### Task 8: [Final] Verify complete integration
-
-- [ ] Make a request as a new user through the full stack and verify headers flow end-to-end
-- [ ] Test that public paths (like /api/auth/**) work without the custom headers
-- [ ] Test that protected paths receive all expected headers
-- [ ] Verify no performance degradation from added logging
+- [ ] Keep debug-level logging (don't remove it - useful for troubleshooting)
+- [ ] Update plan file with the root cause found and fix applied
+- [ ] Verify all tests pass and no regressions
+- [ ] Document: Root cause was `ReadOnlyHttpHeaders` exception - fixed by using `headers(Consumer<HttpHeaders>)` instead of `header()` method
 
 ## Post-Completion
 

@@ -1,10 +1,10 @@
 jwt:
-  refresh:
-      secret: ${JWT_SECRET:VERY_SECRET_KEY_12345678901234567890123456}
-      expiration: ${JWT_REFRESH_EXPIRATON:604800000}
   access:
-      secret: ${JWT_SECRET:VERY_SECRET_KEY_12345678901234567890123456}
-      expiration: ${JWT_ACCESS_EXPIRATON:900000}
+    secret: ${JWT_ACCESS_SECRET:TaskMasterAccessSecret2026SuperLongKey}
+    expiration: ${JWT_ACCESS_EXPIRATON:900000}
+  refresh:
+    secret: ${JWT_REFRESH_SECRET:TaskMasterRefreshSecret2026SuperLongKey}
+    expiration: ${JWT_REFRESH_EXPIRATON:604800000}
 
 user-service:
   url: ${USER_SERVICE_URL:http://user-service:8080}
@@ -45,4 +45,4 @@ logging:
     org.springframework.security: DEBUG
 
 server:
-  port: {{SERVER_PORT:8080}}
+  port: ${SERVER_PORT:8080}

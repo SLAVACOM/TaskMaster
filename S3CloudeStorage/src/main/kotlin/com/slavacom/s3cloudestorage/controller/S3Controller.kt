@@ -1,12 +1,12 @@
-package com.slavacom.s3storageservice.controller
+package com.slavacom.s3cloudestorage.controller
 
-import com.slavacom.s3storageservice.domain.DownloadFileRequest
-import com.slavacom.s3storageservice.domain.DownloadFileResponse
-import com.slavacom.s3storageservice.domain.DownloadFilesRequest
-import com.slavacom.s3storageservice.domain.UploadFileRequest
-import com.slavacom.s3storageservice.domain.UploadFileResponse
-import com.slavacom.s3storageservice.domain.UploadFilesRequest
-import com.slavacom.s3storageservice.service.S3StorageService
+import com.slavacom.s3cloudestorage.domain.DownloadFileRequest
+import com.slavacom.s3cloudestorage.domain.DownloadFileResponse
+import com.slavacom.s3cloudestorage.domain.DownloadFilesRequest
+import com.slavacom.s3cloudestorage.domain.UploadFileRequest
+import com.slavacom.s3cloudestorage.domain.UploadFileResponse
+import com.slavacom.s3cloudestorage.domain.UploadFilesRequest
+import com.slavacom.s3cloudestorage.service.S3StorageService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping

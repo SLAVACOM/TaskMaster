@@ -1,6 +1,6 @@
-package com.slavacom.user_service.dto;
+package com.slavacom.userservice.dto;
 
-import com.slavacom.user_service.entity.User;
+import com.slavacom.userservice.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

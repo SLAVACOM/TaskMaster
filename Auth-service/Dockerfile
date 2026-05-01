@@ -1,5 +1,5 @@
 # Stage: build application JAR
-FROM gradle:9.4.1-jdk25-alpine AS builder
+FROM gradle:9.4.1-jdk21-alpine AS builder
 WORKDIR /application
 COPY . .
 RUN --mount=type=cache,target=/root/.gradle gradle clean build -x test

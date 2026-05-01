@@ -8,13 +8,14 @@ services:
       - organization-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
+      JWT_ACCESS_SECRET: TaskMasterAccessSecret2026SuperLongKey
+      JWT_REFRESH_SECRET: TaskMasterRefreshSecret2026SuperLongKey
       AUTH_SERVICE_URL: http://auth-service:8080
       USER_SERVICE_URL: http://user-service:8080
       ORG_SERVICE_URL: http://organization-service:8080
       TASK_SERVICE_URL: http://task-service:8080
     ports:
-      - "8080:8080"
+      - "8090:8080"
     networks:
       - micro-net
 
@@ -33,10 +34,11 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       USER_SERVICE_URL: http://user-service:8080
-      JWT_SECRET: mySuperSecretKeyForDockerEnvironment
+      JWT_ACCESS_SECRET: TaskMasterAccessSecret2026SuperLongKey
+      JWT_REFRESH_SECRET: TaskMasterRefreshSecret2026SuperLongKey
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     ports:
-      - "8081:8080"
+      - "8091:8080"
     networks:
       - micro-net
     healthcheck:
@@ -50,7 +52,7 @@ services:
     build: ../UserService
     container_name: TaskMaster-UserService
     ports:
-      - "8082:8080"
+      - "8092:8080"
     depends_on:
       - user-db
     environment:
@@ -60,6 +62,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       PROFILE_SERVICE_URL: http://user-service:8080
+      ORG_SERVICE_URL: http://organization-service:8080
     volumes:
       - user-service-logs:/app/logs
     networks:
@@ -69,7 +72,7 @@ services:
     build: ../OrganizationService
     container_name: TaskMaster-OrganizationService
     ports:
-      - "8083:8080"
+      - "8093:8080"
     depends_on:
       - organization-db
       - user-service
@@ -88,7 +91,7 @@ services:
     build: ../TaskService
     container_name: TaskMaster-TaskService
     ports:
-      - "8084:8080"
+      - "8094:8080"
     depends_on:
       - task-db
     environment:

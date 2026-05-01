@@ -13,6 +13,7 @@ data class TaskSearchRequest(
     val responsible: UUID? = null,
     val executor: UUID? = null,
     val sprintId: UUID? = null,
+    val projectId: UUID? = null,
     val isActive: Boolean? = true,
     val tag: String? = null,
     val observerId: UUID? = null,
