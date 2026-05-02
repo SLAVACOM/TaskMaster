@@ -99,6 +99,23 @@ public class AuthController {
 	}
 
 	/**
+	 * Обновление профиля пользователя (вызывается из OrganizationService)
+	 * Сохраняет latestProfileId для включения в JWT при регенерации
+	 *
+	 * @param userId  ID пользователя
+	 * @param request информация о профиле (profileId, organizationId)
+	 */
+	@PutMapping("/users/{userId}/profile")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void updateUserProfile(
+			@PathVariable UUID userId,
+			@Valid @RequestBody UpdateProfileRequest request) {
+		log.info("PUT /api/auth/users/{}/profile - Updating profile: profileId={}, orgId={}",
+				userId, request.getProfileId(), request.getOrganizationId());
+		authService.updateUserProfile(userId, request.getProfileId(), request.getOrganizationId());
+	}
+
+	/**
 	 * Удаление учетных данных пользователя
 	 *
 	 * @param userId ID пользователя

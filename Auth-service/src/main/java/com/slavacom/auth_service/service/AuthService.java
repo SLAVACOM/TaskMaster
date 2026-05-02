@@ -346,6 +346,29 @@ public class AuthService {
 	}
 
 	/**
+	 * Обновление профиля пользователя (вызывается из OrganizationService)
+	 * Сохраняет latestProfileId и latestOrganizationId для включения в JWT
+	 *
+	 * @param userId ID пользователя
+	 * @param profileId ID профиля в организации
+	 * @param organizationId ID организации
+	 */
+	@Transactional
+	public void updateUserProfile(UUID userId, UUID profileId, UUID organizationId) {
+		log.info("Updating user profile for userId: {} with profileId: {} and organizationId: {}",
+				userId, profileId, organizationId);
+
+		User user = userRepository.findByUserId(userId)
+				.orElseThrow(() -> new UserNotFoundException(userId));
+
+		user.setLatestProfileId(profileId);
+		user.setLatestOrganizationId(organizationId);
+		userRepository.save(user);
+
+		log.info("User profile updated successfully for userId: {} with profileId: {}", userId, profileId);
+	}
+
+	/**
 	 * Удаление учетных данных пользователя
 	 *
 	 * @param userId ID пользователя

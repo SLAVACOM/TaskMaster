@@ -34,6 +34,12 @@ public class User {
 	@Column(name = "role", nullable = false)
 	private Role role = Role.USER;
 
+	@Column(name = "latest_profile_id")
+	private UUID latestProfileId;
+
+	@Column(name = "latest_organization_id")
+	private UUID latestOrganizationId;
+
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant createdAt;
