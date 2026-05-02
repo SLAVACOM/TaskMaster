@@ -51,7 +51,7 @@ public class RequestHeaderFilter implements GlobalFilter, Ordered {
 		// Create mutable headers by copying original headers
 		HttpHeaders mutableHeaders = new HttpHeaders();
 //		mutableHeaders.putAll(exchange.getRequest().getHeaders());
-
+		mutableHeaders.add("Content-Type", "application/json");
 		// Add JWT context headers
 		if (StringUtils.hasText(userId)) {
 			mutableHeaders.add("X-User-Id", userId);

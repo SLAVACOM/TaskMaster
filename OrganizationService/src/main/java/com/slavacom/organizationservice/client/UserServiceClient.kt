@@ -2,14 +2,15 @@ package com.slavacom.organizationservice.client
 
 import com.slavacom.organizationservice.dto.CreateProfileRequest
 import com.slavacom.organizationservice.dto.ProfileResponse
-import lombok.extern.slf4j.Slf4j
+import com.slavacom.organizationservice.exception.UserServiceException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientException
-import java.util.UUID
+import org.springframework.web.client.body
+import java.util.*
 
 @Component
 class UserServiceClient(
@@ -36,18 +37,18 @@ class UserServiceClient(
                 .uri("/api/profiles")
                 .body(request)
                 .retrieve()
-                .onStatus(HttpStatus::isError) { request, response ->
+                .onStatus({ it.isError }) { request, response ->
                     logger.error(
                         "Failed to create profile: status={}, body={}",
                         response.statusCode,
-                        response.bodyAsString
+                        response.body
                     )
                     throw UserServiceException(
                         "Failed to create profile: ${response.statusCode}",
-                        response.statusCode
+                        response.statusCode as HttpStatus
                     )
                 }
-                .body(ProfileResponse::class.java)
+                .body<ProfileResponse>()
                 ?: throw UserServiceException("Empty response from UserService", HttpStatus.INTERNAL_SERVER_ERROR)
 
             logger.info("Successfully created profile: profileId={}", response.id)
@@ -72,15 +73,18 @@ class UserServiceClient(
             val response = restClient.get()
                 .uri("/api/users/{userId}", userId)
                 .retrieve()
-                .onStatus(HttpStatus::isError) { request, response ->
+                .onStatus({ it.isError }) { request, response ->
                     if (response.statusCode == HttpStatus.NOT_FOUND) {
                         logger.warn("User not found: userId={}", userId)
                         return@onStatus
                     }
                     logger.error("Failed to get user: status={}", response.statusCode)
-                    throw UserServiceException("Failed to get user: ${response.statusCode}", response.statusCode)
+                    throw UserServiceException(
+                        "Failed to get user: ${response.statusCode}",
+                        response.statusCode as HttpStatus
+                    )
                 }
-                .body(ProfileResponse::class.java)
+                .body<ProfileResponse>()
 
             response?.let { logger.info("Got profile: profileId={}", it.id) }
             response
@@ -95,8 +99,3 @@ class UserServiceClient(
 /**
  * Custom exception for UserService errors
  */
-class UserServiceException(
-    message: String,
-    val statusCode: HttpStatus,
-    cause: Throwable? = null
-) : RuntimeException(message, cause)

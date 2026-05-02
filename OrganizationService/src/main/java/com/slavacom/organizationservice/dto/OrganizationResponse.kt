@@ -9,7 +9,7 @@ data class OrganizationResponse(
     var description: String?,
     var accountable: UUID,
     var isActive: Boolean,
-    var createdAt: Instant,
+    var createdAt: Instant? = Instant.now(),
     var updatedAt: Instant?,
     var profileId: UUID? = null
 )

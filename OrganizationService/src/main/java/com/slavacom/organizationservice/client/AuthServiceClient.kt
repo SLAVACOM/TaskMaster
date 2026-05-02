@@ -1,13 +1,14 @@
 package com.slavacom.organizationservice.client
 
 import com.slavacom.organizationservice.dto.UpdateProfileRequest
+import com.slavacom.organizationservice.exception.AuthServiceException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientException
-import java.util.UUID
+import java.util.*
 
 @Component
 class AuthServiceClient(
@@ -40,15 +41,15 @@ class AuthServiceClient(
                 .uri("/api/auth/users/{userId}/profile", userId)
                 .body(request)
                 .retrieve()
-                .onStatus(HttpStatus::isError) { httpRequest, response ->
+                .onStatus({ it.isError }) { httpRequest, response ->
                     logger.error(
                         "Failed to update profile in AuthService: status={}, body={}",
                         response.statusCode,
-                        response.bodyAsString
+                        response.body
                     )
                     throw AuthServiceException(
                         "Failed to update profile: ${response.statusCode}",
-                        response.statusCode
+                        response.statusCode as HttpStatus
                     )
                 }
                 .toBodilessEntity()
@@ -84,7 +85,7 @@ class AuthServiceClient(
             val response = restClient.get()
                 .uri("/api/auth/users/{userId}", userId)
                 .retrieve()
-                .onStatus(HttpStatus::isError) { request, response ->
+                .onStatus({ it.isError }) { request, response ->
                     if (response.statusCode == HttpStatus.NOT_FOUND) {
                         logger.warn("User not found in AuthService: userId={}", userId)
                         return@onStatus
@@ -92,7 +93,7 @@ class AuthServiceClient(
                     logger.error("Failed to get user profile: status={}", response.statusCode)
                     throw AuthServiceException(
                         "Failed to get user profile: ${response.statusCode}",
-                        response.statusCode
+                        response.statusCode as HttpStatus
                     )
                 }
                 .body(String::class.java)
@@ -114,8 +115,3 @@ class AuthServiceClient(
 /**
  * Custom exception for AuthService errors
  */
-class AuthServiceException(
-    message: String,
-    val statusCode: HttpStatus,
-    cause: Throwable? = null
-) : RuntimeException(message, cause)

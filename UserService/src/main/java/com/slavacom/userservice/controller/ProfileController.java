@@ -31,11 +31,7 @@ public class ProfileController {
     }
 
     @GetMapping
-    public List<ProfileResponse> getAllProfiles(HttpServletRequest request) {
-		UUID userId = UUID.randomUUID();
-		log.info("HTTP {} {}", request.getMethod(), request.getRequestURI());
-		log.info("Query: {}", request.getQueryString());
-		log.info("Headers: Authorization={}", request.getHeader("Authorization"));
+    public List<ProfileResponse> getAllProfiles(@RequestHeader("X-User-Id") UUID userId) {
 		log.info("REST: Getting all profiles for current user: {}", userId);
         return profileService.getAllProfiles(userId);
     }

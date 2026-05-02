@@ -1,21 +1,21 @@
 package com.slavacom.organizationservice.service
 
 import com.slavacom.organizationservice.client.AuthServiceClient
-import com.slavacom.organizationservice.client.AuthServiceException
 import com.slavacom.organizationservice.client.UserServiceClient
-import com.slavacom.organizationservice.client.UserServiceException
 import com.slavacom.organizationservice.dto.CreateOrganizationRequest
 import com.slavacom.organizationservice.dto.OrganizationResponse
 import com.slavacom.organizationservice.dto.UpdateOrganizationRequest
 import com.slavacom.organizationservice.dto.UserOrganizationInfoResponse
 import com.slavacom.organizationservice.employees.EmployeesRepository
+import com.slavacom.organizationservice.exception.AuthServiceException
 import com.slavacom.organizationservice.exception.OrganizationNotFoundException
+import com.slavacom.organizationservice.exception.UserServiceException
 import com.slavacom.organizationservice.mapper.OrganizationMapper
 import com.slavacom.organizationservice.repository.OrganizationRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
+import java.util.*
 
 @Service
 class OrganizationService(
@@ -29,7 +29,7 @@ class OrganizationService(
 
     fun getAll(isActive: Boolean = true): List<OrganizationResponse> {
         val data = if (isActive) organizationRepository.findAllByIsActiveTrue()
-                   else organizationRepository.findAll()
+        else organizationRepository.findAll()
         return data.map { organizationMapper.toOrganizationResponse(it) }
     }
 
