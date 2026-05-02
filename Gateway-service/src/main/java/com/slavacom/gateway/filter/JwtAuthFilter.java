@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +25,9 @@ import java.util.List;
 @Component
 public class JwtAuthFilter implements GlobalFilter, Ordered {
 
-	private static final List<String> PUBLIC_PATHS = List.of("/api/auth/");
+	private static final List<String> PUBLIC_PATHS = List.of(
+			"/api/auth/"
+	);
 
 	@Value("${jwt.access.secret}")
 	private String ACCESS_SECRET;
@@ -66,35 +69,29 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
 
 		final String token = authHeader;
 		return Mono.fromCallable(() -> parseClaims(token))
+				.subscribeOn(Schedulers.boundedElastic())
 				.flatMap(claims -> {
-					try {
-						String userId = firstNonBlank(claims.get("userId", String.class), claims.getSubject());
-						String role = claims.get("role", String.class);
-						String profileId = claims.get("profileId", String.class);
-						String organizationId = claims.get("organizationId", String.class);
 
-						// Сохраняем только непустые данные JWT в exchange attributes
-						putAttributeIfHasText(exchange, "X-User-Id", userId);
-						putAttributeIfHasText(exchange, "X-User-Role", role);
-						putAttributeIfHasText(exchange, "X-Profile-Id", profileId);
-						putAttributeIfHasText(exchange, "X-Organization-Id", organizationId);
+					String userId = firstNonBlank(claims.get("userId", String.class), claims.getSubject());
+					String role = claims.get("role", String.class);
+					String profileId = claims.get("profileId", String.class);
+					String organizationId = claims.get("organizationId", String.class);
 
-						log.info("JWT validated: path={} userId={} role={}", path, userId, role);
-						log.debug("JWT attributes stored in exchange: X-User-Id={}, X-User-Role={}, X-Profile-Id={}, X-Organization-Id={}",
-								userId, role, profileId, organizationId);
-						log.debug("Exchange attributes after JWT filter: {}", exchange.getAttributes());
-						return chain.filter(exchange);
-					} catch (Exception e) {
-						log.error("Error processing JWT claims: path={} error={}", path, e.getMessage(), e);
-						throw e;
-					}
+					putAttributeIfHasText(exchange, "X-User-Id", userId);
+					putAttributeIfHasText(exchange, "X-User-Role", role);
+					putAttributeIfHasText(exchange, "X-Profile-Id", profileId);
+					putAttributeIfHasText(exchange, "X-Organization-Id", organizationId);
+
+					log.info("JWT validated: path={} userId={} role={}", path, userId, role);
+					log.debug("JWT attributes stored in exchange: X-User-Id={}, X-User-Role={}, X-Profile-Id={}, X-Organization-Id={}",
+							userId, role, profileId, organizationId);
+
+					return chain.filter(exchange);
 				})
 				.onErrorResume(e -> {
-					log.error("JWT validation failed: path={} error={} type={} cause={}",
-							path, e.getMessage(), e.getClass().getSimpleName(),
-							(e.getCause() != null ? e.getCause().getClass().getSimpleName() : "none"),
-							e);
 					exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+					log.warn("JWT validation failed for path {}: {}", path, e.getMessage());
+					log.error("Error", e);
 					return exchange.getResponse().setComplete();
 				});
 	}
@@ -102,8 +99,6 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
 	private void putAttributeIfHasText(ServerWebExchange exchange, String key, String value) {
 		if (StringUtils.hasText(value)) {
 			exchange.getAttributes().put(key, value);
-		} else {
-			exchange.getAttributes().remove(key);
 		}
 	}
 

@@ -17,7 +17,11 @@
       "Bash(javap -c -p com/example/d.class)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "mcp__amplicode__rebuild_project"
+      "mcp__amplicode__rebuild_project",
+      "Bash(.\\\\gradlew.bat build *)",
+      "Bash(gradle -version)",
+      "mcp__amplicode__get_entity_details",
+      "mcp__amplicode__list_entity_repositories"
     ]
   }
 }

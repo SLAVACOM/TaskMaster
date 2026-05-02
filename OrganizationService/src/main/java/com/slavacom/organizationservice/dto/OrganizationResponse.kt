@@ -10,5 +10,6 @@ data class OrganizationResponse(
     var accountable: UUID,
     var isActive: Boolean,
     var createdAt: Instant,
-    var updatedAt: Instant?
+    var updatedAt: Instant?,
+    var profileId: UUID? = null
 )

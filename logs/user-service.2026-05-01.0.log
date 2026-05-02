@@ -1,0 +1,562 @@
+2026-05-01 21:38:33.493 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 92428 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:38:33.500 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:38:34.103 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:38:34.151 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 41 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:38:34.660 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:38:34.677 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:38:34.678 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:38:34.728 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1179 ms
+2026-05-01 21:38:34.890 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:38:34.935 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:38:35.306 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:38:35.329 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:38:35.441 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@81a8898
+2026-05-01 21:38:35.442 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:38:35.466 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:38:35.488 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:38:36.254 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:38:36.301 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:38:36.462 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:38:36.676 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:38:36.948 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:38:36.955 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 4.402 seconds (process running for 4.848)
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:38:36.958 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:39:09.988 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:39:10.000 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:39:10.003 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:39:10.006 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:39:10.010 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:39:13.186 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 91504 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:39:13.189 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:39:13.970 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:39:14.033 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 51 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:39:14.509 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:39:14.521 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:39:14.521 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:39:14.565 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1327 ms
+2026-05-01 21:39:14.724 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:39:14.772 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:39:15.135 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:39:15.157 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:39:15.265 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4f563f96
+2026-05-01 21:39:15.266 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:39:15.287 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:39:15.306 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:39:16.141 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:39:16.192 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:39:16.383 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:39:16.591 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:39:16.937 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:39:16.943 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 4.63 seconds (process running for 5.031)
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:39:16.946 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:39:16.947 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:39:16.947 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:40:09.806 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:40:09.827 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:40:09.830 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:40:09.832 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:40:09.835 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:40:12.513 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 89488 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:40:12.516 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:40:13.750 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:40:13.815 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 53 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:40:14.277 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:40:14.290 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:40:14.291 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:40:14.348 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1778 ms
+2026-05-01 21:40:14.548 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:40:14.610 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:40:15.039 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:40:15.069 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:40:15.213 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@38394dc3
+2026-05-01 21:40:15.215 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:40:15.239 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:40:15.264 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:40:16.065 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:40:16.121 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:40:16.323 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:40:16.581 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:40:16.903 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:40:16.908 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 5.046 seconds (process running for 5.497)
+2026-05-01 21:40:16.910 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:40:16.911 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:40:43.785 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:40:43.799 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:40:43.801 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:40:43.804 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:40:43.807 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:40:52.009 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 93536 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:40:52.012 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:40:52.628 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:40:52.683 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:40:53.230 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:40:53.243 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:40:53.244 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:40:53.314 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1265 ms
+2026-05-01 21:40:53.505 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:40:53.550 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:40:53.993 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:40:54.018 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:40:54.142 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@19f1be04
+2026-05-01 21:40:54.144 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:40:54.167 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:40:54.187 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:40:55.067 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:40:55.117 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:40:55.354 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:40:55.692 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:40:56.047 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:40:56.052 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 4.557 seconds (process running for 4.933)
+2026-05-01 21:40:56.055 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:40:56.056 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:41:57.737 [http-nio-8082-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-01 21:41:57.759 [http-nio-8082-exec-1] ERROR c.s.userservice.exception.GlobalExceptionHandler - Unexpected exception occurred: Required request header 'X-User-Id' for method parameter type UUID is not present
+org.springframework.web.bind.MissingRequestHeaderException: Required request header 'X-User-Id' for method parameter type UUID is not present
+	at org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver.handleMissingValue(RequestHeaderMethodArgumentResolver.java:89)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.handleMissingValue(AbstractNamedValueMethodArgumentResolver.java:230)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:123)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1779)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-05-01 21:42:49.114 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:42:49.126 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:42:49.130 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:42:49.132 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:42:49.135 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:42:59.693 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 25.0.2 with PID 94168 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:42:59.699 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:43:00.483 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:43:00.592 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 99 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:43:01.147 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-01 21:43:01.163 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:43:01.163 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:43:01.214 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1437 ms
+2026-05-01 21:43:01.388 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:43:01.444 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:43:01.935 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:43:01.973 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:43:02.124 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4c91f5bf
+2026-05-01 21:43:02.126 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:43:02.160 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:43:02.184 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:43:03.373 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:43:03.451 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:43:03.941 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:43:04.448 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:43:05.101 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-01 21:43:05.104 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:43:05.107 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:43:05.111 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:43:05.130 [main] INFO  o.s.b.a.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-01 21:43:05.159 [main] ERROR o.s.b.diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2026-05-01 21:44:00.794 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 94160 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:44:00.797 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:44:01.579 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:44:01.645 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:44:02.264 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:44:02.277 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:44:02.277 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:44:02.329 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1479 ms
+2026-05-01 21:44:02.517 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:44:02.599 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:44:03.268 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:44:03.309 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:44:03.632 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@516037be
+2026-05-01 21:44:03.633 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:44:03.662 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:44:03.686 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:44:04.569 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:44:04.624 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:44:05.047 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:44:05.594 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:44:06.179 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:44:06.202 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 6.296 seconds (process running for 6.975)
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:44:06.210 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:44:16.934 [http-nio-8082-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-01 21:44:17.018 [http-nio-8082-exec-1] ERROR c.s.userservice.exception.GlobalExceptionHandler - Unexpected exception occurred: Required request header 'X-User-Id' for method parameter type UUID is not present
+org.springframework.web.bind.MissingRequestHeaderException: Required request header 'X-User-Id' for method parameter type UUID is not present
+	at org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver.handleMissingValue(RequestHeaderMethodArgumentResolver.java:89)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.handleMissingValue(AbstractNamedValueMethodArgumentResolver.java:230)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:123)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1779)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-05-01 21:45:36.384 [http-nio-8082-exec-6] ERROR c.s.userservice.exception.GlobalExceptionHandler - Unexpected exception occurred: Required request header 'X-User-Id' for method parameter type UUID is not present
+org.springframework.web.bind.MissingRequestHeaderException: Required request header 'X-User-Id' for method parameter type UUID is not present
+	at org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver.handleMissingValue(RequestHeaderMethodArgumentResolver.java:89)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.handleMissingValue(AbstractNamedValueMethodArgumentResolver.java:230)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:123)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1779)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-05-01 21:46:39.281 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:46:39.290 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:46:39.293 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:46:39.295 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:46:39.298 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:46:42.221 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 91764 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:46:42.223 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:46:43.078 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:46:43.240 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 123 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:46:44.079 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:46:44.095 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:46:44.096 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:46:44.181 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1910 ms
+2026-05-01 21:46:44.513 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:46:44.618 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:46:45.601 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:46:45.663 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:46:45.901 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@675230cd
+2026-05-01 21:46:45.903 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:46:45.940 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:46:45.968 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:46:47.301 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:46:47.367 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:46:47.627 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:46:47.908 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:46:48.311 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:46:48.319 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 6.853 seconds (process running for 7.39)
+2026-05-01 21:46:48.323 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:46:48.324 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:46:48.325 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:46:56.078 [http-nio-8082-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-01 21:48:57.562 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m11s558ms555µs700ns).
+2026-05-01 21:48:57.565 [http-nio-8082-exec-1] INFO  c.s.userservice.controller.ProfileController - REST: Getting all profiles for current user: e65b27d7-1979-4393-af3b-860027409bc8
+2026-05-01 21:48:57.603 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 21:48:57.960 [http-nio-8082-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.is_active,
+        p1_0.name,
+        p1_0.organization_id,
+        p1_0.updated_at,
+        p1_0.user_id 
+    from
+        profiles p1_0 
+    where
+        p1_0.user_id=? 
+        and p1_0.is_active=true
+2026-05-01 21:48:58.086 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 21:48:58.089 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:48:58.092 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 21:48:58.096 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-05-01 21:49:04.770 [main] INFO  com.slavacom.userservice.UserServiceApplication - Starting UserServiceApplication using Java 26 with PID 94260 (C:\Users\slava\IdeaProjects\TaskMaster\UserService\build\classes\java\main started by slava in C:\Users\slava\IdeaProjects\TaskMaster)
+2026-05-01 21:49:04.772 [main] INFO  com.slavacom.userservice.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-01 21:49:05.694 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-01 21:49:05.782 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 2 JPA repository interfaces.
+2026-05-01 21:49:06.376 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-05-01 21:49:06.392 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-01 21:49:06.392 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-05-01 21:49:06.453 [main] INFO  o.s.b.w.c.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1632 ms
+2026-05-01 21:49:06.749 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-01 21:49:06.813 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-05-01 21:49:07.539 [main] INFO  o.s.o.j.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-01 21:49:07.572 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-01 21:49:07.723 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@654db80b
+2026-05-01 21:49:07.724 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-01 21:49:07.747 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-01 21:49:07.771 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/user_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: user_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-01 21:49:08.676 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-01 21:49:08.734 [main] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 21:49:08.977 [main] INFO  o.s.d.jpa.repository.query.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-01 21:49:09.270 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-01 21:49:09.658 [main] INFO  org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path '/'
+2026-05-01 21:49:09.667 [main] INFO  com.slavacom.userservice.UserServiceApplication - Started UserServiceApplication in 5.626 seconds (process running for 7.662)
+2026-05-01 21:49:09.715 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:49:09.716 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - USER SERVICE STARTED
+2026-05-01 21:49:09.716 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - Logging configuration:
+2026-05-01 21:49:09.716 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Controllers logs: logs/controllers.log
+2026-05-01 21:49:09.716 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Services logs: logs/services.log
+2026-05-01 21:49:09.716 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Kafka events: logs/kafka.log
+2026-05-01 21:49:09.717 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - Errors: logs/errors.log
+2026-05-01 21:49:09.717 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - - General: logs/user-service.log
+2026-05-01 21:49:09.717 [main] INFO  c.slavacom.userservice.config.LoggingConfiguration - ================================================================================
+2026-05-01 21:49:12.554 [http-nio-8082-exec-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-01 21:49:12.588 [http-nio-8082-exec-1] INFO  c.s.userservice.controller.ProfileController - HTTP GET /api/profiles
+2026-05-01 21:49:12.588 [http-nio-8082-exec-1] INFO  c.s.userservice.controller.ProfileController - Query: null
+2026-05-01 21:49:12.588 [http-nio-8082-exec-1] INFO  c.s.userservice.controller.ProfileController - Headers: Authorization=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJJZCI6IjlhYTRhZjA1LTIwNzQtNDRkMC1iZGM5LWZiMWQzODI4NDVhOCIsInN1YiI6IjlhYTRhZjA1LTIwNzQtNDRkMC1iZGM5LWZiMWQzODI4NDVhOCIsImlhdCI6MTc3NzY2MDUzOSwiZXhwIjoxNzc3NjYxNDM5fQ.Dcesls42wOSgLHzHijxkW5DwhIq4lLTmc8rjm3D5rNc
+2026-05-01 21:49:12.588 [http-nio-8082-exec-1] INFO  c.s.userservice.controller.ProfileController - REST: Getting all profiles for current user: 64b9dedc-e741-471d-ba12-43f35564d3f8
+2026-05-01 21:49:12.982 [http-nio-8082-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.is_active,
+        p1_0.name,
+        p1_0.organization_id,
+        p1_0.updated_at,
+        p1_0.user_id 
+    from
+        profiles p1_0 
+    where
+        p1_0.user_id=? 
+        and p1_0.is_active=true
+2026-05-01 22:28:21.786 [SpringApplicationShutdownHook] INFO  org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-01 22:28:21.803 [tomcat-shutdown] INFO  org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-01 22:28:21.807 [SpringApplicationShutdownHook] INFO  o.s.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-01 22:28:21.809 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-01 22:28:21.813 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
