@@ -10,6 +10,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -59,4 +60,65 @@ class TaskController(
         @RequestHeader("X-User-Id") changedBy: UUID,
         @PathVariable id: UUID,
     ) = taskService.delete(id, changedBy)
+}
+
+// Project-scoped task endpoints
+@RestController
+@RequestMapping("/api/projects/{projectId}/tasks")
+class ProjectTaskController(
+    private val taskService: TaskService,
+) {
+
+    @PostMapping
+    fun create(
+        @PathVariable projectId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @Valid @RequestBody request: CreateTaskRequest,
+    ): ResponseEntity<TaskResponse> {
+        val requestWithProject = request.copy(projectId = projectId)
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(requestWithProject, changedBy))
+    }
+
+    @GetMapping
+    fun listByProject(@PathVariable projectId: UUID): List<TaskResponse> = taskService.getAll(projectId)
+
+    @GetMapping("/{taskId}")
+    fun getTask(
+        @PathVariable projectId: UUID,
+        @PathVariable taskId: UUID,
+    ): TaskResponse {
+        val task = taskService.getById(taskId)
+        if (task.projectId != projectId) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task $taskId not found in project $projectId")
+        }
+        return task
+    }
+
+    @PutMapping("/{taskId}")
+    fun updateTask(
+        @PathVariable projectId: UUID,
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestBody request: UpdateTaskRequest,
+    ): TaskResponse {
+        val task = taskService.getById(taskId)
+        if (task.projectId != projectId) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task $taskId not found in project $projectId")
+        }
+        return taskService.update(taskId, request, changedBy)
+    }
+
+    @DeleteMapping("/{taskId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteTask(
+        @PathVariable projectId: UUID,
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+    ) {
+        val task = taskService.getById(taskId)
+        if (task.projectId != projectId) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task $taskId not found in project $projectId")
+        }
+        taskService.delete(taskId, changedBy)
+    }
 }
