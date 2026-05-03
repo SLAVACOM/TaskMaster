@@ -60,6 +60,18 @@ class TaskController(
         @RequestHeader("X-User-Id") changedBy: UUID,
         @PathVariable id: UUID,
     ) = taskService.delete(id, changedBy)
+
+    // ===== PHASE 1: Dashboard & Analytics =====
+
+    @GetMapping("/my")
+    fun getMyTasks(@RequestHeader("X-User-Id") userId: UUID): List<TaskResponse> =
+        taskService.getMyTasks(userId)
+
+    @GetMapping("/search-text")
+    fun searchTasks(
+        @RequestParam projectId: UUID,
+        @RequestParam q: String,
+    ): List<TaskResponse> = taskService.searchTasks(projectId, q)
 }
 
 // Project-scoped task endpoints
@@ -121,4 +133,22 @@ class ProjectTaskController(
         }
         taskService.delete(taskId, changedBy)
     }
+
+    // ===== PHASE 1: Dashboard endpoint for project =====
+
+    @GetMapping("/dashboard")
+    fun projectDashboard(@PathVariable projectId: UUID): Map<String, Any> =
+        taskService.getProjectDashboard(projectId)
+}
+
+// Sprint-scoped endpoints (for Phase 1 dashboard)
+@RestController
+@RequestMapping("/api/sprints/{sprintId}")
+class SprintTaskController(
+    private val taskService: TaskService,
+) {
+
+    @GetMapping("/dashboard")
+    fun sprintDashboard(@PathVariable sprintId: UUID): Map<String, Any> =
+        taskService.getSprintDashboard(sprintId)
 }

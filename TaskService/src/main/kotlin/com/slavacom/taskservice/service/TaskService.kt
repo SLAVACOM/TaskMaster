@@ -10,6 +10,7 @@ import com.slavacom.taskservice.entity.FieldChange
 import com.slavacom.taskservice.entity.Task
 import com.slavacom.taskservice.entity.TaskHistory
 import com.slavacom.taskservice.entity.enums.HistoryAction
+import com.slavacom.taskservice.entity.enums.TaskStatus
 import com.slavacom.taskservice.mapper.TaskHistoryMapper
 import com.slavacom.taskservice.mapper.TaskMapper
 import com.slavacom.taskservice.repository.TaskHistoryRepository
@@ -224,5 +225,73 @@ class TaskService(
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId") }
         return taskHistoryRepository.findByTaskIdOrderByChangedAtDesc(taskId)
             .map(taskHistoryMapper::toResponse)
+    }
+
+    // ===== PHASE 1: Dashboard & Analytics =====
+
+    @Transactional(readOnly = true)
+    fun getMyTasks(userId: UUID): List<TaskResponse> {
+        val assignedTasks = taskRepository.findByExecutorAndIsActiveTrueOrderByCreatedAtDesc(userId)
+        return assignedTasks.map(taskMapper::toResponse)
+    }
+
+    @Transactional(readOnly = true)
+    fun getProjectDashboard(projectId: UUID): Map<String, Any> {
+        val allTasks = taskRepository.findByProjectIdAndIsActiveTrue(projectId)
+        val todoCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.TODO)
+        val inProgressCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.IN_PROGRESS)
+        val doneCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.DONE)
+
+        val tasksByPriority = allTasks.groupingBy { it.priority }.eachCount()
+        val tasksByStatus = allTasks.groupingBy { it.status }.eachCount()
+        val activeTasks = allTasks.filter { it.status != TaskStatus.DONE }.sortedByDescending { it.createdAt }
+
+        return mapOf(
+            "projectId" to projectId,
+            "totalTasks" to allTasks.size,
+            "todoCount" to todoCount,
+            "inProgressCount" to inProgressCount,
+            "doneCount" to doneCount,
+            "completionPercentage" to (if (allTasks.isNotEmpty()) (doneCount * 100) / allTasks.size else 0),
+            "tasksByPriority" to tasksByPriority,
+            "tasksByStatus" to tasksByStatus,
+            "activeTasks" to activeTasks.take(10).map(taskMapper::toResponse),
+        )
+    }
+
+    @Transactional(readOnly = true)
+    fun getSprintDashboard(sprintId: UUID): Map<String, Any> {
+        val allTasks = taskRepository.findBySprintIdAndIsActiveTrue(sprintId)
+        val completedCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.DONE)
+        val todoCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.TODO)
+        val inProgressCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.IN_PROGRESS)
+
+        val tasksByPriority = allTasks.groupingBy { it.priority }.eachCount()
+        val tasksByStatus = allTasks.groupingBy { it.status }.eachCount()
+        val remainingTasks = allTasks.filter { it.status != TaskStatus.DONE }.sortedByDescending { it.createdAt }
+        val overdueTasks = remainingTasks.filter { it.deadline != null && it.deadline!! < java.time.Instant.now() }
+
+        return mapOf(
+            "sprintId" to sprintId,
+            "totalTasks" to allTasks.size,
+            "completedTasks" to completedCount,
+            "todoTasks" to todoCount,
+            "inProgressTasks" to inProgressCount,
+            "completionPercentage" to (if (allTasks.isNotEmpty()) (completedCount * 100) / allTasks.size else 0),
+            "tasksByPriority" to tasksByPriority,
+            "tasksByStatus" to tasksByStatus,
+            "remainingTasks" to remainingTasks.take(20).map(taskMapper::toResponse),
+            "overdueTasks" to overdueTasks.map(taskMapper::toResponse),
+        )
+    }
+
+    @Transactional(readOnly = true)
+    fun searchTasks(projectId: UUID, query: String): List<TaskResponse> {
+        val allProjectTasks = taskRepository.findByProjectIdAndIsActiveTrue(projectId)
+        val lowerQuery = query.lowercase()
+        return allProjectTasks.filter { task ->
+            task.name.lowercase().contains(lowerQuery) ||
+            (task.description?.lowercase()?.contains(lowerQuery) ?: false)
+        }.map(taskMapper::toResponse)
     }
 }
