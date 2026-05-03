@@ -189,40 +189,42 @@ data class TaskDependencyResponse(
 
 ---
 
-### Phase 2: Task Assignment & Workflow
+### Phase 2: Task Assignment & Workflow ✅ COMPLETE
 
-**Phase 2.1: Update Task entity with watchers**
+**Phase 2.1: Update Task entity with watchers** ✅
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/Task.kt`
 
-- [ ] Добавить field `watchers: List<UUID>` с @Convert(UuidListJsonConverter)
-- [ ] Убедиться Entity компилируется
+- [x] Добавить field `watchers: List<UUID>` с @Convert(UuidListJsonConverter)
+- [x] Убедиться Entity компилируется
 
-**Phase 2.2: Assignment endpoints**
+**Phase 2.2: Assignment endpoints** ✅
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskService.kt`
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
 
-- [ ] TaskService: добавить методы:
-  - `assignTask(taskId, userId, changedBy): TaskResponse`
-  - `unassignTask(taskId, changedBy): TaskResponse`
-  - `addWatcher(taskId, watcherId, changedBy): TaskResponse`
-  - `removeWatcher(taskId, watcherId, changedBy): TaskResponse`
-  - `transitionStatus(taskId, newStatus, changedBy): TaskResponse`
-- [ ] TaskController: добавить endpoints:
-  - `POST /api/tasks/{taskId}/assign` — assign
-  - `POST /api/tasks/{taskId}/unassign` — unassign
-  - `POST /api/tasks/{taskId}/watchers` — add watcher
-  - `DELETE /api/tasks/{taskId}/watchers/{watcherId}` — remove watcher
-  - `POST /api/tasks/{taskId}/transition` — change status
-- [ ] Manual test всех endpoints
+- [x] TaskService: добавить методы:
+  - [x] `assignTask(taskId, userId, changedBy): TaskResponse`
+  - [x] `unassignTask(taskId, changedBy): TaskResponse`
+  - [x] `addWatcher(taskId, watcherId, changedBy): TaskResponse`
+  - [x] `removeWatcher(taskId, watcherId, changedBy): TaskResponse`
+  - [x] `transitionStatus(taskId, newStatus, changedBy): TaskResponse`
+- [x] TaskController: добавить endpoints:
+  - [x] `POST /api/tasks/{taskId}/assign` — assign
+  - [x] `POST /api/tasks/{taskId}/unassign` — unassign
+  - [x] `POST /api/tasks/{taskId}/watchers` — add watcher
+  - [x] `DELETE /api/tasks/{taskId}/watchers/{watcherId}` — remove watcher
+  - [x] `POST /api/tasks/{taskId}/transition` — change status
+- [x] Compilation check: BUILD SUCCESSFUL ✅
 
-**Phase 2.3: Comments (optional, use TaskHistory)**
+**Phase 2.3: Comments (optional, use TaskHistory)** ✅
 
-- [ ] Переиспользовать TaskHistory для комментариев (action=COMMENT)
-- [ ] Endpoint: `POST /api/tasks/{taskId}/comments` — добавить комментарий
+- [x] Переиспользовать TaskHistory для комментариев (action=COMMENT)
+  - [x] Added COMMENT to HistoryAction enum
+- [x] Endpoint: `POST /api/tasks/{taskId}/comments` — добавить комментарий
+- [x] Compilation check: BUILD SUCCESSFUL ✅
 
 ---
 
