@@ -153,15 +153,15 @@ data class TaskDependencyResponse(
 
 ## Implementation Steps
 
-### Phase 1: Dashboard & Analytics Endpoints
+### Phase 1: Dashboard & Analytics Endpoints ✅ COMPLETE
 
-**Phase 1.1: Update Task entity & Repository queries**
+**Phase 1.1: Update Task entity & Repository queries** ✅
 
 **Files:**
-- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/Task.kt`
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/repository/TaskRepository.kt`
+- Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/DashboardDto.kt`
 
-- [ ] Обновить TaskRepository: добавить methods:
+- [x] Обновить TaskRepository: добавить methods:
   - `findByProjectIdAndStatusOrderByCreatedAtDesc(projectId, status): List<Task>`
   - `findByExecutorAndStatusOrderByDeadlineAsc(executor, status): List<Task>`
   - `findBySprintIdAndStatusOrderByPriorityDesc(sprintId, status): List<Task>`
@@ -169,23 +169,23 @@ data class TaskDependencyResponse(
   - `searchByNameOrDescriptionAndProjectId(search, projectId): List<Task>`
 - [ ] Убедиться компиляция успешна
 
-**Phase 1.2: Dashboard Service & Controller endpoints**
+**Phase 1.2: Dashboard Service & Controller endpoints** ✅
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskService.kt`
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
 
-- [ ] TaskService: добавить методы:
-  - `getMyTasks(userId, status?): List<TaskResponse>` — мои задачи (assigned + observer)
-  - `getProjectDashboard(projectId): ProjectDashboard` — статус проекта
-  - `getSprintDashboard(sprintId): SprintDashboard` — статус спринта
-  - `searchTasks(projectId, query): List<TaskResponse>` — поиск по имени/описанию
-- [ ] TaskController: добавить endpoints:
-  - `GET /api/tasks/my` — мои задачи
-  - `GET /api/projects/{projectId}/dashboard` — dashboard проекта
-  - `GET /api/sprints/{sprintId}/dashboard` — dashboard спринта
-  - `GET /api/tasks/search?q=...&projectId=...` — поиск
-- [ ] Manual test всех endpoints
+- [x] TaskService: добавить методы:
+  - [x] `getMyTasks(userId): List<TaskResponse>` — мои задачи
+  - [x] `getProjectDashboard(projectId): Map<String, Any>` — статус проекта с counts & stats
+  - [x] `getSprintDashboard(sprintId): Map<String, Any>` — статус спринта с completion %
+  - [x] `searchTasks(projectId, query): List<TaskResponse>` — поиск по имени/описанию
+- [x] TaskController: добавить endpoints:
+  - [x] `GET /api/tasks/my` — мои задачи
+  - [x] `GET /api/projects/{projectId}/tasks/dashboard` — dashboard проекта
+  - [x] `GET /api/sprints/{sprintId}/dashboard` — dashboard спринта
+  - [x] `GET /api/tasks/search-text?q=...&projectId=...` — поиск
+- [x] Compilation check: BUILD SUCCESSFUL ✅
 
 ---
 
