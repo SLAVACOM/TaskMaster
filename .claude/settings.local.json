@@ -21,7 +21,11 @@
       "Bash(.\\\\gradlew.bat build *)",
       "Bash(gradle -version)",
       "mcp__amplicode__get_entity_details",
-      "mcp__amplicode__list_entity_repositories"
+      "mcp__amplicode__list_entity_repositories",
+      "mcp__amplicode__list_spring_beans",
+      "mcp__amplicode__list_entity_mappers",
+      "mcp__amplicode__list_entity_dtos",
+      "Bash(./gradlew compileKotlin --no-daemon)"
     ]
   }
 }

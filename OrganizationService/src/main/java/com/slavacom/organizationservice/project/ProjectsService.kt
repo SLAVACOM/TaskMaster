@@ -1,7 +1,7 @@
 package com.slavacom.organizationservice.project
 
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class ProjectsService(
@@ -11,7 +11,7 @@ class ProjectsService(
 
     fun listByOrg(orgId: UUID, isActive: Boolean = true): List<ProjectResponse> {
         val projects = if (isActive) repository.findAllByOrganizationIdAndIsActiveTrue(orgId)
-                       else repository.findAllByOrganizationId(orgId)
+        else repository.findAllByOrganizationId(orgId)
         return projects.map { mapper.toResponse(it) }
     }
 
@@ -20,9 +20,10 @@ class ProjectsService(
             .map { mapper.toResponse(it) }
             .orElseThrow { NoSuchElementException("Project $id not found") }
 
-    fun create(orgId: UUID, request: CreateProjectRequest): ProjectResponse {
+    fun create(orgId: UUID, userId: UUID?, request: CreateProjectRequest): ProjectResponse {
         val project = mapper.fromCreateRequest(request)
         project.organizationId = orgId
+        project.responsible = project.responsible ?: userId
         return mapper.toResponse(repository.save(project))
     }
 

@@ -17,7 +17,7 @@ data class ProjectResponse(
 data class CreateProjectRequest(
     val name: String,
     val description: String? = null,
-    val responsible: UUID
+    val responsible: UUID?
 )
 
 data class UpdateProjectRequest(

@@ -7,6 +7,7 @@ import com.slavacom.organizationservice.dto.OrganizationResponse
 import com.slavacom.organizationservice.dto.UpdateOrganizationRequest
 import com.slavacom.organizationservice.dto.UserOrganizationInfoResponse
 import com.slavacom.organizationservice.employees.EmployeesRepository
+import com.slavacom.organizationservice.employees.EmployeesService
 import com.slavacom.organizationservice.exception.AuthServiceException
 import com.slavacom.organizationservice.exception.OrganizationNotFoundException
 import com.slavacom.organizationservice.exception.UserServiceException
@@ -22,6 +23,7 @@ class OrganizationService(
     private val organizationRepository: OrganizationRepository,
     private val organizationMapper: OrganizationMapper,
     private val employeesRepository: EmployeesRepository,
+    private val employeesService: EmployeesService,
     private val userServiceClient: UserServiceClient,
     private val authServiceClient: AuthServiceClient
 ) {
@@ -50,12 +52,17 @@ class OrganizationService(
         logger.info("Organization created in DB: orgId={}", savedOrg.id)
 
         return try {
-            // Step 2: Create profile in UserService
+            // Step 2: Create owner employee
+            logger.info("Creating owner employee for userId={} in orgId={}", accountable, savedOrg.id)
+            employeesService.createOwner(accountable, savedOrg.id!!)
+            logger.info("Owner employee created: userId={}, orgId={}", accountable, savedOrg.id)
+
+            // Step 3: Create profile in UserService
             logger.info("Creating profile in UserService for userId={} in orgId={}", accountable, savedOrg.id)
             val profileResponse = userServiceClient.createProfile(accountable, savedOrg.id!!)
             logger.info("Profile created: profileId={}", profileResponse.id)
 
-            // Step 3: Update profile in AuthService (JWT will include profileId on next refresh)
+            // Step 4: Update profile in AuthService (JWT will include profileId on next refresh)
             logger.info("Updating profile in AuthService: userId={}, profileId={}", accountable, profileResponse.id)
             try {
                 authServiceClient.updateProfile(accountable, profileResponse.id, savedOrg.id!!)

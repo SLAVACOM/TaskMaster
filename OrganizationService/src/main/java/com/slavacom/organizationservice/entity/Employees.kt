@@ -2,6 +2,8 @@ package com.slavacom.organizationservice.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.Enumerated
+import jakarta.persistence.EnumType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -28,8 +30,9 @@ open class Employees {
     @field:Column(name = "organization_id", nullable = false)
     open var organizationId: UUID? = null
 
+    @field:Enumerated(EnumType.STRING)
     @field:Column(name = "role", nullable = false)
-    open var role: String? = null
+    open var role: EmployeeRole? = null
 
     @field:Column(name = "permissions", columnDefinition = "TEXT")
     open var permissions: String? = null

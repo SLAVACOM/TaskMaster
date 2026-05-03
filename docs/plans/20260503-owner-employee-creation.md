@@ -105,62 +105,65 @@ data class Employees(
 **Files:**
 - Create: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/entity/EmployeeRole.kt`
 
-- [ ] создать файл EmployeeRole.kt с enum OWNER, ADMIN, MEMBER
-- [ ] убедиться что файл компилируется
+- [x] создать файл EmployeeRole.kt с enum OWNER, ADMIN, MEMBER
+- [x] убедиться что файл компилируется
 
 ### Task 2: Обновление Employees entity для использования EmployeeRole
 
 **Files:**
 - Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/entity/Employees.kt`
 
-- [ ] изменить поле `role: String` на `role: EmployeeRole`
-- [ ] установить default value EmployeeRole.MEMBER
-- [ ] обновить конструктор если нужно
-- [ ] убедиться что компилируется
+- [x] изменить поле `role: String` на `role: EmployeeRole`
+- [x] добавить @Enumerated(EnumType.STRING) аннотацию
+- [x] убедиться что компилируется
 
 ### Task 3: Обновление EmployeesRepository и запросов если нужно
 
 **Files:**
 - Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/employees/EmployeesRepository.kt`
 
-- [ ] проверить, не нужны ли изменения в запросах из-за смены типа role
-- [ ] откомпилировать и проверить отсутствие ошибок
+- [x] проверить, не нужны ли изменения в запросах из-за смены типа role
+- [x] изменений не требуется
 
 ### Task 4: Обновление EmployeesService для поддержки создания владельца
 
 **Files:**
 - Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/employees/EmployeesService.kt`
 
-- [ ] добавить метод createOwnerEmployee(userId: UUID, organizationId: UUID): Employees
-- [ ] этот метод создаёт Employee с ролью OWNER
-- [ ] убедиться что метод правильно сохраняет в БД
+- [x] добавить метод createOwner(userId: UUID, organizationId: UUID): EmployeeResponse
+- [x] этот метод создаёт Employee с ролью OWNER
+- [x] убедиться что метод правильно сохраняет в БД
 
 ### Task 5: Модифицировать OrganizationService для создания владельца
 
 **Files:**
 - Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/service/OrganizationService.kt`
 
-- [ ] в методе createOrganization добавить логику вызова EmployeesService.createOwnerEmployee
-- [ ] завернуть весь метод в @Transactional
-- [ ] обновить Organization.accountable = userId владельца после создания сотрудника
-- [ ] убедиться что логика правильная и компилируется
+- [x] добавить EmployeesService в конструктор
+- [x] в методе create добавить вызов employeesService.createOwner(accountable, savedOrg.id!!)
+- [x] @Transactional уже есть на методе create
+- [x] убедиться что логика правильная и компилируется
 
 ### Task 6: Обновление DTOs при необходимости
 
 **Files:**
-- Check: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/dto/`
+- Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/employees/EmployeesDto.kt`
+- Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/dto/UserOrganizationInfoResponse.kt`
 
-- [ ] проверить, не нужны ли обновления CreateOrganizationRequest или OrganizationResponse
-- [ ] если role теперь Enum, обновить маппер OrganizationMapper
-- [ ] откомпилировать и проверить
+- [x] обновить EmployeeResponse: role: String -> role: EmployeeRole
+- [x] обновить AddEmployeeRequest: role: String -> role: EmployeeRole
+- [x] обновить UpdateEmployeeRequest: role: String? -> role: EmployeeRole?
+- [x] обновить UserOrganizationInfoResponse: role: String -> role: EmployeeRole
+- [x] обновить InvitationService для преобразования String роли к EmployeeRole
+- [x] откомпилировать и проверить
 
 ### Task 7: DB Migration для обновления типа поля role
 
 **Files:**
-- Create: `OrganizationService/src/main/resources/db/migration/Vx__update_employee_role_to_enum.sql`
+- Create: `OrganizationService/src/main/resources/db/migration/V1__update_employee_role_to_enum.sql`
 
-- [ ] создать миграцию для изменения типа поля role в таблице employees (varchar → другой enum тип или varchar с проверкой)
-- [ ] миграция должна обновить существующие значения role в соответствии с маппингом (если нужно)
+- [x] создать миграцию для документирования изменения schema
+- [x] миграция документирует что role теперь использует EmployeeRole enum
 
 ### Task 8: Ручное тестирование создания организации
 

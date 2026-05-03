@@ -1,5 +1,6 @@
 package com.slavacom.organizationservice.employees
 
+import com.slavacom.organizationservice.entity.EmployeeRole
 import java.time.Instant
 import java.util.UUID
 
@@ -8,7 +9,7 @@ data class EmployeeResponse(
     val userId: UUID,
     val profileId: UUID?,
     val organizationId: UUID,
-    val role: String,
+    val role: EmployeeRole,
     val permissions: String?,
     val isActive: Boolean,
     val createdAt: Instant,
@@ -18,11 +19,11 @@ data class EmployeeResponse(
 data class AddEmployeeRequest(
     val userId: UUID,
     val profileId: UUID? = null,
-    val role: String,
+    val role: EmployeeRole,
     val permissions: String? = null
 )
 
 data class UpdateEmployeeRequest(
-    val role: String? = null,
+    val role: EmployeeRole? = null,
     val permissions: String? = null
 )

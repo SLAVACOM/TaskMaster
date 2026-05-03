@@ -153,12 +153,22 @@ public class AuthService {
 
 		log.info("User logged in successfully with userId: {}", userId);
 
+		// Используем latestProfileId и latestOrganizationId из User entity если они установлены
+		// Иначе используем данные из UserService (для обратной совместимости)
+		UUID profileIdForToken = user.getLatestProfileId() != null ? 
+				user.getLatestProfileId() : extendedUserInfo.getProfileId();
+		UUID organizationIdForToken = user.getLatestOrganizationId() != null ? 
+				user.getLatestOrganizationId() : extendedUserInfo.getOrganizationId();
+
+		log.debug("Generating token for userId={} with profileId={} and organizationId={}", 
+				userId, profileIdForToken, organizationIdForToken);
+
 		// Шаг 5: Генерируем токены с расширенными данными
 		String accessToken = jwtService.generateExtendedAccessToken(
 				userId,
 				user.getRole(),
-				extendedUserInfo.getProfileId(),
-				extendedUserInfo.getOrganizationId()
+				profileIdForToken,
+				organizationIdForToken
 		);
 		String refreshToken = jwtService.generateRefreshToken(userId);
 
@@ -182,9 +192,9 @@ public class AuthService {
 				.accessToken(accessToken)
 				.refreshToken(refreshToken)
 				.userId(extendedUserInfo.getUserId() != null ? extendedUserInfo.getUserId().toString() : null)
-				.profileId(extendedUserInfo.getProfileId() != null ? extendedUserInfo.getProfileId().toString() : null)
+				.profileId(profileIdForToken != null ? profileIdForToken.toString() : null)
 				.isEmailVerified(extendedUserInfo.getIsEmailVerified() != null && extendedUserInfo.getIsEmailVerified())
-				.needsOrganizationSetup(extendedUserInfo.getProfileId() == null) // Если profileId null, значит нужно создать организацию
+				.needsOrganizationSetup(profileIdForToken == null) // Если profileId null, значит нужно создать организацию
 				.firstName(extendedUserInfo.getFirstName())
 				.lastName(extendedUserInfo.getLastName())
 				.email(extendedUserInfo.getEmail())
@@ -247,12 +257,22 @@ public class AuthService {
 		// Не используем токен, чтобы избежать проблем с Spring Security фильтрами
 		ExtendedUserInfoDto extendedUserInfo = userServiceClient.getExtendedUserInfo(userId);
 
+		// Используем latestProfileId и latestOrganizationId из User entity если они установлены
+		// Иначе используем данные из UserService (для обратной совместимости)
+		UUID profileIdForToken = user.getLatestProfileId() != null ?
+				user.getLatestProfileId() : extendedUserInfo.getProfileId();
+		UUID organizationIdForToken = user.getLatestOrganizationId() != null ?
+				user.getLatestOrganizationId() : extendedUserInfo.getOrganizationId();
+
+		log.debug("Generating token for userId={} with profileId={} and organizationId={}",
+				userId, profileIdForToken, organizationIdForToken);
+
 		// Генерируем новые токены с расширенными данными
 		String newAccessToken = jwtService.generateExtendedAccessToken(
 				userId,
 				user.getRole(),
-				extendedUserInfo.getProfileId(),
-				extendedUserInfo.getOrganizationId()
+				profileIdForToken,
+				organizationIdForToken
 		);
 		String newRefreshToken = jwtService.generateRefreshToken(userId);
 
@@ -266,9 +286,9 @@ public class AuthService {
 				.accessToken(newAccessToken)
 				.refreshToken(newRefreshToken)
 				.userId(extendedUserInfo.getUserId() != null ? extendedUserInfo.getUserId().toString() : null)
-				.profileId(extendedUserInfo.getProfileId() != null ? extendedUserInfo.getProfileId().toString() : null)
+				.profileId(profileIdForToken != null ? profileIdForToken.toString() : null)
 				.isEmailVerified(extendedUserInfo.getIsEmailVerified() != null && extendedUserInfo.getIsEmailVerified())
-				.needsOrganizationSetup(extendedUserInfo.getProfileId() == null) // Если profileId null, значит нужно создать организацию
+				.needsOrganizationSetup(profileIdForToken == null) // Если profileId null, значит нужно создать организацию
 				.firstName(extendedUserInfo.getFirstName())
 				.lastName(extendedUserInfo.getLastName())
 				.email(extendedUserInfo.getEmail())

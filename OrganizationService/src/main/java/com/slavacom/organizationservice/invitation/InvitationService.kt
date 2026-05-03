@@ -48,7 +48,7 @@ class InvitationService(
             invitation.organizationId!!,
             AddEmployeeRequest(
                 userId = invitation.invitedUserId!!,
-                role = invitation.role!!,
+                role = com.slavacom.organizationservice.entity.EmployeeRole.valueOf(invitation.role!!),
                 permissions = invitation.permissions
             )
         )

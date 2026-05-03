@@ -1,5 +1,6 @@
 package com.slavacom.organizationservice.project
 
+import org.osgi.annotation.bundle.Headers
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -15,8 +16,12 @@ class ProjectsController(private val service: ProjectsService) {
 
     @PostMapping("/api/organizations/{orgId}/projects")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@PathVariable orgId: UUID, @RequestBody request: CreateProjectRequest): ProjectResponse =
-        service.create(orgId, request)
+    fun create(
+        @PathVariable orgId: UUID,
+        @RequestBody request: CreateProjectRequest,
+        @RequestHeader("X-User-Id") userId: UUID
+    ): ProjectResponse =
+        service.create(orgId, userId, request)
 
     @GetMapping("/api/projects/{id}")
     fun getById(@PathVariable id: UUID): ProjectResponse = service.getById(id)
