@@ -18,6 +18,7 @@ data class TaskResponse(
     val responsible: UUID?,
     val executor: UUID?,
     val observers: List<UUID>,
+    val watchers: List<UUID>,
     val priority: TaskPriority,
     val tags: List<String>,
     val start: Instant?,

@@ -26,7 +26,8 @@
       "mcp__amplicode__list_entity_mappers",
       "mcp__amplicode__list_entity_dtos",
       "Bash(./gradlew compileKotlin --no-daemon)",
-      "Bash(./gradlew compileKotlin compileJava --no-daemon)"
+      "Bash(./gradlew compileKotlin compileJava --no-daemon)",
+      "Bash(.\\\\gradlew build *)"
     ]
   }
 }

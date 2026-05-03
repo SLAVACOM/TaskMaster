@@ -22,6 +22,8 @@ data class CreateTaskRequest(
     val executor: UUID? = null,
     @param:JsonSetter(nulls = Nulls.AS_EMPTY)
     val observers: List<UUID> = emptyList(),
+    @param:JsonSetter(nulls = Nulls.AS_EMPTY)
+    val watchers: List<UUID> = emptyList(),
     @param:JsonSetter(nulls = Nulls.SKIP)
     val priority: TaskPriority = TaskPriority.MEDIUM,
     @param:JsonSetter(nulls = Nulls.AS_EMPTY)

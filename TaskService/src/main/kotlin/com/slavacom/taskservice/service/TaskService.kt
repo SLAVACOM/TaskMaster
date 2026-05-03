@@ -46,6 +46,7 @@ class TaskService(
             responsible = request.responsible,
             executor = request.executor,
             observers = request.observers,
+            watchers = request.watchers,
             priority = request.priority,
             tags = request.tags,
             start = request.start,
@@ -150,6 +151,10 @@ class TaskService(
         request.observers?.let {
             if (it != task.observers) changes += FieldChange("observers", task.observers.toString(), it.toString())
             task.observers = it
+        }
+        request.watchers?.let {
+            if (it != task.watchers) changes += FieldChange("watchers", task.watchers.toString(), it.toString())
+            task.watchers = it
         }
         request.priority?.let {
             if (it != task.priority) changes += FieldChange("priority", task.priority.name, it.name)
@@ -293,5 +298,150 @@ class TaskService(
             task.name.lowercase().contains(lowerQuery) ||
             (task.description?.lowercase()?.contains(lowerQuery) ?: false)
         }.map(taskMapper::toResponse)
+    }
+
+    // ===== PHASE 2: Task Assignment & Workflow =====
+
+    @Transactional
+    fun assignTask(taskId: UUID, assigneeId: UUID, changedBy: UUID): TaskResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val changes = mutableListOf<FieldChange>()
+        if (assigneeId != task.executor) {
+            changes += FieldChange("executor", task.executor?.toString(), assigneeId.toString())
+            task.executor = assigneeId
+        }
+
+        val saved = taskRepository.save(task)
+        if (changes.isNotEmpty()) {
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.UPDATED,
+                    changes = changes,
+                )
+            )
+        }
+        return taskMapper.toResponse(saved)
+    }
+
+    @Transactional
+    fun unassignTask(taskId: UUID, changedBy: UUID): TaskResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val changes = mutableListOf<FieldChange>()
+        if (task.executor != null) {
+            changes += FieldChange("executor", task.executor?.toString(), null)
+            task.executor = null
+        }
+
+        val saved = taskRepository.save(task)
+        if (changes.isNotEmpty()) {
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.UPDATED,
+                    changes = changes,
+                )
+            )
+        }
+        return taskMapper.toResponse(saved)
+    }
+
+    @Transactional
+    fun addWatcher(taskId: UUID, watcherId: UUID, changedBy: UUID): TaskResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val changes = mutableListOf<FieldChange>()
+        if (!task.watchers.contains(watcherId)) {
+            val updatedWatchers = task.watchers + watcherId
+            changes += FieldChange("watchers", task.watchers.toString(), updatedWatchers.toString())
+            task.watchers = updatedWatchers
+        }
+
+        val saved = taskRepository.save(task)
+        if (changes.isNotEmpty()) {
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.UPDATED,
+                    changes = changes,
+                )
+            )
+        }
+        return taskMapper.toResponse(saved)
+    }
+
+    @Transactional
+    fun removeWatcher(taskId: UUID, watcherId: UUID, changedBy: UUID): TaskResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val changes = mutableListOf<FieldChange>()
+        if (task.watchers.contains(watcherId)) {
+            val updatedWatchers = task.watchers - watcherId
+            changes += FieldChange("watchers", task.watchers.toString(), updatedWatchers.toString())
+            task.watchers = updatedWatchers
+        }
+
+        val saved = taskRepository.save(task)
+        if (changes.isNotEmpty()) {
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.UPDATED,
+                    changes = changes,
+                )
+            )
+        }
+        return taskMapper.toResponse(saved)
+    }
+
+    @Transactional
+    fun transitionStatus(taskId: UUID, newStatus: TaskStatus, changedBy: UUID): TaskResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val changes = mutableListOf<FieldChange>()
+        if (newStatus != task.status) {
+            changes += FieldChange("status", task.status.name, newStatus.name)
+            task.status = newStatus
+        }
+
+        val saved = taskRepository.save(task)
+        if (changes.isNotEmpty()) {
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.UPDATED,
+                    changes = changes,
+                )
+            )
+        }
+        return taskMapper.toResponse(saved)
+    }
+
+    @Transactional
+    fun addComment(taskId: UUID, comment: String, changedBy: UUID): TaskHistoryResponse {
+        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
+
+        val history = taskHistoryRepository.save(
+            TaskHistory(
+                taskId = task.id!!,
+                changedBy = changedBy,
+                action = HistoryAction.COMMENT,
+                changes = listOf(FieldChange("comment", "", comment)),
+            )
+        )
+        return taskHistoryMapper.toResponse(history)
     }
 }

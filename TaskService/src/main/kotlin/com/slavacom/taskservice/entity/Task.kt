@@ -65,6 +65,10 @@ class Task(
 	@Column(name = "observers", nullable = false, columnDefinition = "TEXT")
 	var observers: List<UUID> = emptyList(),
 
+	@Convert(converter = UuidListJsonConverter::class)
+	@Column(name = "watchers", nullable = false, columnDefinition = "TEXT")
+	var watchers: List<UUID> = emptyList(),
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "priority", nullable = false)
 	var priority: TaskPriority = TaskPriority.MEDIUM,

@@ -14,6 +14,7 @@ data class UpdateTaskRequest(
     val responsible: UUID? = null,
     val executor: UUID? = null,
     val observers: List<UUID>? = null,
+    val watchers: List<UUID>? = null,
     val priority: TaskPriority? = null,
     val tags: List<String>? = null,
     val start: Instant? = null,

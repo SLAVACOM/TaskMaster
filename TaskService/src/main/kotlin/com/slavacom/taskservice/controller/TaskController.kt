@@ -1,10 +1,12 @@
 package com.slavacom.taskservice.controller
 
 import com.slavacom.taskservice.dto.CreateTaskRequest
+import com.slavacom.taskservice.dto.TaskHistoryResponse
 import com.slavacom.taskservice.dto.TaskPageResponse
 import com.slavacom.taskservice.dto.TaskResponse
 import com.slavacom.taskservice.dto.TaskSearchRequest
 import com.slavacom.taskservice.dto.UpdateTaskRequest
+import com.slavacom.taskservice.entity.enums.TaskStatus
 import com.slavacom.taskservice.service.TaskService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -72,6 +74,66 @@ class TaskController(
         @RequestParam projectId: UUID,
         @RequestParam q: String,
     ): List<TaskResponse> = taskService.searchTasks(projectId, q)
+
+    // ===== PHASE 2: Task Assignment & Workflow =====
+
+    @PostMapping("/{taskId}/assign")
+    fun assignTask(
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestBody request: Map<String, UUID>,
+    ): TaskResponse {
+        val assigneeId = request["assigneeId"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing assigneeId")
+        return taskService.assignTask(taskId, assigneeId, changedBy)
+    }
+
+    @PostMapping("/{taskId}/unassign")
+    fun unassignTask(
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+    ): TaskResponse = taskService.unassignTask(taskId, changedBy)
+
+    @PostMapping("/{taskId}/watchers")
+    fun addWatcher(
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestBody request: Map<String, UUID>,
+    ): TaskResponse {
+        val watcherId = request["watcherId"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing watcherId")
+        return taskService.addWatcher(taskId, watcherId, changedBy)
+    }
+
+    @DeleteMapping("/{taskId}/watchers/{watcherId}")
+    fun removeWatcher(
+        @PathVariable taskId: UUID,
+        @PathVariable watcherId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+    ): TaskResponse = taskService.removeWatcher(taskId, watcherId, changedBy)
+
+    @PostMapping("/{taskId}/transition")
+    fun transitionStatus(
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestBody request: Map<String, String>,
+    ): TaskResponse {
+        val statusStr = request["status"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing status")
+        val newStatus = try {
+            TaskStatus.valueOf(statusStr.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: $statusStr")
+        }
+        return taskService.transitionStatus(taskId, newStatus, changedBy)
+    }
+
+    @PostMapping("/{taskId}/comments")
+    fun addComment(
+        @PathVariable taskId: UUID,
+        @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestBody request: Map<String, String>,
+    ): TaskHistoryResponse {
+        val comment = request["text"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing comment text")
+        return taskService.addComment(taskId, comment, changedBy)
+    }
 }
 
 // Project-scoped task endpoints
