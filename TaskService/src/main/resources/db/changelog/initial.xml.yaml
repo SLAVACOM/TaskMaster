@@ -1,0 +1,130 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1777821796758-1
+      author: slava (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: task_history_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: action
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: changed_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: changed_by
+                  type: UUID
+              - column:
+                  name: changes
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_id
+                  type: UUID
+            tableName: task_history
+  - changeSet:
+      id: 1777821796758-2
+      author: slava (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: tasks_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: deadline_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: depends
+                  type: TEXT
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: end_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: executor
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: files
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: observers
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: priority
+                  type: VARCHAR(255)
+              - column:
+                  name: responsible
+                  type: UUID
+              - column:
+                  name: sprint_id
+                  type: UUID
+              - column:
+                  name: start_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: story_point
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tags
+                  type: TEXT
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: project_id
+                  type: UUID
+            tableName: tasks
+
