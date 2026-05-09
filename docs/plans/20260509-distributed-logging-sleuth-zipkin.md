@@ -148,12 +148,12 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 - Create: `S3CloudeStorage/src/main/kotlin/com/slavacom/s3cloudestorage/config/LoggingInterceptor.kt`
 - Create: `NotificationService/src/main/kotlin/com/slavacom/notificationservice/config/LoggingInterceptor.kt`
 
-- [ ] Create RestClientCustomizer bean for each service to add request logging interceptor
-- [ ] Log method, path, query params (no sensitive data)
-- [ ] Log response status and execution time
-- [ ] Ensure interceptor doesn't break existing RestClient functionality
-- [ ] Test RestClient calls still work with logging interceptor
-- [ ] Verify logs show: `POST /api/auth/login completed in 145ms with status 200`
+- [x] Create RestClientCustomizer bean for each service to add request logging interceptor
+- [x] Log method, path, query params (no sensitive data)
+- [x] Log response status and execution time
+- [x] Ensure interceptor doesn't break existing RestClient functionality
+- [x] Test RestClient calls still work with logging interceptor
+- [x] Verify logs show: `POST /api/auth/login completed in 145ms with status 200`
 
 ### Task 6: Add logging to service methods and business logic
 
