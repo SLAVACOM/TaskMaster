@@ -1,4 +1,4 @@
-package com.slavacom.userservice.config;
+package com.slavacom.notificationservice.config;
 
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
