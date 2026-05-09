@@ -80,11 +80,11 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 **Files:**
 - Modify: `All-Compose/docker-compose.yaml`
 
-- [ ] Add Zipkin service to docker-compose.yaml with port 9411
-- [ ] Ensure it connects to same network as other services
-- [ ] Start Zipkin: `docker compose up -d zipkin`
-- [ ] Verify Zipkin UI is accessible at http://localhost:9411
-- [ ] Run docker services test - verify Zipkin container is healthy
+- [x] Add Zipkin service to docker-compose.yaml with port 9411
+- [x] Ensure it connects to same network as other services
+- [x] Start Zipkin: `docker compose up -d zipkin`
+- [x] Verify Zipkin UI is accessible at http://localhost:9411
+- [x] Run docker services test - verify Zipkin container is healthy
 
 ### Task 2: Add Spring Cloud Sleuth + Zipkin dependencies to all services
 
