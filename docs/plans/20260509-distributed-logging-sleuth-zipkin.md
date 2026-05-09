@@ -131,12 +131,12 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 - Modify: `S3CloudeStorage/src/main/resources/logback-spring.xml` (create if not exists)
 - Modify: `NotificationService/src/main/resources/logback-spring.xml` (create if not exists)
 
-- [ ] Create logback-spring.xml for each service with pattern: `%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] [%thread] %-5level %logger{36} - %msg%n`
-- [ ] Add console appender for human-readable output
-- [ ] Add file appender for /logs directory (rolling files)
-- [ ] Configure Sleuth pattern to include trace ID and span ID
-- [ ] Set appropriate log levels for different packages
-- [ ] Verify each service outputs trace ID in logs: `[traceId=abc123,spanId=def456]`
+- [x] Create logback-spring.xml for each service with pattern: `%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] [%thread] %-5level %logger{36} - %msg%n`
+- [x] Add console appender for human-readable output
+- [x] Add file appender for /logs directory (rolling files)
+- [x] Configure Sleuth pattern to include trace ID and span ID
+- [x] Set appropriate log levels for different packages
+- [x] Verify each service outputs trace ID in logs: `[traceId=abc123,spanId=def456]`
 
 ### Task 5: Add request/response logging interceptor to each service
 
