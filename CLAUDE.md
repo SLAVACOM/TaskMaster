@@ -99,3 +99,96 @@ S3CloudeStorage needs S3 endpoint, credentials, bucket name, and Redis connectio
 - `StringListJsonConverter` / `UuidListJsonConverter` handle JSON-serialized list columns.
 - Kotlin services use `build.gradle.kts`; Java services use `build.gradle`.
 - Spring Boot version: 4.0.x across all services. Java target: 21 (even for Java 25 toolchain services, due to Kotlin compatibility).
+
+## Distributed Logging & Tracing
+
+All services use **Spring Cloud Sleuth + Zipkin** for distributed tracing and comprehensive logging.
+
+### Key Features
+- **Automatic Trace ID Propagation:** Every request gets a unique `traceId` that flows through all services
+- **Span Tracking:** Each service creates a `spanId` for its work on the request
+- **Log Context:** All logs automatically include `[traceId=xxx,spanId=yyy]` format
+- **Zipkin Visualization:** View complete request timeline across services at http://localhost:9411
+
+### Logging Patterns
+
+**1. Add Logger to Service Classes**
+```kotlin
+// Kotlin
+private val logger = KotlinLogging.logger {}
+logger.info { "Operation started: taskId=$taskId" }
+
+// Java
+@Slf4j
+public class MyService {
+    log.info("Operation started: taskId={}", taskId);
+}
+```
+
+**2. Log Entry Points with Input**
+```kotlin
+logger.info { "Creating task: name=${request.name}, projectId=${request.projectId}" }
+```
+
+**3. Log Success with Timing**
+```kotlin
+val duration = System.currentTimeMillis() - startTime
+logger.info { "Task created successfully: taskId=$taskId, duration=${duration}ms" }
+```
+
+**4. Log Errors with Context**
+```kotlin
+logger.error(exception) { "Failed to create task: projectId=$projectId, error=${exception.message}" }
+```
+
+**5. Request/Response Logging (Automatic)**
+```
+LoggingClientHttpRequestInterceptor logs all REST calls:
+INFO: POST http://localhost:8093/api/projects completed in 45ms with status 200
+```
+
+### Log Levels by Package
+
+| Package | Level | Purpose |
+|---------|-------|---------|
+| `com.slavacom.*` | DEBUG | Service operations, decisions |
+| `org.springframework.cloud.sleuth` | DEBUG | Trace/span creation |
+| `org.springframework.kafka` | DEBUG | Messaging events |
+| `org.springframework.web` | WARN | HTTP warnings only |
+| `org.springframework.security` | DEBUG | Auth details |
+
+### Searching Logs
+
+```bash
+# Find logs for a specific trace
+grep "traceId=abc123" logs/task-service.log
+
+# Find errors
+grep "ERROR" logs/*.log
+
+# Find slow operations (>1000ms)
+grep "duration=[0-9]\{4,\}ms" logs/*.log
+```
+
+### Debugging with Zipkin
+
+1. **Find trace:** Search by service, span name, or duration in Zipkin UI
+2. **View timeline:** See which service took how long and the call chain
+3. **Identify bottleneck:** Look for service with longest duration
+4. **Check logs:** Use trace ID to find related logs in each service's log file
+
+### Do's and Don'ts
+
+**✅ DO:**
+- Log at service method entry with key parameters
+- Include object IDs (userId, taskId, projectId) for context
+- Log execution time for expensive operations
+- Log errors with full exception context
+
+**❌ DON'T:**
+- Log passwords, tokens, API keys, secrets
+- Log entire objects (use specific fields)
+- Log same info twice in one code path
+- Use DEBUG for info needed in production
+
+See `docs/LOGGING.md` for comprehensive guide, examples, and troubleshooting.
