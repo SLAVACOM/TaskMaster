@@ -96,11 +96,11 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 - Modify: `S3CloudeStorage/build.gradle.kts`
 - Modify: `NotificationService/build.gradle`
 
-- [ ] Add `org.springframework.cloud:spring-cloud-starter-sleuth:4.1.5` to all services
-- [ ] Add `org.springframework.cloud:spring-cloud-starter-zipkin:4.1.5` to all services
-- [ ] Refresh gradle build system for all services
-- [ ] Verify dependencies are resolved (no conflicts with Spring Boot 4.0.5)
-- [ ] Run `./gradlew build` on each service to confirm compilation
+- [x] Add `org.springframework.cloud:spring-cloud-starter-sleuth:4.1.5` to all services
+- [x] Add `org.springframework.cloud:spring-cloud-starter-zipkin:4.1.5` to all services
+- [x] Refresh gradle build system for all services
+- [x] Verify dependencies are resolved (no conflicts with Spring Boot 4.0.5)
+- [x] Run `./gradlew build` on each service to confirm compilation
 
 ### Task 3: Configure Sleuth + Zipkin in application.yml for all services
 
