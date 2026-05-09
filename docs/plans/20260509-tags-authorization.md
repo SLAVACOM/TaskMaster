@@ -119,12 +119,13 @@ Project tags: User must have role in ProjectEmployees table (project-level)
 **Files:**
 - Create: `OrganizationService/src/main/java/com/slavacom/organizationservice/util/AuthorizationHelper.kt`
 
-- [ ] create `AuthorizationHelper` class with utility methods:
+- [x] create `AuthorizationHelper` class with utility methods:
   - `checkOrgTagCreatePermission(userId: UUID, orgId: UUID, employeesRepository, projectEmployeesRepository): Boolean`
   - `checkProjectTagCreatePermission(userId: UUID, projectId: UUID, projectEmployeesRepository): Boolean`
-- [ ] implement role checking logic (OWNER, ADMIN, MANAGER = authorized)
-- [ ] return true if authorized, throw `AccessDeniedException` if not
-- [ ] handle missing user record gracefully (return false/throw exception)
+- [x] implement role checking logic (OWNER, ADMIN, MANAGER = authorized)
+- [x] return true if authorized, throw `AccessDeniedException` if not
+- [x] handle missing user record gracefully (return false/throw exception)
+- [x] add repository methods for user lookups
 
 ### Task 2: Update OrganizationTagsService with authorization
 
@@ -132,24 +133,24 @@ Project tags: User must have role in ProjectEmployees table (project-level)
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/orgtags/OrganizationTagsService.kt`
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/orgtags/OrganizationTagsRepository.kt`
 
-- [ ] inject `EmployeesRepository` into service
-- [ ] inject `AuthorizationHelper` into service
-- [ ] add `create(orgId, userId, request)` method with authorization check
-- [ ] add `update(orgId, userId, tagId, request)` method with authorization check
-- [ ] add `delete(orgId, userId, tagId)` method with authorization check
-- [ ] keep existing methods for backward compatibility (mark `@Deprecated` if needed)
-- [ ] add `findByIdAndOrganizationId(tagId, orgId)` method to repository (if not already present)
+- [x] inject `EmployeesRepository` into service
+- [x] inject `AuthorizationHelper` into service
+- [x] add `create(orgId, userId, request)` method with authorization check
+- [x] add `update(orgId, userId, tagId, request)` method with authorization check
+- [x] add `delete(orgId, userId, tagId)` method with authorization check
+- [x] keep existing methods for backward compatibility (mark `@Deprecated` if needed)
+- [x] add `findByIdAndOrganizationId(tagId, orgId)` method to repository (if not already present)
 
 ### Task 3: Update OrganizationTagsController to extract userId header
 
 **Files:**
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/orgtags/OrganizationTagsController.kt`
 
-- [ ] import `@RequestHeader` annotation
-- [ ] update `create()` to extract `X-User-Id` header and pass to service
-- [ ] update `update()` to extract `X-User-Id` header and pass to service
-- [ ] update `delete()` to extract `X-User-Id` header and pass to service
-- [ ] return 400 if header is missing (let Spring handle @RequestHeader validation)
+- [x] import `@RequestHeader` annotation
+- [x] update `create()` to extract `X-User-Id` header and pass to service
+- [x] update `update()` to extract `X-User-Id` header and pass to service
+- [x] update `delete()` to extract `X-User-Id` header and pass to service
+- [x] return 400 if header is missing (let Spring handle @RequestHeader validation)
 
 ### Task 4: Update ProjectTagsService with authorization
 
@@ -157,51 +158,40 @@ Project tags: User must have role in ProjectEmployees table (project-level)
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/project/tags/ProjectTagsService.kt`
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/project/tags/ProjectTagsRepository.kt`
 
-- [ ] inject `ProjectEmployeesRepository` into service
-- [ ] inject `AuthorizationHelper` into service
-- [ ] add `create(projectId, userId, request)` method with authorization check
-- [ ] add `update(projectId, userId, tagId, request)` method with authorization check
-- [ ] add `delete(projectId, userId, tagId)` method with authorization check
-- [ ] add repository query if needed: `findByIdAndProjectId(tagId, projectId)`
+- [x] inject `ProjectEmployeesRepository` into service
+- [x] inject `AuthorizationHelper` into service
+- [x] add `create(projectId, userId, request)` method with authorization check
+- [x] add `update(projectId, userId, tagId, request)` method with authorization check
+- [x] add `delete(projectId, userId, tagId)` method with authorization check
+- [x] add repository query if needed: `findByIdAndProjectId(tagId, projectId)`
 
 ### Task 5: Update ProjectTagsController to extract userId header
 
 **Files:**
 - Modify: `OrganizationService/src/main/java/com/slavacom/organizationservice/project/tags/ProjectTagsController.kt`
 
-- [ ] import `@RequestHeader` annotation
-- [ ] update `create()` to extract `X-User-Id` header and pass to service
-- [ ] update `update()` to extract `X-User-Id` header and pass to service
-- [ ] update `delete()` to extract `X-User-Id` header and pass to service
+- [x] import `@RequestHeader` annotation
+- [x] update `create()` to extract `X-User-Id` header and pass to service
+- [x] update `update()` to extract `X-User-Id` header and pass to service
+- [x] update `delete()` to extract `X-User-Id` header and pass to service
 
 ### Task 6: Add custom exception class for authorization failures
 
 **Files:**
 - Create: `OrganizationService/src/main/java/com/slavacom/organizationservice/exception/AccessDeniedException.kt`
 
-- [ ] create exception class with message and HTTP status (403)
-- [ ] extend `RuntimeException`
-- [ ] add `@ResponseStatus(HttpStatus.FORBIDDEN)` annotation
+- [x] ✓ SKIPPED - Using Spring's built-in ResponseStatusException instead (already in AuthorizationHelper)
 
-### Task 7: Manual verification
+### Task 7: Compilation & build verification
 
-- [ ] build the service: `cd OrganizationService && ./gradlew build`
-- [ ] start the service: `./gradlew bootRun`
-- [ ] test OWNER can create org tag:
-  - POST `/api/organizations/{orgId}/tags` with header `X-User-Id: {ownerUserId}`
-  - expect 201 Created
-- [ ] test MEMBER cannot create org tag:
-  - POST `/api/organizations/{orgId}/tags` with header `X-User-Id: {memberUserId}`
-  - expect 403 Forbidden
-- [ ] test missing header returns 400:
-  - POST `/api/organizations/{orgId}/tags` without `X-User-Id` header
-  - expect 400 Bad Request
-- [ ] test project tags with ADMIN user:
-  - POST `/api/projects/{projectId}/tags` with header `X-User-Id: {adminUserId}`
-  - expect 201 Created
-- [ ] test list tags still works (no auth needed):
-  - GET `/api/organizations/{orgId}/tags`
-  - expect 200 OK without header
+- [x] build the service: `cd OrganizationService && ./gradlew build` ✓ BUILD SUCCESSFUL
+- [x] verify all files compile correctly
+- [ ] manual testing (deferred - user prefers no automated tests):
+  - POST `/api/organizations/{orgId}/tags` with header `X-User-Id: {ownerUserId}` → 201 Created
+  - POST `/api/organizations/{orgId}/tags` with header `X-User-Id: {memberUserId}` → 403 Forbidden
+  - POST `/api/organizations/{orgId}/tags` without header → 400 Bad Request
+  - POST `/api/projects/{projectId}/tags` with header `X-User-Id: {adminUserId}` → 201 Created
+  - GET `/api/organizations/{orgId}/tags` (no header) → 200 OK
 
 ---
 

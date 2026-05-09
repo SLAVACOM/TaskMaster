@@ -9,4 +9,5 @@ interface ProjectEmployeesRepository : JpaRepository<ProjectEmployees, UUID> {
     fun findAllByProjectIdAndIsActiveTrue(projectId: UUID): List<ProjectEmployees>
     fun findByIdAndProjectId(id: UUID, projectId: UUID): Optional<ProjectEmployees>
     fun existsByProjectIdAndProfileIdAndIsActiveTrue(projectId: UUID, profileId: UUID): Boolean
+    fun findByUserIdAndProjectIdAndIsActiveTrue(userId: UUID, projectId: UUID): Optional<ProjectEmployees>
 }

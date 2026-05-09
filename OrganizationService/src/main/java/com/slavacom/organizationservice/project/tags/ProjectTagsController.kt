@@ -13,17 +13,25 @@ class ProjectTagsController(private val service: ProjectTagsService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@PathVariable projectId: UUID, @RequestBody request: CreateProjectTagRequest): ProjectTagResponse =
-        service.create(projectId, request)
+    fun create(
+        @PathVariable projectId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID,
+        @RequestBody request: CreateProjectTagRequest
+    ): ProjectTagResponse = service.create(projectId, userId, request)
 
     @PutMapping("/{tagId}")
     fun update(
         @PathVariable projectId: UUID,
         @PathVariable tagId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID,
         @RequestBody request: UpdateProjectTagRequest
-    ): ProjectTagResponse = service.update(projectId, tagId, request)
+    ): ProjectTagResponse = service.update(projectId, userId, tagId, request)
 
     @DeleteMapping("/{tagId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable projectId: UUID, @PathVariable tagId: UUID) = service.delete(projectId, tagId)
+    fun delete(
+        @PathVariable projectId: UUID,
+        @PathVariable tagId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID
+    ) = service.delete(projectId, userId, tagId)
 }

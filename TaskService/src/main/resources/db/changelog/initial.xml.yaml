@@ -127,4 +127,3 @@ databaseChangeLog:
                   name: project_id
                   type: UUID
             tableName: tasks
-

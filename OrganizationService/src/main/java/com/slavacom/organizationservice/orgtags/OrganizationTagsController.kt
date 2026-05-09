@@ -13,18 +13,25 @@ class OrganizationTagsController(private val service: OrganizationTagsService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@PathVariable orgId: UUID, @RequestBody request: CreateOrgTagRequest): OrgTagResponse =
-        service.create(orgId, request)
+    fun create(
+        @PathVariable orgId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID,
+        @RequestBody request: CreateOrgTagRequest
+    ): OrgTagResponse = service.create(orgId, userId, request)
 
     @PutMapping("/{tagId}")
     fun update(
         @PathVariable orgId: UUID,
         @PathVariable tagId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID,
         @RequestBody request: UpdateOrgTagRequest
-    ): OrgTagResponse = service.update(orgId, tagId, request)
+    ): OrgTagResponse = service.update(orgId, userId, tagId, request)
 
     @DeleteMapping("/{tagId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable orgId: UUID, @PathVariable tagId: UUID) =
-        service.delete(orgId, tagId)
+    fun delete(
+        @PathVariable orgId: UUID,
+        @PathVariable tagId: UUID,
+        @RequestHeader("X-User-Id") userId: UUID
+    ) = service.delete(orgId, userId, tagId)
 }

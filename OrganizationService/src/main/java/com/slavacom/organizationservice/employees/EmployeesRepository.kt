@@ -10,4 +10,5 @@ interface EmployeesRepository : JpaRepository<Employees, UUID> {
     fun findByIdAndOrganizationId(id: UUID, organizationId: UUID): Optional<Employees>
     fun existsByUserIdAndOrganizationIdAndIsActiveTrue(userId: UUID, organizationId: UUID): Boolean
     fun findByUserIdAndIsActiveTrue(userId: UUID): Optional<Employees>
+    fun findByUserIdAndOrganizationIdAndIsActiveTrue(userId: UUID, organizationId: UUID): Optional<Employees>
 }

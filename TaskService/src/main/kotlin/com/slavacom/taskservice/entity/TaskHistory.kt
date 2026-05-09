@@ -24,10 +24,10 @@ class TaskHistory(
     var id: UUID? = null,
 
     @Column(name = "task_id", nullable = false)
-    var taskId: UUID,
+    var taskId: UUID? = null,
 
     @Column(name = "changed_by", nullable = false)
-    var changedBy: UUID,
+    var changedBy: UUID? = null,
 
     @CreationTimestamp
     @Column(name = "changed_at", nullable = false, updatable = false)
@@ -35,7 +35,7 @@ class TaskHistory(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false)
-    var action: HistoryAction,
+    var action: HistoryAction? = null,
 
     @Convert(converter = FieldChangeListConverter::class)
     @Column(name = "changes", columnDefinition = "TEXT")

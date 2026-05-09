@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AmplicodeDatabaseMigrationSettings" liquibaseFileType="YAML" />
   <component name="AmplicodePersistenceUnitSettings">
     <persistence-units>
-      <persistence-unit moduleName="NotificationService.main" name="Default">
+      <persistence-unit moduleName="NotificationService.main" name="Default" defaultIncludeChangeLogFile="TaskService/src/main/resources/db/changelog/db.changelog-master.xml">
         <packages>
           <package value="com.slavacom.notificationservice" />
         </packages>

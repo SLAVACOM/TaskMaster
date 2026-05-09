@@ -15,7 +15,8 @@ React-based web application for TaskMaster task management system. Frontend cons
 - OrganizationService (8083): Organizations, employees, projects
 - TaskService (8084): Task CRUD, dashboard, workflow, time tracking
 - S3CloudStorage (8085): File uploads, presigned URLs
-- NotificationService (8090): Email/Telegram notifications (async)
+- все взаимодействие идет через API Gateway (8090) с маршрутизацией по сервисам
+
 
 **API Base URLs (environment dependent):**
 - Local: `http://localhost:8081`, `http://localhost:8082`, etc.
