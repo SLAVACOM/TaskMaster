@@ -179,13 +179,13 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 - Create: `docs/LOGGING.md`
 - Modify: `docs/CLAUDE.md`
 
-- [ ] Document how to access Zipkin UI: http://localhost:9411
-- [ ] Explain how to search for traces by service name, span name, duration, error
-- [ ] Provide examples of common debugging scenarios (e.g., "trace a slow request")
-- [ ] Document log levels and how to adjust them at runtime
-- [ ] Add environment variables for production Zipkin URL configuration
-- [ ] Include troubleshooting section for common issues
-- [ ] Update CLAUDE.md with logging patterns and conventions for future development
+- [x] Document how to access Zipkin UI: http://localhost:9411
+- [x] Explain how to search for traces by service name, span name, duration, error
+- [x] Provide examples of common debugging scenarios (e.g., "trace a slow request")
+- [x] Document log levels and how to adjust them at runtime
+- [x] Add environment variables for production Zipkin URL configuration
+- [x] Include troubleshooting section for common issues
+- [x] Update CLAUDE.md with logging patterns and conventions for future development
 
 ### Task 8: End-to-end testing and verification
 
