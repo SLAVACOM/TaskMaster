@@ -34,6 +34,10 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    // Distributed Tracing
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth:4.1.5")
+    implementation("org.springframework.cloud:spring-cloud-starter-zipkin:4.1.5")
+
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
