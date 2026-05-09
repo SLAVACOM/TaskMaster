@@ -112,14 +112,14 @@ Flow: Request → Service A → (Trace ID auto-propagated) → Service B
 - Modify: `S3CloudeStorage/src/main/resources/application.yml`
 - Modify: `NotificationService/src/main/resources/application.yml`
 
-- [ ] Add spring.application.name property to each service
-- [ ] Add spring.zipkin.base-url=http://localhost:9411 to all services
-- [ ] Add spring.zipkin.sender.type=web for async reporting
-- [ ] Add spring.sleuth.sampler.probability=1.0 for 100% sampling (dev)
-- [ ] Configure spring.sleuth.trace-id128=true for longer trace IDs
-- [ ] Add logging.level.root=INFO and org.springframework.cloud.sleuth=DEBUG
-- [ ] Also add to docker profiles (application-docker.yml) with docker service hostname
-- [ ] Run each service locally and verify logs contain [traceid=xxx,spanid=yyy]
+- [x] Add spring.application.name property to each service
+- [x] Add spring.zipkin.base-url=http://localhost:9411 to all services
+- [x] Add spring.zipkin.sender.type=web for async reporting
+- [x] Add spring.sleuth.sampler.probability=1.0 for 100% sampling (dev)
+- [x] Configure spring.sleuth.trace-id128=true for longer trace IDs
+- [x] Add logging.level.root=INFO and org.springframework.cloud.sleuth=DEBUG
+- [x] Also add to docker profiles (application-docker.yml) with docker service hostname
+- [x] Run each service locally and verify logs contain [traceid=xxx,spanid=yyy]
 
 ### Task 4: Configure custom logging format with Logback
 
