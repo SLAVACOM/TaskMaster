@@ -15,6 +15,7 @@ import com.slavacom.taskservice.mapper.TaskHistoryMapper
 import com.slavacom.taskservice.mapper.TaskMapper
 import com.slavacom.taskservice.repository.TaskHistoryRepository
 import com.slavacom.taskservice.repository.TaskRepository
+import mu.KotlinLogging
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class TaskService(
@@ -37,48 +40,73 @@ class TaskService(
 
     @Transactional
     fun create(request: CreateTaskRequest, changedBy: UUID): TaskResponse {
-        val task = Task(
-            name = request.name.trim(),
-            description = request.description,
-            files = request.files,
-            depends = request.depends,
-            status = request.status,
-            responsible = request.responsible,
-            executor = request.executor,
-            observers = request.observers,
-            watchers = request.watchers,
-            priority = request.priority,
-            tags = request.tags,
-            start = request.start,
-            end = request.end,
-            deadline = request.deadline,
-            sprintId = request.sprintId,
-            projectId = request.projectId,
-            storyPoint = request.storyPoint,
-        )
-        val saved = taskRepository.save(task)
-        taskHistoryRepository.save(
-            TaskHistory(
-                taskId = saved.id!!,
-                changedBy = changedBy,
-                action = HistoryAction.CREATED,
-                changes = emptyList(),
+        val startTime = System.currentTimeMillis()
+        logger.info { "Creating task: name=${request.name}, projectId=${request.projectId}, changedBy=$changedBy" }
+
+        try {
+            val task = Task(
+                name = request.name.trim(),
+                description = request.description,
+                files = request.files,
+                depends = request.depends,
+                status = request.status,
+                responsible = request.responsible,
+                executor = request.executor,
+                observers = request.observers,
+                watchers = request.watchers,
+                priority = request.priority,
+                tags = request.tags,
+                start = request.start,
+                end = request.end,
+                deadline = request.deadline,
+                sprintId = request.sprintId,
+                projectId = request.projectId,
+                storyPoint = request.storyPoint,
             )
-        )
-        return taskMapper.toResponse(saved)
+            val saved = taskRepository.save(task)
+            taskHistoryRepository.save(
+                TaskHistory(
+                    taskId = saved.id!!,
+                    changedBy = changedBy,
+                    action = HistoryAction.CREATED,
+                    changes = emptyList(),
+                )
+            )
+            val duration = System.currentTimeMillis() - startTime
+            logger.info { "Task created successfully: taskId=${saved.id}, duration=${duration}ms" }
+            return taskMapper.toResponse(saved)
+        } catch (e: Exception) {
+            val duration = System.currentTimeMillis() - startTime
+            logger.error(e) { "Failed to create task in ${duration}ms: ${e.message}" }
+            throw e
+        }
     }
 
     @Transactional(readOnly = true)
-    fun getById(id: UUID): TaskResponse =
-        taskRepository.findByIdAndIsActiveTrue(id)?.let(taskMapper::toResponse)
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $id")
+    fun getById(id: UUID): TaskResponse {
+        val startTime = System.currentTimeMillis()
+        logger.debug { "Fetching task: taskId=$id" }
+        return taskRepository.findByIdAndIsActiveTrue(id)?.let {
+            val duration = System.currentTimeMillis() - startTime
+            logger.debug { "Task fetched in ${duration}ms: taskId=$id" }
+            taskMapper.toResponse(it)
+        } ?: run {
+            logger.warn { "Task not found: taskId=$id" }
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $id")
+        }
+    }
 
     @Transactional(readOnly = true)
     fun getAll(projectId: UUID? = null): List<TaskResponse> {
+        val startTime = System.currentTimeMillis()
+        logger.debug { "Fetching all tasks: projectId=$projectId" }
+
         val tasks = if (projectId != null)
             taskRepository.findByProjectIdAndIsActiveTrueOrderByCreatedAtDesc(projectId)
         else
             taskRepository.findByIsActiveTrueOrderByCreatedAtDesc()
+        val duration = System.currentTimeMillis() - startTime
+        logger.info { "Retrieved ${tasks.size} tasks in ${duration}ms: projectId=$projectId" }
         return tasks.map(taskMapper::toResponse)
     }
 
