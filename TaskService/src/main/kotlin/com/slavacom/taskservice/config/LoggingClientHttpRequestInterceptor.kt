@@ -19,7 +19,7 @@ class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
         val startTime = System.currentTimeMillis()
-        val method = request.method.name
+        val method = request.method.toString()
         val uri = request.uri.toString()
 
         logger.debug { "$method $uri - request started" }
