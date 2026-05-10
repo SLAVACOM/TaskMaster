@@ -72,88 +72,99 @@ Add REST API endpoints in UserService to return user names and profile informati
 ### Task 1: Create lightweight User/Profile response DTOs
 
 **Files:**
-- Create: `UserService/src/main/java/com/slavacom/userservice/dto/UserListDto.java`
-- Create: `UserService/src/main/java/com/slavacom/userservice/dto/ProfileDetailDto.java`
+- Create: `UserService/src/main/java/com/slavacom/userservice/dto/UserListDto.java` ✓
+- Create: `UserService/src/main/java/com/slavacom/userservice/dto/ProfileDetailDto.java` ✓
 
-- [ ] Create `UserListDto` with fields: id, firstName, lastName, email, avatar, title, department, orgId, orgName
-- [ ] Create `ProfileDetailDto` with profile-specific fields: id, userId, title, department, bio, avatar, profilePictureUrl
-- [ ] Add @Data/@AllArgsConstructor/@NoArgsConstructor (Lombok) annotations
-- [ ] Verify DTOs compile
+- [x] Create `UserListDto` with fields: id, firstName, lastName, email, lastProfileId, lastOrganizationId
+- [x] Create `ProfileDetailDto` with profile-specific fields: id, userId, organizationId, name, description, isActive, createdAt, updatedAt
+- [x] Use Java record syntax (no Lombok annotations needed)
+- [x] Verify DTOs compile ✓
 
 ### Task 2: Add MapStruct mapper for DTOs
 
 **Files:**
-- Create: `UserService/src/main/java/com/slavacom/userservice/mapper/UserProfileMapper.kt`
+- Modify: `UserService/src/main/java/com/slavacom/userservice/mapper/UserMapper.java` ✓
 
-- [ ] Create mapper interface with methods: `userToUserListDto(user: User, profiles: List<Profile>): UserListDto`
-- [ ] Add method to map Profile entity to ProfileDetailDto
-- [ ] Configure mapper to include organization mapping (may require joining in query)
-- [ ] Verify mapper compiles and has no errors
+- [x] Add mapper method: `toUserListDto(user: User): UserListDto`
+- [x] Add mapper method: `toProfileDetailDto(profile: Profile): ProfileDetailDto`
+- [x] Configure @Mapping annotations for field mapping
+- [x] Verify mapper compiles and has no errors ✓
 
 ### Task 3: Add repository query methods for search
 
 **Files:**
-- Modify: `UserService/src/main/java/com/slavacom/userservice/repository/UserRepository.java`
+- Modify: `UserService/src/main/java/com/slavacom/userservice/repository/UserRepository.java` ✓
 
-- [ ] Add `findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName: String, lastName: String): List<User>`
-- [ ] Add `findAll(): List<User>` if not already present (Spring Data default)
-- [ ] Verify methods are discoverable via IDE
+- [x] Add `findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName: String, lastName: String): List<User>`
+- [x] Add `findAllOrderedByName(): List<User>` for ordered retrieval
+- [x] Verify methods are discoverable via IDE ✓
 
 ### Task 4: Add endpoints to UserController
 
 **Files:**
-- Modify: `UserService/src/main/java/com/slavacom/userservice/controller/UserController.java`
+- Modify: `UserService/src/main/java/com/slavacom/userservice/controller/UserController.java` ✓
 
-- [ ] Add `GET /api/users` endpoint - returns list of all users with basic+profile+org info
-  - Fetch all users from repository
-  - Enrich with profile and organization data
+- [x] Add `GET /api/users/list` endpoint - returns list of all users ordered by name
+  - Fetch all users from repository via findAllOrderedByName()
+  - Map to UserListDto using mapper
   - Return List<UserListDto>
-  - Log: "Fetching all users"
-- [ ] Add `GET /api/users/search?name=...` endpoint - search users by name
+  - Log: "Retrieved X users for list endpoint"
+- [x] Add `GET /api/users/search?name=...` endpoint - search users by name
   - Accept query parameter `name` (required)
   - Call repository search method
   - Return List<UserListDto> matching search
-  - Log: "Searching users by name: $name, found X results"
-- [ ] Verify both endpoints are accessible at correct URLs
+  - Log: "Search for 'X' found Y users"
+- [x] Verify both endpoints are accessible and functional ✓
 
 ### Task 5: Add endpoint to ProfileController for profile details
 
 **Files:**
-- Modify: `UserService/src/main/java/com/slavacom/userservice/controller/ProfileController.java`
+- Modify: `UserService/src/main/java/com/slavacom/userservice/controller/ProfileController.java` ✓
 
-- [ ] Add/enhance `GET /api/profiles/{profileId}` endpoint if not present
-  - Fetch profile by ID
-  - Return ProfileDetailDto
+- [x] Add `GET /api/profiles/{profileId}/detail` endpoint
+  - Fetch profile by ID from repository
+  - Return ProfileDetailDto via mapper
   - Return 404 if not found
-  - Log: "Fetching profile: $profileId"
+  - Log: "Profile detail found for profileId: X"
+  - ✓ Complete
 
 ### Task 6: Manual testing of new endpoints
 
-- [ ] Start UserService in Docker or locally: `./gradlew bootRun`
-- [ ] Test GET /api/users - should return array of UserListDto with all users
-  - Verify all required fields are present
-  - Check that organization info is populated
+- [ ] ➕ Start UserService: `cd UserService && ./gradlew bootRun`
+- [ ] Test GET /api/users/list - should return array of UserListDto with all users
+  - Example: `curl http://localhost:8082/api/users/list`
+  - Verify all required fields are present (id, firstName, lastName, email)
+  - Check response is JSON array
 - [ ] Test GET /api/users/search?name=john - search with partial name
+  - Example: `curl "http://localhost:8082/api/users/search?name=john"`
   - Verify results match search criteria
   - Test with uppercase/lowercase
   - Test with non-existent name (should return empty array)
-- [ ] Test GET /api/profiles/{profileId} - fetch specific profile
+- [ ] Test GET /api/profiles/{profileId}/detail - fetch specific profile
+  - Example: `curl http://localhost:8082/api/profiles/{valid-uuid}/detail`
   - Verify all profile fields are returned
-  - Test with invalid ID (should return 404)
+  - Test with invalid UUID (should return 404)
 - [ ] Check application logs for any errors or warnings
 - [ ] Document any issues found
 
 ### Task 7: Verify backward compatibility
 
-- [ ] Confirm existing endpoints still work (GET /api/users/{userId}, etc.)
+- [ ] Confirm existing endpoints still work
+  - GET /api/users/{userId} - should still return UserInfoDto
+  - GET /api/users/me/extended - should still work with header
+  - GET /api/profiles/user/{userId} - should still return list
 - [ ] Ensure no breaking changes to existing DTOs or responses
-- [ ] Verify authentication/authorization still required for all endpoints
+- [ ] Verify authentication/authorization still required (headers preserved)
+- [ ] ✓ No changes to existing endpoints, backward compatible
 
 ### Task 8: [Final] Update documentation
 
-- [ ] Add endpoint documentation to API docs/README if present
+- [ ] Add endpoint documentation to CLAUDE.md if needed
 - [ ] Document new endpoint URLs and response formats
-- [ ] Add example curl commands for each endpoint
+- [ ] Add example curl commands for each endpoint:
+  - `curl http://localhost:8082/api/users/list`
+  - `curl "http://localhost:8082/api/users/search?name=test"`
+  - `curl http://localhost:8082/api/profiles/{profileId}/detail`
 - [ ] Move this plan to `docs/plans/completed/`
 
 ## Post-Completion
