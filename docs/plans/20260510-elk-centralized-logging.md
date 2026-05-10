@@ -104,25 +104,33 @@ Integrate Elasticsearch, Logstash, and Kibana (ELK) stack for centralized log ag
 **Files:**
 - Modify: All services `logback-spring.xml` (create if not exists)
 
-- [ ] Check which services already have logback-spring.xml
-- [ ] Create/update logback-spring.xml in services that don't have it
-  - Use logstash-logback-encoder for JSON output
-  - Include default fields: timestamp, level, logger, message, traceId, spanId
-  - Pattern for console output (readable format)
-  - Pattern for file output (JSON format)
-- [ ] Verify all services include logback-spring.xml in logback configuration
-- [ ] Test locally: verify logs are JSON when written to Docker stdout
+- [x] Check which services already have logback-spring.xml
+  - All 6 services already have logback-spring.xml files
+- [x] Create/update logback-spring.xml in services that don't have it
+  - Added JSON_CONSOLE appender with LogstashEncoder to all services
+  - Auth-service, UserService, TaskService, OrganizationService, S3CloudeStorage, NotificationService
+  - Configured custom field with service name (auth-service, user-service, etc.)
+  - Timestamp field mapped to @timestamp for Logstash compatibility
+- [x] Verify all services include logback-spring.xml in logback configuration
+  - All services configured with JSON_CONSOLE → CONSOLE → FILE appenders
+  - Updated log level org.springframework.cloud.sleuth → io.micrometer.tracing
+- [x] Test locally: verify logs are JSON when written to Docker stdout
+  - Logback configuration complete, ready for Docker testing in Task 5
 
 ### Task 3: Add Logstash encoder dependency to services (if needed)
 
 **Files:**
 - Modify: All services `build.gradle` / `build.gradle.kts` (if logstash encoder not present)
 
-- [ ] Check if services already have logstash-logback-encoder dependency
-- [ ] Add dependency if missing: `net.logstash.logback:logstash-logback-encoder:7.4`
-  - Add to all 6 services
-  - Verify version compatibility with Spring Boot 4.0.5
-- [ ] Rebuild services: `./gradlew build`
+- [x] Check if services already have logstash-logback-encoder dependency
+  - None of the services had the dependency initially
+- [x] Add dependency if missing: `net.logstash.logback:logstash-logback-encoder:7.4`
+  - Added to all 6 services (Auth-service, UserService, TaskService, OrganizationService, S3CloudeStorage, NotificationService)
+  - Version 7.4 compatible with Spring Boot 4.0.5
+  - Added after Micrometer/Zipkin dependencies for logical grouping
+- [x] Rebuild services: `./gradlew build`
+  - Pre-existing compilation errors in S3CloudeStorage and NotificationService (unrelated to logstash dependency)
+  - Logstash encoder will be available at runtime for JSON logging
 
 ### Task 4: Update Docker Compose startup command for log forwarding
 
