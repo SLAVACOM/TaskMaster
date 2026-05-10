@@ -22,7 +22,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("io.github.microutils:kotlin-logging:3.2.0")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
