@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -209,6 +210,53 @@ public class UserController {
 		} catch (Exception e) {
 			log.warn("Error getting extended user info for userId: {}", userId, e);
 			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	/**
+	 * Получение списка всех пользователей с основной информацией
+	 * Используется для фронтенда (dropdowns, user lists, search)
+	 */
+	@GetMapping("/list")
+	public ResponseEntity<List<UserListDto>> getAllUsers() {
+		log.info("REST: Getting list of all users");
+
+		try {
+			List<User> users = userRepository.findAllOrderedByName();
+			List<UserListDto> userDtos = users.stream()
+					.map(userMapper::toUserListDto)
+					.toList();
+			log.info("Retrieved {} users for list endpoint", userDtos.size());
+			return ResponseEntity.ok(userDtos);
+		} catch (Exception e) {
+			log.error("Error retrieving user list", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	/**
+	 * Поиск пользователей по имени (частичное совпадение, case-insensitive)
+	 * Используется для autocomplete в фронтенде
+	 */
+	@GetMapping("/search")
+	public ResponseEntity<List<UserListDto>> searchUsers(@RequestParam String name) {
+		log.info("REST: Searching users by name: {}", name);
+
+		if (name == null || name.isBlank()) {
+			log.warn("Search request with blank name parameter");
+			return ResponseEntity.badRequest().build();
+		}
+
+		try {
+			List<User> users = userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
+			List<UserListDto> userDtos = users.stream()
+					.map(userMapper::toUserListDto)
+					.toList();
+			log.info("Search for '{}' found {} users", name, userDtos.size());
+			return ResponseEntity.ok(userDtos);
+		} catch (Exception e) {
+			log.error("Error searching users by name: {}", name, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }

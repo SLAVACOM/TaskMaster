@@ -2,7 +2,10 @@ package com.slavacom.userservice.controller;
 
 import com.slavacom.userservice.dto.CreateProfileRequest;
 import com.slavacom.userservice.dto.ProfileResponse;
+import com.slavacom.userservice.dto.ProfileDetailDto;
 import com.slavacom.userservice.dto.UpdateProfileRequest;
+import com.slavacom.userservice.mapper.UserMapper;
+import com.slavacom.userservice.repository.ProfileRepository;
 import com.slavacom.userservice.service.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,8 @@ import java.util.UUID;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
+    private final UserMapper userMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -58,6 +63,26 @@ public class ProfileController {
         log.info("REST: Activating profile {} for current user {}", profileId, userId);
         profileService.activateProfile(userId, profileId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Получение деталей профиля по ID
+     * Используется для фронтенда при отображении информации о профиле
+     */
+    @GetMapping("/{profileId}/detail")
+    public ResponseEntity<ProfileDetailDto> getProfileDetail(@PathVariable UUID profileId) {
+        log.info("REST: Getting profile detail for profileId: {}", profileId);
+
+        try {
+            var profile = profileRepository.findById(profileId)
+                    .orElseThrow(() -> new RuntimeException("Profile not found: " + profileId));
+            ProfileDetailDto detailDto = userMapper.toProfileDetailDto(profile);
+            log.info("Profile detail found for profileId: {}", profileId);
+            return ResponseEntity.ok(detailDto);
+        } catch (Exception e) {
+            log.warn("Profile not found for profileId: {}", profileId);
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
