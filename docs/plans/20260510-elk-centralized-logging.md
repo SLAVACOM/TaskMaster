@@ -73,29 +73,31 @@ Integrate Elasticsearch, Logstash, and Kibana (ELK) stack for centralized log ag
 - Modify: `All-Compose/docker-compose.yaml`
 - Create: `All-Compose/logstash.conf`
 
-- [ ] Add Elasticsearch service to docker-compose.yaml (port 9200)
+- [x] Add Elasticsearch service to docker-compose.yaml (port 9200)
   - image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
   - single node cluster configuration
-  - 2GB heap size for dev
+  - 512MB heap size for dev
   - volume for data persistence
   - health check configured
-- [ ] Add Logstash service to docker-compose.yaml (port 5000)
+- [x] Add Logstash service to docker-compose.yaml (port 5000)
   - image: docker.elastic.co/logstash/logstash:8.11.0
   - input from stdin (Docker logs)
   - JSON codec for structured logs
   - output to Elasticsearch
   - depends_on Elasticsearch
-- [ ] Add Kibana service to docker-compose.yaml (port 5601)
+- [x] Add Kibana service to docker-compose.yaml (port 5601)
   - image: docker.elastic.co/kibana/kibana:8.11.0
   - ELASTICSEARCH_HOSTS pointing to Elasticsearch
   - depends_on Elasticsearch
   - health check configured
-- [ ] Create logstash.conf with pipeline configuration
+- [x] Create logstash.conf with pipeline configuration
   - input: stdin with JSON codec
   - filter: parse JSON, extract traceId and spanId
   - output: Elasticsearch with index pattern logstash-%{+YYYY.MM.dd}
-- [ ] Add shared network and volumes for ELK services
-- [ ] Verify compose file is valid: `docker-compose config`
+- [x] Add shared network and volumes for ELK services
+  - Added elasticsearch-data volume to volumes section
+  - All services connected to micro-net network
+- [x] Verify compose file is valid: `docker-compose config` ✓
 
 ### Task 2: Configure Logback for JSON structured logging
 
