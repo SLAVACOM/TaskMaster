@@ -135,11 +135,25 @@ Integrate Elasticsearch, Logstash, and Kibana (ELK) stack for centralized log ag
 ### Task 4: Update Docker Compose startup command for log forwarding
 
 **Files:**
-- Modify: `All-Compose/docker-compose.services.yml`
+- Modify: `All-Compose/logstash.conf`
+- Modify: All services `logback-spring.xml`
 
-- [ ] Verify services include logging driver configuration if needed
-- [ ] Check if Docker Compose automatically collects stdout from containers
-- [ ] Document the log flow in docker-compose for clarity
+- [x] Verify services include logging driver configuration if needed
+  - Standard Docker Compose setup uses default logging driver
+- [x] Configure Logstash to accept TCP connections from services
+  - Updated logstash.conf to add TCP input on port 5000 with JSON codec
+  - Added UDP fallback on port 5001 for reliability
+  - Both inputs send to Elasticsearch with logstash-%{+YYYY.MM.dd} index pattern
+- [x] Add TCP socket appenders to all services
+  - Added LOGSTASH_TCP appender to all 6 services' logback-spring.xml
+  - Appender sends JSON logs directly to logstash:5000
+  - Configured keep-alive with 5-minute timeout
+  - Logs still output to console (for Docker visibility) and file (for local debugging)
+- [x] Document the log flow in docker-compose for clarity
+  - Log flow: Services → Logstash:5000 (TCP) → Elasticsearch → Kibana
+  - Console appender: visible in `docker logs <service>`
+  - File appender: stored in service logs/ directory
+  - TCP appender: aggregated in Elasticsearch for searching
 
 ### Task 5: Manual testing in Docker environment
 
