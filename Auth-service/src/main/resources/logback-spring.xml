@@ -3,11 +3,27 @@
     <property name="LOG_FILE" value="logs/auth-service.log"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] [%thread] %-5level %logger{36} - %msg%n"/>
 
-    <!-- Console Appender -->
+    <!-- Console Appender - Readable Format -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- JSON Console Appender - Logstash format (sent to Logstash via Docker) -->
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <charset>UTF-8</charset>
+            <fieldNames>
+                <timestamp>@timestamp</timestamp>
+                <version>[ignore]</version>
+                <levelValue>[ignore]</levelValue>
+            </fieldNames>
+            <customFields>
+                <service>auth-service</service>
+            </customFields>
+            <includeContext>false</includeContext>
         </encoder>
     </appender>
 
@@ -29,12 +45,13 @@
     <!-- Log Levels -->
     <logger name="com.slavacom.auth_service" level="DEBUG"/>
     <logger name="org.springframework.security" level="DEBUG"/>
-    <logger name="org.springframework.cloud.sleuth" level="DEBUG"/>
+    <logger name="io.micrometer.tracing" level="DEBUG"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>
 
-    <!-- Root Logger -->
+    <!-- Root Logger - Output to JSON Console (goes to Logstash) and readable console -->
     <root level="INFO">
+        <appender-ref ref="JSON_CONSOLE"/>
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
