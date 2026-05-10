@@ -39,22 +39,20 @@ spring:
   application:
     name: Auth-service
 
-  # Distributed Tracing with Sleuth + Zipkin
+management:
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_RATE:1.0}
   zipkin:
-    base-url: ${ZIPKIN_BASE_URL:http://localhost:9411}
-    sender:
-      type: web
-  sleuth:
-    sampler:
-      probability: ${SLEUTH_SAMPLING_RATE:1.0}
-    trace-id128: true
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
 
 logging:
   level:
     root: INFO
     com.slavacom.auth_service: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.cloud.sleuth: DEBUG
+    io.micrometer.tracing: DEBUG
 
 server:
   port: ${SERVER_PORT:8080}

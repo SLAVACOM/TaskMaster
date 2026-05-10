@@ -24,7 +24,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -35,8 +34,11 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:4.1.5'
-    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:4.1.5'
+    // Distributed Tracing with Micrometer and Zipkin (Spring Boot 4.0+ uses Micrometer instead of Sleuth)
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave:1.4.1'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave:3.4.0'
+    implementation 'io.zipkin.brave:brave:5.18.1'
+
 
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'

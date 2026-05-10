@@ -2,16 +2,6 @@ spring:
     application:
         name: OrganizationService
 
-    # Distributed Tracing with Sleuth + Zipkin
-    zipkin:
-      base-url: ${ZIPKIN_BASE_URL:http://localhost:9411}
-      sender:
-        type: web
-    sleuth:
-      sampler:
-        probability: ${SLEUTH_SAMPLING_RATE:1.0}
-      trace-id128: true
-
     datasource:
         url: ${DB_URL:jdbc:postgresql://localhost:5432/organization_db}
         username: ${DB_USERNAME:postgres}
@@ -34,8 +24,16 @@ services:
 server:
   port: ${SERVER_PORT:8080}
 
+management:
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_RATE:1.0}
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+
 logging:
   level:
     root: INFO
     com.slavacom.organizationservice: DEBUG
-    org.springframework.cloud.sleuth: DEBUG
+    io.micrometer.tracing: DEBUG

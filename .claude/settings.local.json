@@ -30,7 +30,10 @@
       "Bash(.\\\\gradlew build *)",
       "mcp__amplicode__list_spring_security_roles",
       "Bash(docker compose *)",
-      "PowerShell(Start-Sleep -Seconds 10; $response = Invoke-WebRequest -Uri \"http://localhost:9411/health\" -SkipHttpErrorCheck; Write-Host \"Zipkin Status Code: $\\($response.StatusCode\\)\")"
+      "PowerShell(Start-Sleep -Seconds 10; $response = Invoke-WebRequest -Uri \"http://localhost:9411/health\" -SkipHttpErrorCheck; Write-Host \"Zipkin Status Code: $\\($response.StatusCode\\)\")",
+      "mcp__amplicode__list_application_properties_files",
+      "mcp__amplicode__list_docker_compose_files",
+      "mcp__amplicode__list_module_dependencies"
     ]
   }
 }
