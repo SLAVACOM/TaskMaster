@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -81,6 +83,22 @@ public class GlobalExceptionHandler {
         error.setValidationErrors(validationErrors);
 
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestHeader(MissingRequestHeaderException ex) {
+        log.severe("Missing required header: " + ex.getHeaderName());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                buildError(HttpStatus.BAD_REQUEST, "Missing Header",
+                        "Required header '" + ex.getHeaderName() + "' is missing"));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        log.severe("Type mismatch for parameter: " + ex.getName() + ", expected: " + ex.getRequiredType().getSimpleName());
+        String message = "Invalid value for '" + ex.getName() + "': expected " + ex.getRequiredType().getSimpleName();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                buildError(HttpStatus.BAD_REQUEST, "Invalid Parameter", message));
     }
 
     private ErrorResponse buildError(HttpStatus status, String error, String message) {
