@@ -11,8 +11,26 @@
         </encoder>
     </appender>
 
-    <!-- JSON Console Appender - Logstash format (sent to Logstash via Docker) -->
+    <!-- JSON Console Appender - Logstash format (visible in local development) -->
     <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <charset>UTF-8</charset>
+            <fieldNames>
+                <timestamp>@timestamp</timestamp>
+                <version>[ignore]</version>
+                <levelValue>[ignore]</levelValue>
+            </fieldNames>
+            <customFields>
+                <service>organization-service</service>
+            </customFields>
+            <includeContext>false</includeContext>
+        </encoder>
+    </appender>
+
+    <!-- TCP Socket Appender - Sends JSON logs to Logstash -->
+    <appender name="LOGSTASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>logstash:5000</destination>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <charset>UTF-8</charset>
             <fieldNames>
@@ -49,8 +67,9 @@
     <logger name="org.springframework.kafka" level="DEBUG"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>
 
-    <!-- Root Logger - Output to JSON Console (goes to Logstash) and readable console -->
+    <!-- Root Logger - Output to Logstash TCP, JSON Console (for visibility), and readable console -->
     <root level="INFO">
+        <appender-ref ref="LOGSTASH_TCP"/>
         <appender-ref ref="JSON_CONSOLE"/>
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
