@@ -30,9 +30,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "org.jetbrains.kotlin:kotlin-reflect"
 
-    // ✅ Lombok
+    // ✅ Lombok (for mixed Java/Kotlin)
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    kapt 'org.projectlombok:lombok'
 
     // ✅ MapStruct
     implementation 'org.mapstruct:mapstruct:1.6.3'
