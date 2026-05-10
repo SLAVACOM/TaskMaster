@@ -1,9 +1,9 @@
 package com.slavacom.organizationservice.config
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RestClientCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.client.RestClient
 
 @Configuration
 class RestClientConfig(
@@ -14,10 +14,17 @@ class RestClientConfig(
     private val authServiceUrl: String
 ) {
 
-    @Bean
-    fun restClientCustomizer(loggingInterceptor: LoggingClientHttpRequestInterceptor): RestClientCustomizer {
-        return RestClientCustomizer { restClientBuilder ->
-            restClientBuilder.requestInterceptor(loggingInterceptor)
-        }
+    @Bean("userServiceRestClient")
+    fun userServiceRestClient(): RestClient {
+        return RestClient.builder()
+            .baseUrl(userServiceUrl)
+            .build()
+    }
+
+    @Bean("authServiceRestClient")
+    fun authServiceRestClient(): RestClient {
+        return RestClient.builder()
+            .baseUrl(authServiceUrl)
+            .build()
     }
 }
