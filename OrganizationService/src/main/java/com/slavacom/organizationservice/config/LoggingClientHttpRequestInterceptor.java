@@ -1,6 +1,7 @@
 package com.slavacom.organizationservice.config;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -9,9 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Slf4j
 @Component
 public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor.class);
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
@@ -21,13 +23,13 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
         String method = request.getMethod().name();
         String uri = request.getURI().toString();
 
-        log.debug("{} {} - request started", method, uri);
+        logger.debug("{} {} - request started", method, uri);
 
         try {
             ClientHttpResponse response = execution.execute(request, body);
             long duration = System.currentTimeMillis() - startTime;
 
-            log.info("{} {} completed in {}ms with status {}",
+            logger.info("{} {} completed in {}ms with status {}",
                     method,
                     uri,
                     duration,
@@ -36,7 +38,7 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
             return response;
         } catch (IOException e) {
             long duration = System.currentTimeMillis() - startTime;
-            log.error("{} {} failed in {}ms with error: {}",
+            logger.error("{} {} failed in {}ms with error: {}",
                     method,
                     uri,
                     duration,
