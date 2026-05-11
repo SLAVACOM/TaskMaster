@@ -2,6 +2,7 @@ package com.slavacom.organizationservice.client
 
 import com.slavacom.organizationservice.dto.CreateProfileRequest
 import com.slavacom.organizationservice.dto.ProfileResponse
+import com.slavacom.organizationservice.dto.UserInfoDto
 import com.slavacom.organizationservice.exception.UserServiceException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -60,6 +61,41 @@ class UserServiceClient(
         } catch (e: Exception) {
             logger.error("Unexpected error while creating profile: {}", e.message, e)
             throw UserServiceException("Unexpected error: ${e.message}", HttpStatus.INTERNAL_SERVER_ERROR, e)
+        }
+    }
+
+    /**
+     * Get user info by ID (email and name)
+     */
+    fun getUserInfo(userId: UUID): UserInfoDto? {
+        return try {
+            logger.info("Getting user info for userId={}", userId)
+
+            val response = restClient.get()
+                .uri("/api/users/{userId}", userId)
+                .retrieve()
+                .onStatus({ it.isError }) { request, response ->
+                    if (response.statusCode == HttpStatus.NOT_FOUND) {
+                        logger.warn("User not found: userId={}", userId)
+                        return@onStatus
+                    }
+                    logger.error("Failed to get user info: status={}", response.statusCode)
+                    throw UserServiceException(
+                        "Failed to get user info: ${response.statusCode}",
+                        response.statusCode as HttpStatus
+                    )
+                }
+                .body<UserInfoDto>()
+
+            response?.let { logger.info("Got user info for userId={}", userId) }
+            response
+
+        } catch (e: RestClientException) {
+            logger.error("RestClient error while getting user info: {}", e.message, e)
+            null
+        } catch (e: Exception) {
+            logger.error("Unexpected error while getting user info: {}", e.message, e)
+            null
         }
     }
 

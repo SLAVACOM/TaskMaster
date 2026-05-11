@@ -4,15 +4,16 @@ import com.slavacom.auth_service.client.UserServiceClient;
 import com.slavacom.auth_service.dto.*;
 import com.slavacom.auth_service.entity.User;
 import com.slavacom.auth_service.enums.Role;
-// import com.slavacom.auth_service.event.UserCreatedEvent; // Временно отключено - используем REST
 import com.slavacom.auth_service.event.UserCreatedEvent;
 import com.slavacom.auth_service.event.UserLoginEvent;
 import com.slavacom.auth_service.exception.InvalidCredentialsException;
 import com.slavacom.auth_service.exception.UserAlreadyExistsException;
 import com.slavacom.auth_service.exception.UserNotFoundException;
+import com.slavacom.auth_service.notification.NotificationClient;
 import com.slavacom.auth_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,10 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final UserServiceClient userServiceClient;
 	private final UserEventProducer userEventProducer;
+	private final NotificationClient notificationClient;
+
+	@Value("${app-url:http://localhost:3000}")
+	private String appUrl;
 
 	/**
 	 * Регистрация нового пользователя
@@ -84,6 +89,22 @@ public class AuthService {
 
 		userRepository.save(user);
 		log.info("Auth credentials created successfully with userId: {}", userInfo.getId());
+
+		// Отправляем приветственное письмо и письмо для подтверждения почты
+		try {
+			notificationClient.sendWelcomeEmail(request.getFirstName(), request.getEmail(), appUrl);
+			log.info("Welcome email sent to {}", request.getEmail());
+		} catch (Exception e) {
+			log.error("Failed to send welcome email to {}", request.getEmail(), e);
+		}
+
+		try {
+			String verificationUrl = appUrl + "/verify-email?token=" + UUID.randomUUID();
+			notificationClient.sendEmailVerification(request.getFirstName(), request.getEmail(), verificationUrl);
+			log.info("Email verification sent to {}", request.getEmail());
+		} catch (Exception e) {
+			log.error("Failed to send email verification to {}", request.getEmail(), e);
+		}
 
 		// Генерируем токены
 		String accessToken = jwtService.generateAccessToken(user.getUserId(), user.getRole());

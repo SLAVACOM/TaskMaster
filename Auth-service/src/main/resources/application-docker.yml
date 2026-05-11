@@ -6,8 +6,13 @@ jwt:
     secret: ${JWT_REFRESH_SECRET:TaskMasterRefreshSecret2026SuperLongKey}
     expiration: ${JWT_REFRESH_EXPIRATON:604800000}
 
-user-service:
-  url: ${USER_SERVICE_URL:http://profile-service:8080}
+services:
+  user-service:
+    url: ${USER_SERVICE_URL:http://user-service:8082}
+  notification-service:
+    url: ${NOTIFICATION_SERVICE_URL:http://notification-service:8090}
+
+app-url: ${APP_URL:http://localhost:3000}
 
 spring:
   datasource:

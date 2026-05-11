@@ -11,7 +11,10 @@ class RestClientConfig(
     private val userServiceUrl: String,
 
     @Value("\${services.auth-service.url:http://localhost:8081}")
-    private val authServiceUrl: String
+    private val authServiceUrl: String,
+
+    @Value("\${services.notification-service.url:http://localhost:8090}")
+    private val notificationServiceUrl: String
 ) {
 
     @Bean("userServiceRestClient")
@@ -25,6 +28,13 @@ class RestClientConfig(
     fun authServiceRestClient(): RestClient {
         return RestClient.builder()
             .baseUrl(authServiceUrl)
+            .build()
+    }
+
+    @Bean("notificationServiceRestClient")
+    fun notificationServiceRestClient(): RestClient {
+        return RestClient.builder()
+            .baseUrl(notificationServiceUrl)
             .build()
     }
 }

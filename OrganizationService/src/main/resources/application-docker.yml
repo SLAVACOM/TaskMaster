@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: OrganizationService
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://organization-db:5432/organization_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+app-url: ${APP_URL:http://localhost:3000}
+
+services:
+  user-service:
+    url: ${USER_SERVICE_URL:http://user-service:8082}
+  auth-service:
+    url: ${AUTH_SERVICE_URL:http://auth-service:8081}
+  notification-service:
+    url: ${NOTIFICATION_SERVICE_URL:http://notification-service:8090}
+
+server:
+  port: ${SERVER_PORT:8083}
+
+logging:
+  level:
+    root: INFO
+    com.slavacom.organizationservice: INFO
+    io.micrometer.tracing: DEBUG
