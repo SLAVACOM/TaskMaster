@@ -164,7 +164,7 @@ class TaskService(
             task.depends = it
         }
         request.status?.let {
-            if (it != task.status) changes += FieldChange("status", task.status.name, it.name)
+            if (it != task.status) changes += FieldChange("status", task.status, it)
             task.status = it
         }
         request.responsible?.let {
