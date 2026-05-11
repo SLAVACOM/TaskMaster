@@ -35,7 +35,8 @@
       "mcp__amplicode__list_docker_compose_files",
       "mcp__amplicode__list_module_dependencies",
       "Bash(bash ./gradlew build -q)",
-      "mcp__amplicode__analyze_files"
+      "mcp__amplicode__analyze_files",
+      "Bash(grep -E \"\\\\.\\(yml|yaml|properties\\)$\")"
     ]
   }
 }
