@@ -31,6 +31,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // NotificationService models
+    implementation project(':NotificationService')
+
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
