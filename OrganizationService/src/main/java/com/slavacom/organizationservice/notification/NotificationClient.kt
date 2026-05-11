@@ -1,7 +1,7 @@
 package com.slavacom.organizationservice.notification
 
-import com.slavacom.notificationservice.model.Channel
-import com.slavacom.notificationservice.model.NotificationRequest
+import com.slavacom.organizationservice.notification.model.Channel
+import com.slavacom.organizationservice.notification.model.NotificationRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
