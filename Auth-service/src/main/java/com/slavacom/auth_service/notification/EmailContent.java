@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@AllArgsConstructor
 public class EmailContent {
     private final EmailTemplate template;
     private final String recipientEmail;
