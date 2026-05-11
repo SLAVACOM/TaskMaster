@@ -127,3 +127,49 @@ databaseChangeLog:
                   name: project_id
                   type: UUID
             tableName: tasks
+  - changeSet:
+      id: 1777821796758-3
+      author: slava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: project_members_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: project_members
+        - addUniqueConstraint:
+            columnNames: project_id,user_id
+            constraintName: uk_project_user
+            tableName: project_members
+        - createIndex:
+            columns:
+              - column:
+                  name: project_id
+            indexName: idx_project_members_project_id
+            tableName: project_members
+        - createIndex:
+            columns:
+              - column:
+                  name: user_id
+            indexName: idx_project_members_user_id
+            tableName: project_members

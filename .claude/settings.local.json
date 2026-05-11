@@ -36,7 +36,11 @@
       "mcp__amplicode__list_module_dependencies",
       "Bash(bash ./gradlew build -q)",
       "mcp__amplicode__analyze_files",
-      "Bash(grep -E \"\\\\.\\(yml|yaml|properties\\)$\")"
+      "Bash(grep -E \"\\\\.\\(yml|yaml|properties\\)$\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\slava\\\\IdeaProjects\\\\TaskMaster\\\\OrganizationService\\\\src\\\\main\\\\java\\\\com\\\\slavacom\\\\organizationservice\" -Directory)",
+      "Bash(./gradlew :Auth-service:build -x test)",
+      "Bash(git rm *)",
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\slava\\\\IdeaProjects\\\\TaskMaster\\\\TaskService\\\\src\\\\main\\\\resources\\\\db\\\\migration\\\\\" | Sort-Object Name | Select-Object -Last 10 | Format-Table Name *)"
     ]
   }
 }

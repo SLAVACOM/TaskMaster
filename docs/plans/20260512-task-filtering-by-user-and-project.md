@@ -64,84 +64,110 @@ This improves security and reduces cognitive load—users see only tasks relevan
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/ProjectMember.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/repository/ProjectMemberRepository.kt`
 
-- [ ] Create `ProjectMember` entity with fields: id (UUID), projectId (UUID), userId (UUID), createdAt (Instant)
-- [ ] Add `@Table(name = "project_members")` and `@Entity` annotations
-- [ ] Create `ProjectMemberRepository` extending `JpaRepository<ProjectMember, UUID>`
-- [ ] Add query method: `fun findByProjectId(projectId: UUID): List<ProjectMember>`
-- [ ] Add query method: `fun findByUserId(userId: UUID): List<ProjectMember>`
-- [ ] Add compound query: `fun findByProjectIdAndUserId(projectId: UUID, userId: UUID): Optional<ProjectMember>`
+- [x] Create `ProjectMember` entity with fields: id (UUID), projectId (UUID), userId (UUID), createdAt (Instant)
+- [x] Add `@Table(name = "project_members")` and `@Entity` annotations
+- [x] Create `ProjectMemberRepository` extending `JpaRepository<ProjectMember, UUID>`
+- [x] Add query method: `fun findByProjectId(projectId: UUID): List<ProjectMember>`
+- [x] Add query method: `fun findByUserId(userId: UUID): List<ProjectMember>`
+- [x] Add compound query: `fun findByProjectIdAndUserId(projectId: UUID, userId: UUID): Optional<ProjectMember>`
 
 ### Task 2: Create database migration for ProjectMember table
 
 **Files:**
-- Create: `TaskService/src/main/resources/db/migration/V[N]__create_project_members_table.sql`
+- Modify: `TaskService/src/main/resources/db/changelog/initial.xml.yaml`
 
-- [ ] Create migration script to add `project_members` table with columns: id, project_id, user_id, created_at
-- [ ] Add unique constraint on (project_id, user_id) to prevent duplicates
-- [ ] Add indexes on project_id and user_id for query performance
-- [ ] Run migration locally with `./gradlew bootRun` to verify (watch logs for migration execution)
+- [x] Create migration script to add `project_members` table with columns: id, project_id, user_id, created_at
+- [x] Add unique constraint on (project_id, user_id) to prevent duplicates
+- [x] Add indexes on project_id and user_id for query performance
+- [x] Run migration locally with `./gradlew bootRun` to verify (watch logs for migration execution)
 
 ### Task 3: Create TaskFilteringService
 
 **Files:**
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskFilteringService.kt`
 
-- [ ] Create service with method: `fun getAccessibleTasks(userId: UUID): List<Task>`
-- [ ] Implement query logic:
+- [x] Create service with method: `fun getAccessibleTasks(userId: UUID): List<Task>`
+- [x] Implement query logic:
   - Get all tasks where responsible/executor/observer/watcher contains userId
   - Get user's project IDs from ProjectMemberRepository
   - Get all tasks in those projects
   - Combine (union) and remove duplicates
-- [ ] Consider performance: may need custom JPQL query if list operations are slow
-- [ ] Use `@Transactional(readOnly = true)` for read efficiency
+- [x] Consider performance: may need custom JPQL query if list operations are slow
+- [x] Use `@Transactional(readOnly = true)` for read efficiency
 
 ### Task 4: Modify TaskController.getTasks() to use filtering
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
 
-- [ ] Find the `getTasks()` endpoint (GET /api/tasks)
-- [ ] Extract current user ID: `SecurityContextHolder.getContext().authentication.principal as String` (or similar, verify actual pattern in codebase)
-- [ ] Replace return logic: instead of `taskRepository.findAll()`, call `taskFilteringService.getAccessibleTasks(userId)`
-- [ ] Verify endpoint still returns correct DTO/response format
-- [ ] Test locally by calling endpoint with different users (if test data available)
+- [x] Find the `getTasks()` endpoint (GET /api/tasks)
+- [x] Extract current user ID from X-User-Id header (existing pattern in codebase)
+- [x] Replace return logic: instead of `taskRepository.findAll()`, call `taskFilteringService.getAccessibleTasks(userId)`
+- [x] Verify endpoint still returns correct DTO/response format
+- [x] Keep optional projectId parameter for additional filtering
 
 ### Task 5: Populate ProjectMember table for existing projects
 
 **Files:**
-- Create: `TaskService/src/main/resources/db/migration/V[N+1]__populate_project_members_from_organization.sql` (optional)
+- Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/listener/ProjectMembershipKafkaListener.kt` (optional, for Kafka approach)
 
-- [ ] Decide: should ProjectMember be synced via Kafka when OrganizationService adds users? OR manually populated once?
-- [ ] If manual: write SQL migration to insert rows based on existing project-user relationships (may require data analysis first)
-- [ ] If Kafka: create Kafka listener in TaskService for organization membership events
-  - Listen to topic (e.g., `user-added-to-org` or similar)
-  - Insert ProjectMember rows on each membership event
-  - Update/delete on removal events
-- [ ] Document the sync mechanism in code comments
+- [ ] ⚠️ Decide sync mechanism:
+  - **Option A (Kafka):** Create listener for organization membership events from OrganizationService
+  - **Option B (Manual):** Create init script to populate from existing data (requires understanding current user-project relationships)
+  - **Option C (On-demand):** Sync when user first accesses tasks (queries OrganizationService for membership)
+- [ ] If choosing Kafka: Create `ProjectMembershipKafkaListener` to handle membership change events
+- [ ] If choosing Manual: Create migration/seed script and document how to populate initial data
+- [ ] Document the chosen sync mechanism in README and code comments
+- [ ] Note: For MVP, ProjectMember can be manually populated via SQL or seeded with test data
 
 ### Task 6: Manual testing of filtering
 
+**Testing Prerequisites:**
+1. Ensure ProjectMember table is populated with test data (see Task 5)
+2. Create test tasks assigned to different users and in different projects
+
+**Manual test scenarios to verify:**
 - [ ] Start infrastructure: `cd All-Compose && docker compose -f docker-compose.yaml -f docker-compose.db.yml -f docker-compose.kafka.yml up -d`
 - [ ] Start TaskService: `cd TaskService && ./gradlew bootRun`
-- [ ] Create test data: multiple users, multiple projects, assign users to projects and tasks
-- [ ] Test as User A: GET /api/tasks — verify only shows tasks assigned to A or in A's projects
-- [ ] Test as User B: GET /api/tasks — verify shows different tasks (not A's private work)
-- [ ] Test edge case: user with no project membership — verify returns only directly assigned tasks
-- [ ] Test edge case: user assigned to task but no project membership — verify task shows (union logic)
-- [ ] Test edge case: user is observer only — verify task shows
-- [ ] Document results and any edge cases encountered
+- [ ] Test Scenario 1: User with direct assignment
+  - Create task assigned to User A (responsible or executor)
+  - Call `GET /api/tasks` as User A
+  - Verify task appears in response
+- [ ] Test Scenario 2: User with project membership
+  - Create task in Project X, assign to someone else
+  - Add User B to project_members for Project X
+  - Call `GET /api/tasks` as User B
+  - Verify task appears even though not assigned to B
+- [ ] Test Scenario 3: User as observer/watcher
+  - Create task with User C in observers list
+  - Call `GET /api/tasks` as User C
+  - Verify task appears
+- [ ] Test Scenario 4: User with no involvement
+  - Call `GET /api/tasks` as User D (not assigned, not in project)
+  - Verify task does NOT appear
+- [ ] Test Scenario 5: Optional projectId filter
+  - Call `GET /api/tasks?projectId=<id>` as User A
+  - Verify results are further filtered to that project only
+- [ ] Document any edge cases or unexpected behavior
 
 ### Task 7: (Optional) Handle pagination and search
 
-- [ ] If existing `GET /api/tasks` supported pagination/search parameters, verify they still work with filtered results
-- [ ] Consider: pagination should be applied **after** filtering for correct behavior
-- [ ] Update any existing documentation or OpenAPI specs
+- [x] Verified: `GET /api/tasks` does NOT support pagination/search in original implementation
+- [x] Current implementation returns List<TaskResponse>, not paginated
+- [x] Search and pagination are in separate endpoints (`/search`, `/search-text`)
+- [x] Filtering applied before mapping to response format
+- [x] No changes needed to pagination/search logic (different endpoints)
 
 ### Task 8: Breaking change documentation
 
-- [ ] Add note to release notes / CHANGELOG: "BREAKING: GET /api/tasks now returns only tasks assigned to you or in your projects. Previous behavior returned all tasks."
-- [ ] Update CLAUDE.md if task filtering pattern becomes standardized
-- [ ] Consider: add deprecation header or version requirement if versioning system exists
+- [x] Note: This is a BREAKING CHANGE for consumers of `GET /api/tasks`
+- [x] Previous behavior: returned all tasks regardless of user
+- [x] New behavior: returns only tasks assigned to user or in user's projects
+- [x] Action items:
+  - [ ] Add to CHANGELOG: "BREAKING: GET /api/tasks now filters by user assignment and project membership"
+  - [ ] Add to API documentation: describe new filtering behavior and X-User-Id header requirement
+  - [ ] Notify consuming clients of the API change
+  - [ ] Update CLAUDE.md if filtering pattern should be documented for other services
 
 ## Post-Completion
 

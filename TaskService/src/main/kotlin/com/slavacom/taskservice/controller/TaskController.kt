@@ -6,6 +6,8 @@ import com.slavacom.taskservice.dto.TaskPageResponse
 import com.slavacom.taskservice.dto.TaskResponse
 import com.slavacom.taskservice.dto.TaskSearchRequest
 import com.slavacom.taskservice.dto.UpdateTaskRequest
+import com.slavacom.taskservice.mapper.TaskMapper
+import com.slavacom.taskservice.service.TaskFilteringService
 import com.slavacom.taskservice.service.TaskService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -29,6 +31,8 @@ import java.util.UUID
 @RequestMapping("/api/tasks")
 class TaskController(
     private val taskService: TaskService,
+    private val taskFilteringService: TaskFilteringService,
+    private val taskMapper: TaskMapper,
 ) {
 
     @PostMapping
@@ -42,7 +46,17 @@ class TaskController(
     fun getById(@PathVariable id: UUID): TaskResponse = taskService.getById(id)
 
     @GetMapping
-    fun getAll(@RequestParam projectId: UUID? = null): List<TaskResponse> = taskService.getAll(projectId)
+    fun getAll(
+        @RequestHeader("X-User-Id") userId: UUID,
+        @RequestParam projectId: UUID? = null,
+    ): List<TaskResponse> {
+        val tasks = taskFilteringService.getAccessibleTasks(userId)
+        return if (projectId != null) {
+            tasks.filter { it.projectId == projectId }
+        } else {
+            tasks
+        }.map(taskMapper::toResponse)
+    }
 
     @GetMapping("/search")
     fun search(@ModelAttribute filter: TaskSearchRequest): TaskPageResponse =
