@@ -52,31 +52,15 @@ class OrganizationService(
         logger.info("Organization created in DB: orgId={}", savedOrg.id)
 
         return try {
-            // Step 2: Create owner employee
+            // Step 2: Create owner employee (which also creates profile in UserService)
             logger.info("Creating owner employee for userId={} in orgId={}", accountable, savedOrg.id)
-            employeesService.createOwner(accountable, savedOrg.id!!)
-            logger.info("Owner employee created: userId={}, orgId={}", accountable, savedOrg.id)
+            val ownerEmployee = employeesService.createOwner(accountable, savedOrg.id!!)
+            logger.info("Owner employee created: userId={}, orgId={}, profileId={}", accountable, savedOrg.id, ownerEmployee.profileId)
 
-            // Step 3: Create profile in UserService
-            logger.info("Creating profile in UserService for userId={} in orgId={}", accountable, savedOrg.id)
-            val profileResponse = userServiceClient.createProfile(accountable, savedOrg.id!!)
-            logger.info("Profile created: profileId={}", profileResponse.id)
+            // Note: Profile creation and AuthService update happen within employeesService.createOwner()
+            // No need to duplicate these calls here
 
-            // Step 4: Update profile in AuthService (JWT will include profileId on next refresh)
-            logger.info("Updating profile in AuthService: userId={}, profileId={}", accountable, profileResponse.id)
-            try {
-                authServiceClient.updateProfile(accountable, profileResponse.id, savedOrg.id!!)
-                logger.info("Profile updated in AuthService for userId={}", accountable)
-            } catch (e: AuthServiceException) {
-                logger.warn(
-                    "Failed to update profile in AuthService (non-blocking): {}",
-                    e.message
-                )
-                // Don't block organization creation if AuthService fails
-                // User will get updated JWT on next login/refresh
-            }
-
-            // Return response with profileId
+            // Return response
             val response = organizationMapper.toOrganizationResponse(savedOrg)
             response
 

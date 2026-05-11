@@ -18,7 +18,7 @@ abstract class EmployeesMapper {
             role = employee.role ?: EmployeeRole.MEMBER,
             permissions = employee.permissions,
             isActive = employee.isActive,
-            createdAt = employee.createdAt!!,
+            createdAt = employee.createdAt ?: java.time.Instant.now(),
             updatedAt = employee.updatedAt
         )
     }

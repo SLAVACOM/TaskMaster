@@ -15,6 +15,32 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(OrganizationNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleOrganizationNotFoundException(OrganizationNotFoundException ex) {
+        log.warn("Organization not found: {}", ex.getMessage());
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", Instant.now());
+        errorResponse.put("status", HttpStatus.NOT_FOUND.value());
+        errorResponse.put("error", "Not Found");
+        errorResponse.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handleServiceUnavailableException(ServiceUnavailableException ex) {
+        log.error("Service unavailable: {}", ex.getMessage(), ex);
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", Instant.now());
+        errorResponse.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
+        errorResponse.put("error", "Service Unavailable");
+        errorResponse.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
         log.error("Validation error occurred: {}", ex.getMessage());
