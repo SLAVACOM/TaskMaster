@@ -98,4 +98,22 @@ class EmployeesService(
         )
         return add(organizationId, employee)
     }
+
+    fun getById(orgId: UUID, employeeId: UUID): EmployeeResponse {
+        val employee = employeesRepository.findByIdAndOrganizationId(employeeId, orgId)
+            .orElseThrow { EmployeeNotFoundException("Employee $employeeId not found in organization $orgId") }
+        return employeesMapper.toResponse(employee)
+    }
+
+    fun getOrganizationOwner(organizationId: UUID): EmployeeResponse? {
+        val owner = employeesRepository.findByOrganizationIdAndRoleAndIsActiveTrue(organizationId, EmployeeRole.OWNER)
+            .orElse(null)
+        return owner?.let { employeesMapper.toResponse(it) }
+    }
+
+    fun isOrganizationOwner(userId: UUID, organizationId: UUID): Boolean {
+        return employeesRepository.findByUserIdAndOrganizationIdAndIsActiveTrue(userId, organizationId)
+            .map { it.role == EmployeeRole.OWNER }
+            .orElse(false)
+    }
 }

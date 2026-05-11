@@ -81,132 +81,95 @@ Mark completed items with `[x]` immediately when done. Document issues/blockers 
 
 ## Implementation Steps
 
-### Task 1: Add owner field to Organization entity
+### Task 1: Add authorization checks to EmployeesController (owner-only operations)
 
 **Files:**
-- Modify: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/entity/Organization.kt`
-- Create: Database migration file for adding `owner_id` column
+- Modify: `EmployeesController.kt`
+- Modify: `EmployeesService.kt` — add authorization logic
+- Modify: `EmployeesRepository.kt` — add role query method
 
-- [ ] Add `ownerId: UUID?` field to Organization entity
-- [ ] Add appropriate JPA annotations (@Column, @NotNull after migration)
-- [ ] Create Liquibase/Flyway migration to add `owner_id` column to organizations table
-- [ ] Migration should make column NOT NULL with DEFAULT for existing records
+- [x] Add X-User-Id header extraction to controller methods
+- [x] Create authorization method in EmployeesService to check if user is organization owner
+- [x] Add authorization check before POST (add employee) — only owner can add
+- [x] Add authorization check before PUT (update employee) — only owner can update
+- [x] Add authorization check before DELETE (remove employee) — only owner can remove
+- [x] Return 403 Forbidden if user is not organization owner
+- [x] GET (list) can remain public for organization members
+- [x] Build successfully with all changes
 
-### Task 2: Update Organization DTOs and mapper
-
-**Files:**
-- Modify: `CreateOrganizationRequest.kt` — add owner field if needed
-- Modify: `OrganizationResponse.kt` — include owner info in response
-- Modify: `OrganizationMapper.kt` — map owner field to DTO
-
-- [ ] Update OrganizationResponse to include owner information (id, name/email if available)
-- [ ] Update OrganizationMapper to map owner field from entity to response
-- [ ] Verify CreateOrganizationRequest doesn't require explicit owner (should be automatic)
-
-### Task 3: Update OrganizationService to assign owner on creation
+### Task 2: Add GET single employee endpoint
 
 **Files:**
-- Modify: `OrganizationService.kt` (in service package)
+- Modify: `EmployeesController.kt`
+- Modify: `EmployeesService.kt`
 
-- [ ] Find create/save organization method
-- [ ] Extract current user ID from X-User-Id header or authentication context
-- [ ] Set ownerId to current user before saving organization
-- [ ] Verify existing organization queries don't break
+- [ ] Add getById method to EmployeesService that returns single employee
+- [ ] Add GET `/api/organizations/{orgId}/employees/{employeeId}` endpoint
+- [ ] Verify employee exists in specified organization (404 if not)
+- [ ] Return EmployeeResponse with full employee details
 
-### Task 4: Create Employee entity (or verify structure)
-
-**Files:**
-- Read: `OrganizationService/src/main/kotlin/com/slavacom/organizationservice/entity/` — check if Employee entity exists
-- Create or Modify: Employee entity file
-
-- [ ] Verify Employee entity structure (id, organizationId, userId, role, status fields)
-- [ ] If Employee entity doesn't exist, create it with required fields
-- [ ] Add `role` field (ENUM with OWNER, ADMIN, MEMBER values)
-- [ ] Add `status` field (ENUM with ACTIVE, INACTIVE values)
-- [ ] Add JPA annotations and relationships to Organization
-- [ ] Create migration if entity is new
-
-### Task 5: Create/update Employee DTOs
+### Task 3: Add getOrganizationOwner method to EmployeesService
 
 **Files:**
-- Create or Modify: `EmployeeResponse.kt` — response DTO with all employee details
-- Create or Modify: `CreateEmployeeRequest.kt` — request DTO for adding employees
-- Create or Modify: `UpdateEmployeeRequest.kt` — request DTO for updating employees
+- Modify: `EmployeesService.kt`
+- Modify: `EmployeesRepository.kt`
 
-- [ ] Create EmployeeResponse DTO with id, userId, role, status, joinDate fields
-- [ ] Create CreateEmployeeRequest DTO with userId, role fields
-- [ ] Create UpdateEmployeeRequest DTO with role, status fields
-- [ ] Ensure DTOs follow project conventions (camelCase, proper validation annotations)
+- [ ] Add findByOrganizationIdAndRole method to EmployeesRepository (query by role)
+- [ ] Add getOrganizationOwner method to EmployeesService
+- [ ] Return EmployeeResponse for the OWNER of the organization
 
-### Task 6: Create EmployeeMapper
+### Task 4: Update OrganizationResponse to include owner details
 
 **Files:**
-- Create or Modify: `EmployeeMapper.kt` in mapper package
+- Modify: `OrganizationResponse.kt`
+- Modify: `OrganizationMapper.kt`
 
-- [ ] Create MapStruct EmployeeMapper for Entity ↔ DTO conversions
-- [ ] Implement mapping for all EmployeeResponse/CreateEmployeeRequest/UpdateEmployeeRequest
-- [ ] Handle role and status ENUM conversions
+- [ ] Add owner field to OrganizationResponse (can be nullable UUID or OwnerInfo object)
+- [ ] Update OrganizationMapper to populate owner field from `accountable` field
+- [ ] Verify response includes owner information in all organization endpoints
 
-### Task 7: Create EmployeeService with authorization
-
-**Files:**
-- Create or Modify: `EmployeeService.kt` in service package
-
-- [ ] Create service with methods: getEmployeesByOrg, addEmployee, updateEmployee, removeEmployee
-- [ ] Add authorization check: only OWNER can add/remove/modify employees
-- [ ] Implement role assignment logic (default to MEMBER for new employees)
-- [ ] Handle user context from X-User-Id header for authorization checks
-- [ ] Verify user is OWNER of organization before allowing changes
-
-### Task 8: Update/create EmployeeController with authorization
+### Task 5: Add proper error handling for employee operations
 
 **Files:**
-- Create or Modify: `EmployeeController.kt` in controller package
+- Modify: `EmployeesController.kt`
+- Create error response DTO if needed
 
-- [ ] Create REST endpoints:
-    - GET `/api/organizations/{orgId}/employees` — list all employees
-    - POST `/api/organizations/{orgId}/employees` — add new employee (owner only)
-    - GET `/api/organizations/{orgId}/employees/{employeeId}` — get employee details
-    - PUT `/api/organizations/{orgId}/employees/{employeeId}` — update employee (owner only)
-    - DELETE `/api/organizations/{orgId}/employees/{employeeId}` — remove employee (owner only)
-- [ ] Add authorization checks via @PreAuthorize or custom security logic
-- [ ] Return proper HTTP status codes (403 Forbidden for unauthorized, 404 for not found)
-- [ ] Include error response messages in responses
-- [ ] Verify authorization headers passed correctly to service
+- [ ] Ensure all exception scenarios return proper HTTP status codes
+- [ ] Return 404 for employee not found
+- [ ] Return 409 for employee already exists
+- [ ] Return 403 for unauthorized operations
+- [ ] Include error message in response body
 
-### Task 9: Update EmployeeRepository
-
-**Files:**
-- Create or Modify: `EmployeeRepository.kt` in repository package
-
-- [ ] Create/verify EmployeeRepository extends JpaRepository
-- [ ] Add query methods: findByOrganizationId, findByOrganizationIdAndId, deleteByOrganizationIdAndId
-- [ ] Add custom queries if needed for role-based queries
-
-### Task 10: Verify organization creation flow end-to-end
+### Task 6: Verify organization creation still works correctly
 
 - [ ] Start OrganizationService: `./gradlew bootRun` from OrganizationService directory
-- [ ] Create new organization via POST `/api/organizations`
-- [ ] Verify ownerId is set to request user ID
-- [ ] Check organization response includes owner information
-- [ ] Verify created organization owner can manage employees
-- [ ] Verify non-owner users cannot manage employees
+- [ ] Create new organization via POST `/api/organizations` with X-User-Id header
+- [ ] Verify creator becomes organization owner (accountable field set)
+- [ ] Verify owner employee record created with OWNER role
+- [ ] Check organization response includes accountable/owner field
 
-### Task 11: Test employee management endpoints
+### Task 7: Test employee management authorization
 
-- [ ] Add employee to organization (as owner)
-- [ ] Verify employee appears in GET `/api/organizations/{orgId}/employees`
-- [ ] Update employee role and status
-- [ ] Remove employee from organization
-- [ ] Test authorization: non-owner attempting to manage employees returns 403
-- [ ] Verify response structure matches expected format
+- [ ] List employees in organization (GET) — should return all active employees
+- [ ] Add employee as organization owner (POST) — should succeed
+- [ ] Update employee role as organization owner (PUT) — should succeed
+- [ ] Remove employee as organization owner (DELETE) — should succeed
+- [ ] Try adding employee as non-owner user — should return 403 Forbidden
+- [ ] Try updating employee as non-owner user — should return 403 Forbidden
+- [ ] Try removing employee as non-owner user — should return 403 Forbidden
 
-### Task 12: Verify backward compatibility
+### Task 8: Test single employee detail endpoint
 
-- [ ] Test existing organization queries still work
-- [ ] Verify existing employee list endpoint returns correct format
+- [ ] GET `/api/organizations/{orgId}/employees/{employeeId}` — should return employee details
+- [ ] GET with invalid employee ID — should return 404
+- [ ] GET with different organization ID — should return 404
+
+### Task 9: Verify backward compatibility
+
+- [ ] Verify existing GET `/api/organizations/{orgId}/employees` still works
+- [ ] Verify POST `/api/organizations` creation flow intact
 - [ ] Check no breaking changes to existing DTOs or endpoints
-- [ ] Test organization updates (PUT) don't affect owner assignment
+- [ ] Test organization updates (PUT) still work correctly
 
 ## Post-Completion
 
