@@ -1,14 +1,13 @@
 package com.slavacom.taskservice.dto
 
 import com.slavacom.taskservice.entity.enums.TaskPriority
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import java.time.Instant
 import java.util.UUID
 
 data class TaskSearchRequest(
     val name: String? = null,
     val description: String? = null,
-    val status: TaskStatus? = null,
+    val status: String? = null,
     val priority: TaskPriority? = null,
     val responsible: UUID? = null,
     val executor: UUID? = null,

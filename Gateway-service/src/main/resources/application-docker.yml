@@ -31,6 +31,16 @@ spring:
           predicates:
             - Path=/api/organizations/**
 
+        - id: organization-service-projects
+          uri: ${ORG_SERVICE_URL:http://organization-service:8080}
+          predicates:
+            - Path=/api/projects/**
+
+        - id: organization-service-tags
+          uri: ${ORG_SERVICE_URL:http://organization-service:8080}
+          predicates:
+            - Path=/api/tags/**
+
         - id: task-service
           uri: ${TASK_SERVICE_URL:http://task-service:8080}
           predicates:

@@ -6,7 +6,6 @@ import com.slavacom.taskservice.dto.TaskPageResponse
 import com.slavacom.taskservice.dto.TaskResponse
 import com.slavacom.taskservice.dto.TaskSearchRequest
 import com.slavacom.taskservice.dto.UpdateTaskRequest
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import com.slavacom.taskservice.service.TaskService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -117,12 +116,7 @@ class TaskController(
         @RequestBody request: Map<String, String>,
     ): TaskResponse {
         val statusStr = request["status"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing status")
-        val newStatus = try {
-            TaskStatus.valueOf(statusStr.uppercase())
-        } catch (e: IllegalArgumentException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: $statusStr")
-        }
-        return taskService.transitionStatus(taskId, newStatus, changedBy)
+        return taskService.transitionStatus(taskId, statusStr, changedBy)
     }
 
     @PostMapping("/{taskId}/comments")

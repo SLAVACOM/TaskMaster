@@ -10,7 +10,6 @@ import com.slavacom.taskservice.entity.FieldChange
 import com.slavacom.taskservice.entity.Task
 import com.slavacom.taskservice.entity.TaskHistory
 import com.slavacom.taskservice.entity.enums.HistoryAction
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import com.slavacom.taskservice.mapper.TaskHistoryMapper
 import com.slavacom.taskservice.mapper.TaskMapper
 import com.slavacom.taskservice.repository.TaskHistoryRepository
@@ -271,13 +270,13 @@ class TaskService(
     @Transactional(readOnly = true)
     fun getProjectDashboard(projectId: UUID): Map<String, Any> {
         val allTasks = taskRepository.findByProjectIdAndIsActiveTrue(projectId)
-        val todoCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.TODO)
-        val inProgressCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.IN_PROGRESS)
-        val doneCount = taskRepository.countByProjectIdAndStatusAndIsActiveTrue(projectId, TaskStatus.DONE)
+        val todoCount = allTasks.count { it.status == "TODO" }
+        val inProgressCount = allTasks.count { it.status == "IN_PROGRESS" }
+        val doneCount = allTasks.count { it.status == "DONE" }
 
         val tasksByPriority = allTasks.groupingBy { it.priority }.eachCount()
         val tasksByStatus = allTasks.groupingBy { it.status }.eachCount()
-        val activeTasks = allTasks.filter { it.status != TaskStatus.DONE }.sortedByDescending { it.createdAt }
+        val activeTasks = allTasks.filter { it.status != "DONE" }.sortedByDescending { it.createdAt }
 
         return mapOf(
             "projectId" to projectId,
@@ -295,13 +294,13 @@ class TaskService(
     @Transactional(readOnly = true)
     fun getSprintDashboard(sprintId: UUID): Map<String, Any> {
         val allTasks = taskRepository.findBySprintIdAndIsActiveTrue(sprintId)
-        val completedCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.DONE)
-        val todoCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.TODO)
-        val inProgressCount = taskRepository.countBySprintIdAndStatusAndIsActiveTrue(sprintId, TaskStatus.IN_PROGRESS)
+        val completedCount = allTasks.count { it.status == "DONE" }
+        val todoCount = allTasks.count { it.status == "TODO" }
+        val inProgressCount = allTasks.count { it.status == "IN_PROGRESS" }
 
         val tasksByPriority = allTasks.groupingBy { it.priority }.eachCount()
         val tasksByStatus = allTasks.groupingBy { it.status }.eachCount()
-        val remainingTasks = allTasks.filter { it.status != TaskStatus.DONE }.sortedByDescending { it.createdAt }
+        val remainingTasks = allTasks.filter { it.status != "DONE" }.sortedByDescending { it.createdAt }
         val overdueTasks = remainingTasks.filter { it.deadline != null && it.deadline!! < java.time.Instant.now() }
 
         return mapOf(
@@ -433,13 +432,13 @@ class TaskService(
     }
 
     @Transactional
-    fun transitionStatus(taskId: UUID, newStatus: TaskStatus, changedBy: UUID): TaskResponse {
+    fun transitionStatus(taskId: UUID, newStatus: String, changedBy: UUID): TaskResponse {
         val task = taskRepository.findByIdAndIsActiveTrue(taskId)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
 
         val changes = mutableListOf<FieldChange>()
         if (newStatus != task.status) {
-            changes += FieldChange("status", task.status.name, newStatus.name)
+            changes += FieldChange("status", task.status, newStatus)
             task.status = newStatus
         }
 

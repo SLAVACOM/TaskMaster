@@ -1,7 +1,6 @@
 package com.slavacom.taskservice.dto
 
 import com.slavacom.taskservice.entity.enums.TaskPriority
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import java.time.Instant
 import java.util.UUID
 
@@ -14,7 +13,7 @@ data class TaskResponse(
     val description: String?,
     val files: List<String>,
     val depends: List<UUID>,
-    val status: TaskStatus,
+    val status: String,
     val responsible: UUID?,
     val executor: UUID?,
     val observers: List<UUID>,

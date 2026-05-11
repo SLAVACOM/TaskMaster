@@ -1,7 +1,6 @@
 package com.slavacom.taskservice.dto
 
 import com.slavacom.taskservice.entity.enums.TaskPriority
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import java.time.Instant
 import java.util.UUID
 
@@ -11,7 +10,7 @@ data class TaskDashboardResponse(
     val name: String,
     val projectId: UUID,
     val sprintId: UUID?,
-    val status: TaskStatus,
+    val status: String,
     val executor: UUID?,
     val priority: TaskPriority,
     val createdAt: Instant,
@@ -38,7 +37,7 @@ data class SprintDashboardResponse(
     val totalTasks: Long,
     val completedTasks: Long,
     val completionPercentage: Double,
-    val tasksByStatus: Map<TaskStatus, Long>,
+    val tasksByStatus: Map<String, Long>,
     val tasksByPriority: Map<TaskPriority, Long>,
     val remainingTasks: List<TaskDashboardResponse>,
     val overdueTasks: List<TaskDashboardResponse>,

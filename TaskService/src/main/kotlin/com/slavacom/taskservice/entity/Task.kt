@@ -3,12 +3,9 @@ package com.slavacom.taskservice.entity
 import com.slavacom.taskservice.entity.converter.StringListJsonConverter
 import com.slavacom.taskservice.entity.converter.UuidListJsonConverter
 import com.slavacom.taskservice.entity.enums.TaskPriority
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -51,9 +48,8 @@ class Task(
 	@Column(name = "depends", nullable = false, columnDefinition = "TEXT")
 	var depends: List<UUID> = emptyList(),
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	var status: TaskStatus = TaskStatus.TODO,
+	var status: String = "TODO",
 
 	@Column(name = "responsible")
 	var responsible: UUID? = null,

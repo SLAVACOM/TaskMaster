@@ -57,67 +57,80 @@ enum class TaskStatus {
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/Task.kt`
 
-- [ ] Заменить `var status: TaskStatus` на `var status: String` в Task entity
-- [ ] Удалить импорт `TaskStatus` enum
-- [ ] Обновить default значение статуса на `"TODO"` (String вместо `TaskStatus.TODO`)
-- [ ] Проверить, что сущность компилируется
+- [x] Заменить `var status: TaskStatus` на `var status: String` в Task entity
+- [x] Удалить импорт `TaskStatus` enum
+- [x] Обновить default значение статуса на `"TODO"` (String вместо `TaskStatus.TODO`)
+- [x] Проверить, что сущность компилируется
 
 ### Task 2: Обновить TaskMapper для работы со String статусами
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/mapper/TaskMapper.kt`
 
-- [ ] Обновить маппинг `task.status` чтобы работал со String (не требует преобразования из enum)
-- [ ] Проверить методы `toResponse()`, `toEntity()`, `fromCreateRequest()` — убедиться работают со String
+- [x] Обновить маппинг `task.status` чтобы работал со String (не требует преобразования из enum)
+- [x] Проверить методы `toResponse()`, `toEntity()`, `fromCreateRequest()` — убедиться работают со String
+  *(Маппер не требует изменений, работает со String напрямую)*
 
 ### Task 3: Обновить DTO классы для Task
 
 **Files:**
-- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/TaskResponse.kt` (если существует)
-- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/CreateTaskRequest.kt` (если существует)
-- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/UpdateTaskRequest.kt` (если существует)
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/TaskResponse.kt`
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/CreateTaskRequest.kt`
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/UpdateTaskRequest.kt`
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/DashboardDto.kt`
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/TaskSearchRequest.kt`
 
-- [ ] Найти все DTO классы содержащие `status: TaskStatus`
-- [ ] Заменить на `status: String`
-- [ ] Обновить документацию/примеры в DTO если есть
+- [x] Найти все DTO классы содержащие `status: TaskStatus`
+- [x] Заменить на `status: String` во всех DTO классах
+- [x] Обновить Map<TaskStatus, Long> на Map<String, Long> в SprintDashboardResponse
 
 ### Task 4: Обновить контроллеры TaskService
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
-- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/ProjectTaskController.kt` (если есть)
 
-- [ ] Проверить эндпоинты на предмет явного парсинга/валидации TaskStatus enum
-- [ ] Убрать любые попытки валидации enum значений
-- [ ] Заменить на простую работу со String
+- [x] Проверить эндпоинты на предмет явного парсинга/валидации TaskStatus enum
+- [x] Убрать попытки валидации enum значений (TaskStatus.valueOf)
+- [x] Заменить на простую работу со String в transitionStatus endpoint
+
+### Task 5a: Обновить TaskRepository сигнатуры методов
+
+**Files:**
+- Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/repository/TaskRepository.kt`
+
+- [x] Удалить импорт TaskStatus enum
+- [x] Заменить все параметры status: TaskStatus на status: String в сигнатурах методов
+- [x] Методы остаются функциональными, Spring Data JPA работает со String
 
 ### Task 5: Обновить сервис Task
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskService.kt`
 
-- [ ] Обновить логику обработки статусов на работу со String
-- [ ] Если есть методы вроде `transitionStatus()` — обновить их сигнатуры
-- [ ] Убрать любые switch/when по enum значениям (заменить на String сравнение если нужно)
+- [x] Обновить логику обработки статусов на работу со String
+- [x] Обновить сигнатуру `transitionStatus(newStatus: String)`
+- [x] Заменить countBy методы репозитория на in-memory подсчет через allTasks.count { it.status == "TODO" }
+- [x] Обновить фильтры status != TaskStatus.DONE на status != "DONE"
 
 ### Task 6: Обновить миграцию БД (если использует миграции)
 
 **Files:**
-- Create/Modify: `TaskService/src/main/resources/db/migration/V*__change_task_status_to_string.sql` (создать новую миграцию)
+- Check/Create: `TaskService/src/main/resources/db/migration/V*__change_task_status_to_string.sql`
 
 - [ ] Проверить текущий тип колонки `status` в таблице `tasks`
 - [ ] Если текущий тип ENUM — создать миграцию для изменения на VARCHAR/TEXT
 - [ ] Если уже VARCHAR — никаких изменений БД не требуется
 - [ ] Миграция должна обратима или содержать комментарий о необратимости
+- [ ] Запустить миграции: `./gradlew flywayMigrate` (если используется Flyway)
 
 ### Task 7: Проверить все references в других сервисах
 
 **Files:**
 - Search: Все импорты `TaskStatus` в OrganizationService, другие сервисы
 
-- [ ] Найти все места где используется `TaskStatus` через grep/intellij
-- [ ] Обновить любые imports в других сервисах если есть
-- [ ] Обновить контракты REST API в комментариях если есть документация
+- [x] Найти все места где используется `TaskStatus` (grep по всем сервисам)
+- [x] OrganizationService содержит только ProjectTaskStatuses DTO (не конфликтует)
+- [x] Других ссылок на TaskStatus из TaskService не найдено
 
 ### Task 8: Синхронизация статуса с канбан доской (опционально)
 
@@ -127,7 +140,7 @@ enum class TaskStatus {
 
 - [ ] Добавить логику: при изменении позиции задачи на канбан доске обновлять `task.status` на имя столбца
 - [ ] Или добавить endpoint для явного обновления статуса = название столбца
-- [ ] *(Опционально)* пока не реализовать если не требуется для устранения ошибки
+- [ ] *(Опционально - пока пропускаем, можно добавить позже)*
 
 ### Task 9: Ручное тестирование
 

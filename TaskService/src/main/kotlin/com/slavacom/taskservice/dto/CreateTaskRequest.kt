@@ -3,7 +3,6 @@ package com.slavacom.taskservice.dto
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
 import com.slavacom.taskservice.entity.enums.TaskPriority
-import com.slavacom.taskservice.entity.enums.TaskStatus
 import jakarta.validation.constraints.NotBlank
 import java.time.Instant
 import java.util.UUID
@@ -17,7 +16,7 @@ data class CreateTaskRequest(
     @param:JsonSetter(nulls = Nulls.AS_EMPTY)
     val depends: List<UUID> = emptyList(),
     @param:JsonSetter(nulls = Nulls.SKIP)
-    val status: TaskStatus = TaskStatus.TODO,
+    val status: String = "TODO",
     val responsible: UUID? = null,
     val executor: UUID? = null,
     @param:JsonSetter(nulls = Nulls.AS_EMPTY)
