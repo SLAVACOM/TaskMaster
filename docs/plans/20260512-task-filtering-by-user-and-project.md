@@ -169,6 +169,28 @@ This improves security and reduces cognitive load—users see only tasks relevan
   - [ ] Notify consuming clients of the API change
   - [ ] Update CLAUDE.md if filtering pattern should be documented for other services
 
+### Task 9: Verify acceptance criteria
+
+- [x] All requirements from Overview are implemented:
+  - [x] ProjectMember entity and repository created
+  - [x] Database migration added
+  - [x] TaskFilteringService filters by user assignment and project membership
+  - [x] GET /api/tasks endpoint modified to use filtering
+  - [x] Union-based filtering working (assigned OR in project)
+  - [x] All user roles included (responsible, executor, observer, watcher)
+- [x] Code compiles successfully
+- [x] Edge cases handled:
+  - [x] User with no assignments returns only project tasks
+  - [x] User with no projects returns only assigned tasks
+  - [x] Empty result when user has no involvement
+- [ ] Manual testing complete (see Task 6 scenarios)
+
+### Task 10: [Final] Update documentation
+
+- [ ] Update CLAUDE.md with new task filtering pattern if desired
+- [ ] Add BREAKING CHANGE note to API documentation or README
+- [ ] Move this plan to `docs/plans/completed/` when testing is verified
+
 ## Post-Completion
 
 **Manual verification scenarios:**
