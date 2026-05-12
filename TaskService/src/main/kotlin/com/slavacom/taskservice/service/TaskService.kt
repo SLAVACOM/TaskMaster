@@ -131,6 +131,80 @@ class TaskService(
     }
 
     @Transactional(readOnly = true)
+    fun searchFiltered(filter: TaskSearchRequest, accessibleTasks: List<Task>, organizationId: UUID): TaskPageResponse {
+        val startTime = System.currentTimeMillis()
+        logger.info { "Searching tasks for organizationId=$organizationId, filter=${filter.name}, page=${filter.page}" }
+
+        var filtered = accessibleTasks
+            .filter { it.projectId != null }
+
+        if (filter.name != null) {
+            filtered = filtered.filter { it.name.contains(filter.name, ignoreCase = true) }
+        }
+        if (filter.status != null) {
+            filtered = filtered.filter { it.status == filter.status }
+        }
+        if (filter.priority != null) {
+            filtered = filtered.filter { it.priority == filter.priority }
+        }
+        if (filter.responsible != null) {
+            filtered = filtered.filter { it.responsible == filter.responsible }
+        }
+        if (filter.executor != null) {
+            filtered = filtered.filter { it.executor == filter.executor }
+        }
+        if (filter.sprintId != null) {
+            filtered = filtered.filter { it.sprintId == filter.sprintId }
+        }
+        if (filter.projectId != null) {
+            filtered = filtered.filter { it.projectId == filter.projectId }
+        }
+        if (filter.tag != null) {
+            filtered = filtered.filter { it.tags.contains(filter.tag) }
+        }
+
+        val normalizedSortBy = if (filter.sortBy in allowedSortFields) filter.sortBy else "createdAt"
+        val direction = if (filter.sortDir.equals("asc", ignoreCase = true)) Sort.Direction.ASC else Sort.Direction.DESC
+
+        filtered = when (normalizedSortBy) {
+            "createdAt" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.createdAt } else filtered.sortedByDescending { it.createdAt }
+            "updatedAt" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.updatedAt } else filtered.sortedByDescending { it.updatedAt }
+            "name" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.name } else filtered.sortedByDescending { it.name }
+            "priority" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.priority } else filtered.sortedByDescending { it.priority }
+            "status" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.status } else filtered.sortedByDescending { it.status }
+            "deadline" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.deadline } else filtered.sortedByDescending { it.deadline }
+            "start" -> if (direction == Sort.Direction.ASC) filtered.sortedBy { it.start } else filtered.sortedByDescending { it.start }
+            else -> filtered.sortedByDescending { it.createdAt }
+        }
+
+        val pageNum = filter.page.coerceAtLeast(0)
+        val pageSize = filter.size.coerceIn(1, 200)
+        val totalElements = filtered.size
+        val totalPages = (totalElements + pageSize - 1) / pageSize
+        val startIndex = pageNum * pageSize
+        val endIndex = (startIndex + pageSize).coerceAtMost(totalElements)
+
+        val pageContent = if (startIndex < totalElements) {
+            filtered.subList(startIndex, endIndex).map(taskMapper::toResponse)
+        } else {
+            emptyList()
+        }
+
+        val duration = System.currentTimeMillis() - startTime
+        logger.info { "Search completed in ${duration}ms: found ${totalElements} tasks, returning page ${pageNum} of ${totalPages}" }
+
+        return TaskPageResponse(
+            content = pageContent,
+            page = pageNum,
+            size = pageSize,
+            totalElements = totalElements.toLong(),
+            totalPages = totalPages,
+            hasNext = pageNum < totalPages - 1,
+            hasPrevious = pageNum > 0,
+        )
+    }
+
+    @Transactional(readOnly = true)
     fun getAllBySprintId(sprintId: UUID): List<TaskResponse> =
         taskRepository.findBySprintIdAndIsActiveTrueOrderByCreatedAtDesc(sprintId).map(taskMapper::toResponse)
 
