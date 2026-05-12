@@ -153,9 +153,9 @@ Implement a polymorphic comment and attachment system supporting projects, organ
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/CommentResponse.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/AttachmentResponse.kt`
 
-- [ ] Create `CreateCommentRequest` with: content (String, not blank), parentCommentId (UUID, optional)
-- [ ] Create `CommentResponse` with: id, content, createdBy, createdAt, updatedAt, parentCommentId, replies (list of child comments), attachments (list)
-- [ ] Create `AttachmentResponse` with: id, fileName, fileUrl, fileSize, mimeType, createdAt
+- [x] Create `CreateCommentRequest` with: content (String, not blank), parentCommentId (UUID, optional)
+- [x] Create `CommentResponse` with: id, content, createdBy, createdAt, updatedAt, parentCommentId, replies (list of child comments), attachments (list)
+- [x] Create `AttachmentResponse` with: id, fileName, fileUrl, fileSize, mimeType, createdAt
 
 ### Task 5: Create repositories for polymorphic queries
 
@@ -166,19 +166,11 @@ Implement a polymorphic comment and attachment system supporting projects, organ
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/repository/OrganizationCommentRepository.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/repository/AttachmentRepository.kt`
 
-- [ ] Create `CommentRepository` extending `JpaRepository<Comment, UUID>`
-  - Query method: `fun findByParentCommentIdOrderByCreatedAtDesc(parentId: UUID): List<Comment>`
-- [ ] Create `TaskCommentRepository` extending `JpaRepository<TaskComment, UUID>`
-  - Query method: `fun findByTaskIdOrderByCreatedAtDesc(taskId: UUID): List<TaskComment>`
-  - Query method: `fun findByTaskIdAndParentCommentIdIsNull(taskId: UUID): List<TaskComment>`
-- [ ] Create `ProjectCommentRepository` extending `JpaRepository<ProjectComment, UUID>`
-  - Query method: `fun findByProjectIdOrderByCreatedAtDesc(projectId: UUID): List<ProjectComment>`
-  - Query method: `fun findByProjectIdAndParentCommentIdIsNull(projectId: UUID): List<ProjectComment>`
-- [ ] Create `OrganizationCommentRepository` extending `JpaRepository<OrganizationComment, UUID>`
-  - Query method: `fun findByOrganizationIdOrderByCreatedAtDesc(orgId: UUID): List<OrganizationComment>`
-  - Query method: `fun findByOrganizationIdAndParentCommentIdIsNull(orgId: UUID): List<OrganizationComment>`
-- [ ] Create `AttachmentRepository` extending `JpaRepository<Attachment, UUID>`
-  - Query method: `fun findByCommentId(commentId: UUID): List<Attachment>`
+- [x] Create `CommentRepository` extending `JpaRepository<Comment, UUID>`
+- [x] Create `TaskCommentRepository` with queries for task-specific comments
+- [x] Create `ProjectCommentRepository` with queries for project-specific comments
+- [x] Create `OrganizationCommentRepository` with queries for org-specific comments
+- [x] Create `AttachmentRepository` with query by commentId
 
 ### Task 6: Create CommentService with business logic
 
@@ -186,41 +178,36 @@ Implement a polymorphic comment and attachment system supporting projects, organ
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/CommentService.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/AttachmentService.kt`
 
-- [ ] Create `CommentService` with methods:
-  - `fun addTaskComment(taskId: UUID, request: CreateCommentRequest, createdBy: UUID): CommentResponse`
-  - `fun addProjectComment(projectId: UUID, request: CreateCommentRequest, createdBy: UUID): CommentResponse`
-  - `fun addOrganizationComment(orgId: UUID, request: CreateCommentRequest, createdBy: UUID): CommentResponse`
-  - `fun addReply(parentCommentId: UUID, request: CreateCommentRequest, createdBy: UUID): CommentResponse`
-  - `fun getCommentWithReplies(commentId: UUID): CommentResponse`
-  - `fun getTaskComments(taskId: UUID): List<CommentResponse>` (top-level only)
-  - `fun getProjectComments(projectId: UUID): List<CommentResponse>` (top-level only)
-  - `fun getOrganizationComments(orgId: UUID): List<CommentResponse>` (top-level only)
-  - `fun editComment(commentId: UUID, updatedContent: String, userId: UUID): CommentResponse` (auth check)
-  - `fun deleteComment(commentId: UUID, userId: UUID): void` (auth check)
-- [ ] Create `AttachmentService` with methods:
-  - `fun addAttachment(commentId: UUID, fileName: String, fileUrl: String, fileSize: Long?, mimeType: String?): AttachmentResponse`
-  - `fun getAttachments(commentId: UUID): List<AttachmentResponse>`
-  - `fun deleteAttachment(attachmentId: UUID): void`
+- [x] Create `CommentService` with methods for all comment operations:
+  - [x] `addTaskComment()`, `addProjectComment()`, `addOrganizationComment()`
+  - [x] `addReply()` — polymorphic reply creation
+  - [x] `getCommentWithReplies()` — recursive reply retrieval
+  - [x] `getTaskComments()`, `getProjectComments()`, `getOrganizationComments()`
+  - [x] `editComment()` — with author authorization check
+  - [x] `deleteComment()` — with author authorization and cascade delete
+- [x] Create `AttachmentService` with attachment operations
+- [x] Authorization checks implemented (only author can edit/delete)
 
 ### Task 7: Create CommentController with REST endpoints
 
 **Files:**
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/CommentController.kt`
 
-- [ ] Create endpoints:
-  - `POST /api/tasks/{taskId}/comments` — add comment to task
-  - `POST /api/projects/{projectId}/comments` — add comment to project
-  - `POST /api/organizations/{orgId}/comments` — add comment to organization
-  - `GET /api/comments/{commentId}` — get comment with replies tree
-  - `POST /api/comments/{commentId}/replies` — add nested reply
-  - `POST /api/comments/{commentId}/attachments` — add attachment
-  - `GET /api/tasks/{taskId}/comments` — list top-level comments for task
-  - `GET /api/projects/{projectId}/comments` — list top-level comments for project
-  - `GET /api/organizations/{orgId}/comments` — list top-level comments for org
-  - `PUT /api/comments/{commentId}` — edit comment (X-User-Id must match createdBy)
-  - `DELETE /api/comments/{commentId}` — delete comment (X-User-Id must match createdBy)
-- [ ] All endpoints require X-User-Id header (author context)
-- [ ] Return appropriate HTTP status codes (201 for creation, 403 for auth errors, 404 for not found)
+- [x] Create all 12 REST endpoints:
+  - [x] `POST /api/tasks/{taskId}/comments` — add comment to task
+  - [x] `POST /api/projects/{projectId}/comments` — add comment to project
+  - [x] `POST /api/organizations/{orgId}/comments` — add comment to organization
+  - [x] `GET /api/comments/{commentId}` — get comment with replies tree
+  - [x] `POST /api/comments/{commentId}/replies` — add nested reply
+  - [x] `POST /api/comments/{commentId}/attachments` — add attachment
+  - [x] `GET /api/tasks/{taskId}/comments` — list top-level comments for task
+  - [x] `GET /api/projects/{projectId}/comments` — list top-level comments for project
+  - [x] `GET /api/organizations/{orgId}/comments` — list top-level comments for org
+  - [x] `PUT /api/comments/{commentId}` — edit comment (auth check)
+  - [x] `DELETE /api/comments/{commentId}` — delete comment (auth check)
+  - [x] `DELETE /api/attachments/{attachmentId}` — delete attachment
+- [x] All endpoints require X-User-Id header
+- [x] Correct HTTP status codes (201, 204, 403, 404)
 
 ### Task 8: Create MapStruct mappers
 
@@ -228,9 +215,11 @@ Implement a polymorphic comment and attachment system supporting projects, organ
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/mapper/CommentMapper.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/mapper/AttachmentMapper.kt`
 
-- [ ] Create `CommentMapper` with `toResponse(Comment): CommentResponse`
-- [ ] Create `AttachmentMapper` with `toResponse(Attachment): AttachmentResponse`
-- [ ] Mappers should recursively populate replies
+- [x] Create `AttachmentMapper` for simple mapping
+- [x] Create `CommentMapper` with recursive reply population
+  - [x] `toResponse()` — basic mapping without replies
+  - [x] `toResponseWithReplies()` — recursive mapping with nested replies and attachments
+- [x] Code compiles successfully
 
 ### Task 9: Manual testing of comment system
 
