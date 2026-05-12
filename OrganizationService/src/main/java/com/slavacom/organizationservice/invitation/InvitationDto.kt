@@ -1,6 +1,7 @@
 package com.slavacom.organizationservice.invitation
 
 import com.slavacom.organizationservice.entity.InvitationStatus
+import jakarta.validation.constraints.NotNull
 import java.time.Instant
 import java.util.UUID
 
@@ -21,6 +22,7 @@ data class InvitationResponse(
 )
 
 data class CreateInvitationRequest(
+    @field:NotNull(message = "invitedUserId is required")
     val invitedUserId: UUID,
     val identifier: String,
     val role: String,

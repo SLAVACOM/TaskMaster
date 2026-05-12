@@ -1,5 +1,6 @@
 package com.slavacom.organizationservice.invitation
 
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -12,7 +13,7 @@ class InvitationController(private val service: InvitationService) {
     fun invite(
         @PathVariable orgId: UUID,
         @RequestHeader("X-User-Id") userId: UUID,
-        @RequestBody request: CreateInvitationRequest
+        @Valid @RequestBody request: CreateInvitationRequest
     ): InvitationResponse = service.invite(orgId, request, userId)
 
     @GetMapping("/api/organizations/{orgId}/invitations")
