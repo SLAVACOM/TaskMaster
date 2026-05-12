@@ -93,16 +93,18 @@ The fix adds an explicit `organizationId` field to the Task entity so that:
 **Files:**
 - Modify: `TaskService/src/main/resources/db/changelog/initial.xml.yaml`
 
-- [ ] Add changeSet to backfill organizationId from project relationships (if project→organization mapping exists)
+- [ ] Add changeSet to backfill organizationId from project relationships (optional, depends on project→org mapping)
 - [ ] OR: Document manual process to populate organizationId via SQL script
+- [ ] Note: New tasks created after deployment will have organizationId set automatically
 
 ### Task 7: Manual testing
 
-- [ ] Create task with organizationId header → verify organizationId stored
-- [ ] Create task with projectId → verify organizationId populated (if derived)
-- [ ] Search tasks → verify filtered by task.organizationId, not header
-- [ ] Query `/api/tasks/search` as user in Org A → only sees Org A tasks
-- [ ] Query `/api/tasks/search` as user in Org B → only sees Org B tasks
+- [ ] Create task with X-Organization-Id header → verify organizationId stored
+- [ ] Create task with organizationId in request body → verify takes precedence over header
+- [ ] Create task without organizationId → verify nullable, no error
+- [ ] Search tasks → verify filtered by task.organizationId directly
+- [ ] Query `/api/tasks/search?organizationId=X` as user in Org A → only sees Org A tasks
+- [ ] Query `/api/tasks/search` as user in Org B → only sees Org B tasks (no cross-org leakage)
 
 ## Post-Completion
 
