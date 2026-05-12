@@ -136,15 +136,6 @@ class TaskController(
         return taskService.transitionStatus(taskId, statusStr, changedBy)
     }
 
-    @PostMapping("/{taskId}/comments")
-    fun addComment(
-        @PathVariable taskId: UUID,
-        @RequestHeader("X-User-Id") changedBy: UUID,
-        @RequestBody request: Map<String, String>,
-    ): TaskHistoryResponse {
-        val comment = request["text"] ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing comment text")
-        return taskService.addComment(taskId, comment, changedBy)
-    }
 }
 
 // Project-scoped task endpoints

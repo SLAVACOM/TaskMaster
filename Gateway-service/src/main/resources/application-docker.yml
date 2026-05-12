@@ -45,3 +45,13 @@ spring:
           uri: ${TASK_SERVICE_URL:http://task-service:8080}
           predicates:
             - Path=/api/tasks/**
+
+        - id: task-service-comments
+          uri: ${TASK_SERVICE_URL:http://task-service:8080}
+          predicates:
+            - Path=/api/comments/**
+
+        - id: task-service-attachments
+          uri: ${TASK_SERVICE_URL:http://task-service:8080}
+          predicates:
+            - Path=/api/attachments/**

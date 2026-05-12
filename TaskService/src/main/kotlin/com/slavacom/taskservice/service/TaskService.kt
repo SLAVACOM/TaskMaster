@@ -612,20 +612,4 @@ class TaskService(
         }
         return taskMapper.toResponse(saved)
     }
-
-    @Transactional
-    fun addComment(taskId: UUID, comment: String, changedBy: UUID): TaskHistoryResponse {
-        val task = taskRepository.findByIdAndIsActiveTrue(taskId)
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found: $taskId")
-
-        val history = taskHistoryRepository.save(
-            TaskHistory(
-                taskId = task.id!!,
-                changedBy = changedBy,
-                action = HistoryAction.COMMENT,
-                changes = listOf(FieldChange("comment", "", comment)),
-            )
-        )
-        return taskHistoryMapper.toResponse(history)
-    }
 }

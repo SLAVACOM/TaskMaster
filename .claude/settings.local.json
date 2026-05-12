@@ -40,7 +40,12 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\slava\\\\IdeaProjects\\\\TaskMaster\\\\OrganizationService\\\\src\\\\main\\\\java\\\\com\\\\slavacom\\\\organizationservice\" -Directory)",
       "Bash(./gradlew :Auth-service:build -x test)",
       "Bash(git rm *)",
-      "Bash(Get-ChildItem \"C:\\\\Users\\\\slava\\\\IdeaProjects\\\\TaskMaster\\\\TaskService\\\\src\\\\main\\\\resources\\\\db\\\\migration\\\\\" | Sort-Object Name | Select-Object -Last 10 | Format-Table Name *)"
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\slava\\\\IdeaProjects\\\\TaskMaster\\\\TaskService\\\\src\\\\main\\\\resources\\\\db\\\\migration\\\\\" | Sort-Object Name | Select-Object -Last 10 | Format-Table Name *)",
+      "Bash(./gradlew clean *)",
+      "Bash(./gradlew --info kaptGenerateStubsKotlin)",
+      "Bash(mv src/main/kotlin/com/slavacom/taskservice/service/CommentService.kt.bak src/main/kotlin/com/slavacom/taskservice/service/CommentService.kt)",
+      "Bash(mv src/main/kotlin/com/slavacom/taskservice/service/AttachmentService.kt src/main/kotlin/com/slavacom/taskservice/service/AttachmentService.kt.bak)",
+      "Bash(git checkout *)"
     ]
   }
 }
