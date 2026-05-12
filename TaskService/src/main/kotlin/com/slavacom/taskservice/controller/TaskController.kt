@@ -61,14 +61,9 @@ class TaskController(
 
     @GetMapping("/search")
     fun search(
-        @RequestHeader("X-User-Id") userId: UUID,
         @RequestHeader("X-Organization-Id") organizationId: UUID,
         @ModelAttribute filter: TaskSearchRequest,
-    ): TaskPageResponse {
-        val accessibleTasks = taskFilteringService.getAccessibleTasks(userId)
-            .filter { it.projectId != null }
-        return taskService.searchFiltered(filter, accessibleTasks, organizationId)
-    }
+    ): TaskPageResponse = taskService.searchByOrgAndProject(filter, organizationId)
 
     @PutMapping("/{id}")
     fun update(
