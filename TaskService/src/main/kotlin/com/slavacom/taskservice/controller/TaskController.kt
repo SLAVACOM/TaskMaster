@@ -38,9 +38,10 @@ class TaskController(
     @PostMapping
     fun create(
         @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestHeader("X-Organization-Id", required = false) organizationId: UUID?,
         @Valid @RequestBody request: CreateTaskRequest,
     ): ResponseEntity<TaskResponse> =
-        ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(request, changedBy))
+        ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(request, changedBy, organizationId))
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: UUID): TaskResponse = taskService.getById(id)

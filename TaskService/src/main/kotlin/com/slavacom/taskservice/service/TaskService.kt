@@ -38,9 +38,9 @@ class TaskService(
     )
 
     @Transactional
-    fun create(request: CreateTaskRequest, changedBy: UUID): TaskResponse {
+    fun create(request: CreateTaskRequest, changedBy: UUID, organizationId: UUID? = null): TaskResponse {
         val startTime = System.currentTimeMillis()
-        logger.info { "Creating task: name=${request.name}, projectId=${request.projectId}, changedBy=$changedBy" }
+        logger.info { "Creating task: name=${request.name}, projectId=${request.projectId}, organizationId=${organizationId}, changedBy=$changedBy" }
 
         try {
             val task = Task(
@@ -60,6 +60,7 @@ class TaskService(
                 deadline = request.deadline,
                 sprintId = request.sprintId,
                 projectId = request.projectId,
+                organizationId = request.organizationId ?: organizationId,
                 storyPoint = request.storyPoint,
             )
             val saved = taskRepository.save(task)
@@ -137,6 +138,7 @@ class TaskService(
 
         var filtered = accessibleTasks
             .filter { it.projectId != null }
+            .filter { it.organizationId == organizationId }
 
         if (filter.name != null) {
             filtered = filtered.filter { it.name.contains(filter.name, ignoreCase = true) }

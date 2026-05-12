@@ -173,3 +173,20 @@ databaseChangeLog:
                   name: user_id
             indexName: idx_project_members_user_id
             tableName: project_members
+  - changeSet:
+      id: 1777821796758-4
+      author: slava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            tableName: tasks
+            columns:
+              - column:
+                  name: organization_id
+                  type: UUID
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+            indexName: idx_tasks_organization_id
+            tableName: tasks

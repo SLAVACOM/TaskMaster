@@ -32,6 +32,7 @@ data class CreateTaskRequest(
     val deadline: Instant? = null,
     val sprintId: UUID? = null,
     val projectId: UUID? = null,
+    val organizationId: UUID? = null,
     val storyPoint: Int? = null,
 )
 

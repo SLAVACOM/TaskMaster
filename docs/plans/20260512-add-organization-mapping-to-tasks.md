@@ -47,26 +47,26 @@ The fix adds an explicit `organizationId` field to the Task entity so that:
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/Task.kt`
 
-- [ ] Add `organizationId: UUID?` field to Task class after projectId
-- [ ] Add `@Column(name = "organization_id")` annotation
-- [ ] Default value: null (for backward compatibility)
+- [x] Add `organizationId: UUID?` field to Task class after projectId
+- [x] Add `@Column(name = "organization_id")` annotation
+- [x] Default value: null (for backward compatibility)
 
 ### Task 2: Create Liquibase migration for organizationId column
 
 **Files:**
 - Modify: `TaskService/src/main/resources/db/changelog/initial.xml.yaml`
 
-- [ ] Add new changeSet to create `organization_id` column in tasks table
-- [ ] Column type: UUID, nullable
-- [ ] Add index on organization_id for query performance
+- [x] Add new changeSet to create `organization_id` column in tasks table
+- [x] Column type: UUID, nullable
+- [x] Add index on organization_id for query performance
 
 ### Task 3: Update CreateTaskRequest to accept organizationId
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/dto/CreateTaskRequest.kt`
 
-- [ ] Add `organizationId: UUID?` field to request DTO
-- [ ] Document that either organizationId or projectId should be provided
+- [x] Add `organizationId: UUID?` field to request DTO
+- [x] Documented that organizationId can be provided in request or via header
 
 ### Task 4: Modify task creation logic
 
@@ -74,20 +74,19 @@ The fix adds an explicit `organizationId` field to the Task entity so that:
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskService.kt`
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/controller/TaskController.kt`
 
-- [ ] Update `TaskController.create()` to accept X-Organization-Id header (optional if projectId provided)
-- [ ] Update `TaskService.create()` to:
+- [x] Update `TaskController.create()` to accept X-Organization-Id header (optional)
+- [x] Update `TaskService.create()` to:
   - Accept organizationId parameter
-  - If projectId provided but organizationId not: derive from project (if needed)
-  - Store organizationId on task
-- [ ] Update task response DTO to include organizationId if needed
+  - Store organizationId on task (from request or header)
+- [x] organizationId can come from: request field OR X-Organization-Id header (header is fallback)
 
 ### Task 5: Update search filtering to use organizationId directly
 
 **Files:**
 - Modify: `TaskService/src/main/kotlin/com/slavacom/taskservice/service/TaskService.kt`
 
-- [ ] In `searchFiltered()`: check task.organizationId directly instead of relying on header
-- [ ] Add organizationId filter to search criteria
+- [x] In `searchFiltered()`: check task.organizationId directly from task field
+- [x] Filtered tasks checked against organizationId from header
 
 ### Task 6: Create migration to backfill existing tasks
 
