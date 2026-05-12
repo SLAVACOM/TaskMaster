@@ -190,3 +190,155 @@ databaseChangeLog:
                   name: organization_id
             indexName: idx_tasks_organization_id
             tableName: tasks
+  - changeSet:
+      id: 1777821796758-5
+      author: slava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: comment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: dtype
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_by
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: parent_comment_id
+                  type: UUID
+            tableName: comment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: task_comment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_id
+                  type: UUID
+            tableName: task_comment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: project_comment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: UUID
+            tableName: project_comment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: organization_comment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organization_id
+                  type: UUID
+            tableName: organization_comment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: attachment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: comment_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: file_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: file_url
+                  type: TEXT
+              - column:
+                  name: file_size
+                  type: BIGINT
+              - column:
+                  name: mime_type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: attachment
+        - createIndex:
+            columns:
+              - column:
+                  name: task_id
+            indexName: idx_task_comment_task_id
+            tableName: task_comment
+        - createIndex:
+            columns:
+              - column:
+                  name: project_id
+            indexName: idx_project_comment_project_id
+            tableName: project_comment
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+            indexName: idx_organization_comment_organization_id
+            tableName: organization_comment
+        - createIndex:
+            columns:
+              - column:
+                  name: comment_id
+            indexName: idx_attachment_comment_id
+            tableName: attachment
+        - createIndex:
+            columns:
+              - column:
+                  name: parent_comment_id
+            indexName: idx_comment_parent_comment_id
+            tableName: comment

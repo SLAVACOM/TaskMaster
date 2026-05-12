@@ -111,41 +111,40 @@ Implement a polymorphic comment and attachment system supporting projects, organ
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/ProjectComment.kt`
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/OrganizationComment.kt`
 
-- [ ] Create abstract base `Comment` entity with:
-  - `@Entity @Inheritance(strategy = InheritanceType.JOINED)`
-  - `@DiscriminatorColumn(name = "dtype")`
-  - Fields: id (UUID, PK), content (TEXT), createdBy (UUID), createdAt, updatedAt, parentCommentId (UUID, nullable)
-- [ ] Create `TaskComment` extends Comment with taskId field
-- [ ] Create `ProjectComment` extends Comment with projectId field
-- [ ] Create `OrganizationComment` extends Comment with organizationId field
-- [ ] Add `@OneToMany` self-referencing relationship on Comment for child comments (optional, for convenience)
+- [x] Create abstract base `Comment` entity with:
+  - [x] `@Entity @Inheritance(strategy = InheritanceType.JOINED)`
+  - [x] `@DiscriminatorColumn(name = "dtype")`
+  - [x] Fields: id (UUID, PK), content (TEXT), createdBy (UUID), createdAt, updatedAt, parentCommentId (UUID, nullable)
+- [x] Create `TaskComment` extends Comment with taskId field
+- [x] Create `ProjectComment` extends Comment with projectId field
+- [x] Create `OrganizationComment` extends Comment with organizationId field
 
 ### Task 2: Create Attachment entity
 
 **Files:**
 - Create: `TaskService/src/main/kotlin/com/slavacom/taskservice/entity/Attachment.kt`
 
-- [ ] Create `Attachment` entity with:
-  - `id` (UUID, PK)
-  - `commentId` (UUID, FK to Comment)
-  - `fileName` (VARCHAR, not null)
-  - `fileUrl` (TEXT, not null) — stores S3 URL or file path
-  - `fileSize` (BIGINT, nullable)
-  - `mimeType` (VARCHAR, nullable)
-  - `createdAt` (TIMESTAMP)
-- [ ] Add foreign key constraint on commentId
+- [x] Create `Attachment` entity with:
+  - [x] `id` (UUID, PK)
+  - [x] `commentId` (UUID, FK to Comment)
+  - [x] `fileName` (VARCHAR, not null)
+  - [x] `fileUrl` (TEXT, not null) — stores S3 URL or file path
+  - [x] `fileSize` (BIGINT, nullable)
+  - [x] `mimeType` (VARCHAR, nullable)
+  - [x] `createdAt` (TIMESTAMP)
 
 ### Task 3: Create Liquibase migrations for new tables
 
 **Files:**
 - Modify: `TaskService/src/main/resources/db/changelog/initial.xml.yaml`
 
-- [ ] Add changeSet for `comment` table (base table for inheritance)
-- [ ] Add changeSet for `task_comment` table
-- [ ] Add changeSet for `project_comment` table
-- [ ] Add changeSet for `organization_comment` table
-- [ ] Add changeSet for `attachment` table with FK to comment
-- [ ] Add indexes on foreign key columns (task_id, project_id, organization_id, comment_id, parent_comment_id)
+- [x] Add changeSet for `comment` table (base table for inheritance)
+- [x] Add changeSet for `task_comment` table
+- [x] Add changeSet for `project_comment` table
+- [x] Add changeSet for `organization_comment` table
+- [x] Add changeSet for `attachment` table with FK to comment
+- [x] Add indexes on foreign key columns (task_id, project_id, organization_id, comment_id, parent_comment_id)
+- [x] Code compiles successfully
 
 ### Task 4: Create DTOs for requests and responses
 
