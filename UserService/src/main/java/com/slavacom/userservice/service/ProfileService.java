@@ -49,6 +49,24 @@ public class ProfileService {
                 .toList();
     }
 
+    public ProfileResponse getActiveProfile(UUID userId) {
+        log.info("Getting active profile for userId: {}", userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userId));
+
+        UUID lastProfileId = user.getLastProfileId();
+        if (lastProfileId == null) {
+            throw new RuntimeException("No active profile set for user: " + userId);
+        }
+
+        Profile profile = profileRepository.findById(lastProfileId)
+                .orElseThrow(() -> new RuntimeException("Active profile not found: " + lastProfileId));
+
+        log.info("Active profile {} found for user {}", profile.getId(), userId);
+        return mapToResponse(profile);
+    }
+
     public List<ProfileResponse> getUserProfilesInOrganization(UUID userId, UUID organizationId) {
         return profileRepository.findByUserIdAndOrganizationIdAndIsActiveTrue(userId, organizationId)
                 .stream()

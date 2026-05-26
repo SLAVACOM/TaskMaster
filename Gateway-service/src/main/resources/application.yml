@@ -42,6 +42,11 @@ spring:
           uri: ${ORG_SERVICE_URL:http://localhost:8093}
           predicates:
             - Path=/api/tags/**
+            -
+        - id: invitations-service-tags
+          uri: ${ORG_SERVICE_URL:http://localhost:8093}
+          predicates:
+            - Path=/api/invitations/**
 
         - id: task-service
           uri: ${TASK_SERVICE_URL:http://localhost:8094}

@@ -45,7 +45,8 @@
       "Bash(./gradlew --info kaptGenerateStubsKotlin)",
       "Bash(mv src/main/kotlin/com/slavacom/taskservice/service/CommentService.kt.bak src/main/kotlin/com/slavacom/taskservice/service/CommentService.kt)",
       "Bash(mv src/main/kotlin/com/slavacom/taskservice/service/AttachmentService.kt src/main/kotlin/com/slavacom/taskservice/service/AttachmentService.kt.bak)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(./gradlew :UserService:build -x test)"
     ]
   }
 }

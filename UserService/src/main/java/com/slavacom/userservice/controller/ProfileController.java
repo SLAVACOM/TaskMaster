@@ -47,6 +47,17 @@ public class ProfileController {
         return profileService.getUserProfiles(userId);
     }
 
+    @GetMapping("/user/{userId}/active")
+    public ResponseEntity<ProfileResponse> getActiveProfile(@PathVariable UUID userId) {
+        log.info("REST: Getting active profile for userId: {}", userId);
+        try {
+            return ResponseEntity.ok(profileService.getActiveProfile(userId));
+        } catch (Exception e) {
+            log.warn("Active profile not found for userId: {}", userId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/{profileId}")
     public ResponseEntity<ProfileResponse> updateProfile(
             @PathVariable UUID profileId,

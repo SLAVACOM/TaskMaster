@@ -1,6 +1,7 @@
 package com.slavacom.organizationservice.project.goals
 
 import org.springframework.stereotype.Service
+import java.time.ZoneOffset
 import java.util.UUID
 
 @Service
@@ -23,7 +24,7 @@ class ProjectGoalsService(
             .orElseThrow { NoSuchElementException("Goal $goalId not found in project $projectId") }
         request.name?.let { goal.name = it }
         request.description?.let { goal.description = it }
-        request.targetDate?.let { goal.targetDate = it }
+        request.targetDate?.let { goal.targetDate = it.atStartOfDay(ZoneOffset.UTC).toInstant() }
         request.progress?.let { goal.progress = it }
         request.isCompleted?.let { goal.isCompleted = it }
         request.responsible?.let { goal.responsible = it }

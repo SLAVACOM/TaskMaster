@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: User-service
+
+  # Kafka configuration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:user-service-group}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.slavacom.user_service.event.UserCreatedEvent
+    listener:
+      # Включаем автозапуск Kafka listeners
+      auto-startup: true
+
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://user-db:5432/user_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Kafka topics
+kafka:
+  topic:
+    user-created: ${KAFKA_TOPIC_USER_CREATED:user-created}
+
+
+
+management:
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_RATE:1.0}
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+
+logging:
+  level:
+    root: INFO
+    com.slavacom.user_service: DEBUG
+    io.micrometer.tracing: DEBUG
+    com.slavacom.user_service.controller: INFO
+    com.slavacom.user_service.service: INFO
+    com.slavacom.user_service.listener: DEBUG
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: INFO
+    org.springframework.kafka.listener: DEBUG
+    org.springframework.kafka.config: DEBUG
+    org.springframework.web: WARN
+    org.hibernate.SQL: DEBUG
+  file:
+    name: logs/user-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - %msg%n"
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 3GB
+server:
+  port: ${SERVER_PORT:8080}
+
+organization-service:
+  url: ${ORG_SERVICE_URL:http://organization-service:8080}
+
+# JWT configuration - должен совпадать с Auth Service
+jwt:
+  secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}

@@ -40,7 +40,7 @@ class CommentService(
 		comment.content = request.content
 		comment.createdBy = createdBy
 		comment.parentCommentId = request.parentCommentId
-		val saved = taskCommentRepository.save(comment)
+		val saved = taskCommentRepository.saveAndFlush(comment)
 		return commentMapper.toResponse(saved)
 	}
 
@@ -51,7 +51,7 @@ class CommentService(
 		comment.content = request.content
 		comment.createdBy = createdBy
 		comment.parentCommentId = request.parentCommentId
-		val saved = projectCommentRepository.save(comment)
+		val saved = projectCommentRepository.saveAndFlush(comment)
 		return commentMapper.toResponse(saved)
 	}
 
@@ -62,7 +62,7 @@ class CommentService(
 		comment.content = request.content
 		comment.createdBy = createdBy
 		comment.parentCommentId = request.parentCommentId
-		val saved = organizationCommentRepository.save(comment)
+		val saved = organizationCommentRepository.saveAndFlush(comment)
 		return commentMapper.toResponse(saved)
 	}
 
@@ -81,7 +81,7 @@ class CommentService(
 		reply.content = request.content
 		reply.createdBy = createdBy
 		reply.parentCommentId = parentCommentId
-		val saved = commentRepository.save(reply)
+		val saved = commentRepository.saveAndFlush(reply)
 		return commentMapper.toResponse(saved)
 	}
 

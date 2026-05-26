@@ -90,6 +90,10 @@ class InvitationService(
         invitationRepository.findAllByOrganizationId(orgId)
             .map { invitationMapper.toResponse(it) }
 
+    fun listMy(userId: UUID): List<InvitationResponse> =
+        invitationRepository.findAllByInvitedUserId(userId)
+            .map { invitationMapper.toResponse(it) }
+
     fun accept(invitationId: UUID) {
         val invitation = invitationRepository.findById(invitationId)
             .orElseThrow { InvitationNotFoundException(invitationId) }

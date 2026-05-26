@@ -20,6 +20,10 @@ class InvitationController(private val service: InvitationService) {
     fun list(@PathVariable orgId: UUID): List<InvitationResponse> =
         service.list(orgId)
 
+    @GetMapping("/api/invitations/my")
+    fun listMy(@RequestHeader("X-User-Id") userId: UUID): List<InvitationResponse> =
+        service.listMy(userId)
+
     @PutMapping("/api/invitations/{id}/accept")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun accept(@PathVariable id: UUID) = service.accept(id)

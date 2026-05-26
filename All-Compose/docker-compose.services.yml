@@ -25,9 +25,9 @@ services:
 
     container_name: TaskMaster-AuthService
     restart: always
-#    depends_on:
-#      - auth-db
-#      - user-service
+    depends_on:
+      auth-db:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_db
@@ -54,7 +54,8 @@ services:
     ports:
       - "8092:8080"
     depends_on:
-      - user-db
+      user-db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/user_db
       SPRING_DATASOURCE_USERNAME: postgres
@@ -74,8 +75,10 @@ services:
     ports:
       - "8093:8080"
     depends_on:
-      - organization-db
-      - user-service
+      organization-db:
+        condition: service_healthy
+      user-service:
+        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://organization-db:5432/organization_db
       SPRING_DATASOURCE_USERNAME: postgres
@@ -93,12 +96,13 @@ services:
     ports:
       - "8094:8080"
     depends_on:
-      - task-db
+      task-db:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://task-db:5432/task_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://task-db:5432/task_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
     networks:
       - micro-net
 

@@ -13,6 +13,12 @@ services:
       - user-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   auth-db:
     image: postgres:16
@@ -27,6 +33,12 @@ services:
       - auth-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   organization-db:
     image: postgres:16
@@ -41,6 +53,12 @@ services:
       - organization-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d organization_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   task-db:
     image: postgres:16
@@ -55,6 +73,12 @@ services:
       - task-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   event-db:
     image: postgres:16
@@ -69,6 +93,12 @@ services:
       - event-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d event_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
     image: redis:8.6.2
