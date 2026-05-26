@@ -78,6 +78,9 @@ server:
 organization-service:
   url: ${ORG_SERVICE_URL:http://localhost:8093}
 
+auth-service:
+  url: ${AUTH_SERVICE_URL:http://localhost:8081}
+
 # JWT configuration - должен совпадать с Auth Service
 jwt:
   secret: ${JWT_SECRET:mySuperSecretKeyForDockerEnvironment}

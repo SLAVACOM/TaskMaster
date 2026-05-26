@@ -1,5 +1,6 @@
 package com.slavacom.userservice.service;
 
+import com.slavacom.userservice.client.AuthServiceClient;
 import com.slavacom.userservice.dto.CreateProfileRequest;
 import com.slavacom.userservice.dto.ProfileResponse;
 import com.slavacom.userservice.dto.UpdateProfileRequest;
@@ -22,6 +23,7 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
+    private final AuthServiceClient authServiceClient;
 
     @Transactional
     public ProfileResponse createProfile(CreateProfileRequest request) {
@@ -118,6 +120,12 @@ public class ProfileService {
         userRepository.save(user);
 
         log.info("Current profile switched for user {} to profile {}", userId, profileId);
+
+        try {
+            authServiceClient.updateProfile(userId, profile.getId(), profile.getOrganizationId());
+        } catch (Exception e) {
+            log.warn("Failed to notify Auth service of profile switch for userId={}: {}", userId, e.getMessage());
+        }
     }
 
     private ProfileResponse mapToResponse(Profile profile) {

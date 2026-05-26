@@ -49,17 +49,16 @@ class TaskController(
     @GetMapping
     fun getAll(
         @RequestHeader("X-User-Id") userId: UUID,
-        @RequestParam projectId: UUID? = null,
-    ): List<TaskResponse> {
-        val tasks = taskFilteringService.getAccessibleTasks(userId)
-        return if (projectId != null) {
-            tasks.filter { it.projectId == projectId }
-        } else {
-            tasks
-        }.map(taskMapper::toResponse)
-    }
+        @RequestHeader("X-Organization-Id", required = false) organizationId: UUID?,
+        @ModelAttribute filter: TaskSearchRequest,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+        @RequestParam(defaultValue = "createdAt") sortBy: String,
+        @RequestParam(defaultValue = "desc") sortDir: String,
+    ): TaskPageResponse = taskFilteringService.getAccessibleTasks(userId, organizationId, filter, page, size, sortBy, sortDir)
 
     @GetMapping("/search")
+    @Deprecated("Use GET /api/tasks with filters instead")
     fun search(
         @RequestHeader("X-Organization-Id") organizationId: UUID,
         @ModelAttribute filter: TaskSearchRequest,
@@ -143,20 +142,44 @@ class TaskController(
 @RequestMapping("/api/projects/{projectId}/tasks")
 class ProjectTaskController(
     private val taskService: TaskService,
+    private val taskFilteringService: TaskFilteringService,
+    private val taskRepository: TaskRepository,
+    private val taskMapper: TaskMapper,
 ) {
 
     @PostMapping
     fun create(
         @PathVariable projectId: UUID,
         @RequestHeader("X-User-Id") changedBy: UUID,
+        @RequestHeader("X-Organization-Id", required = false) organizationId: UUID?,
         @Valid @RequestBody request: CreateTaskRequest,
     ): ResponseEntity<TaskResponse> {
         val requestWithProject = request.copy(projectId = projectId)
-        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(requestWithProject, changedBy))
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(requestWithProject, changedBy, organizationId))
     }
 
     @GetMapping
-    fun listByProject(@PathVariable projectId: UUID): List<TaskResponse> = taskService.getAll(projectId)
+    fun listByProject(
+        @PathVariable projectId: UUID,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+        @RequestParam(defaultValue = "createdAt") sortBy: String,
+        @RequestParam(defaultValue = "desc") sortDir: String,
+    ): TaskPageResponse {
+        val sort = if (sortDir.equals("asc", ignoreCase = true)) Sort.by(sortBy).ascending()
+                   else Sort.by(sortBy).descending()
+        val pageable = PageRequest.of(page, size, sort)
+        val taskPage = taskRepository.findByProjectIdAndIsActiveTrue(projectId, pageable)
+        return TaskPageResponse(
+            content = taskPage.content.map(taskMapper::toResponse),
+            page = taskPage.number,
+            size = taskPage.size,
+            totalElements = taskPage.totalElements,
+            totalPages = taskPage.totalPages,
+            hasNext = taskPage.hasNext(),
+            hasPrevious = taskPage.hasPrevious(),
+        )
+    }
 
     @GetMapping("/{taskId}")
     fun getTask(

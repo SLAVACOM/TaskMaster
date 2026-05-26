@@ -1,9 +1,14 @@
 package com.slavacom.taskservice.service
 
-import com.slavacom.taskservice.entity.Task
+import com.slavacom.taskservice.dto.TaskPageResponse
+import com.slavacom.taskservice.dto.TaskResponse
+import com.slavacom.taskservice.dto.TaskSearchRequest
+import com.slavacom.taskservice.mapper.TaskMapper
 import com.slavacom.taskservice.repository.ProjectMemberRepository
 import com.slavacom.taskservice.repository.TaskRepository
 import mu.KotlinLogging
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -12,49 +17,47 @@ private val logger = KotlinLogging.logger {}
 
 @Service
 class TaskFilteringService(
-	private val taskRepository: TaskRepository,
-	private val projectMemberRepository: ProjectMemberRepository,
+    private val taskRepository: TaskRepository,
+    private val projectMemberRepository: ProjectMemberRepository,
+    private val taskMapper: TaskMapper,
 ) {
 
-	@Transactional(readOnly = true)
-	fun getAccessibleTasks(userId: UUID): List<Task> {
-		val startTime = System.currentTimeMillis()
-		logger.info { "Fetching accessible tasks for user: $userId" }
+    @Transactional(readOnly = true)
+    fun getAccessibleTasks(
+        userId: UUID,
+        organizationId: UUID?,
+        filter: TaskSearchRequest,
+        page: Int = 0,
+        size: Int = 20,
+        sortBy: String = "createdAt",
+        sortDir: String = "desc",
+    ): TaskPageResponse {
+        val startTime = System.currentTimeMillis()
+        logger.info { "Fetching accessible tasks for user=$userId, org=$organizationId, page=$page, size=$size" }
 
-		try {
-			// Get tasks where user has any role (responsible, executor, observer, watcher)
-			val tasksAssignedToUser = taskRepository.findByIsActiveTrueOrderByCreatedAtDesc()
-				.filter { task ->
-					task.responsible == userId ||
-					task.executor == userId ||
-					task.observers.contains(userId) ||
-					task.watchers.contains(userId)
-				}
+        val sort = if (sortDir.equals("asc", ignoreCase = true)) Sort.by(sortBy).ascending()
+                   else Sort.by(sortBy).descending()
+        val pageable = PageRequest.of(page, size, sort)
 
-			// Get projects where user is a member
-			val userProjectMemberships = projectMemberRepository.findByUserId(userId)
-			val userProjectIds = userProjectMemberships.mapNotNull { it.projectId }.toSet()
+        val userProjectIds = projectMemberRepository.findByUserId(userId)
+            .mapNotNull { it.projectId }
+            .toSet()
 
-			// Get tasks in user's projects
-			val tasksInUserProjects = if (userProjectIds.isNotEmpty()) {
-				taskRepository.findByIsActiveTrueOrderByCreatedAtDesc()
-					.filter { task -> task.projectId in userProjectIds }
-			} else {
-				emptyList()
-			}
+        val effectiveFilter = filter.copy(organizationId = organizationId ?: filter.organizationId)
 
-			// Combine and deduplicate
-			val allAccessibleTasks = (tasksAssignedToUser + tasksInUserProjects)
-				.distinctBy { it.id }
-				.sortedByDescending { it.createdAt }
+        val taskPage = taskRepository.searchAccessibleTasks(effectiveFilter, userId, userProjectIds, pageable)
 
-			val duration = System.currentTimeMillis() - startTime
-			logger.info { "Fetched ${allAccessibleTasks.size} accessible tasks for user $userId, duration=${duration}ms" }
+        val duration = System.currentTimeMillis() - startTime
+        logger.info { "Fetched ${taskPage.totalElements} accessible tasks for user=$userId in ${duration}ms" }
 
-			return allAccessibleTasks
-		} catch (e: Exception) {
-			logger.error(e) { "Failed to fetch accessible tasks for user $userId" }
-			throw e
-		}
-	}
+        return TaskPageResponse(
+            content = taskPage.content.map(taskMapper::toResponse),
+            page = taskPage.number,
+            size = taskPage.size,
+            totalElements = taskPage.totalElements,
+            totalPages = taskPage.totalPages,
+            hasNext = taskPage.hasNext(),
+            hasPrevious = taskPage.hasPrevious(),
+        )
+    }
 }
